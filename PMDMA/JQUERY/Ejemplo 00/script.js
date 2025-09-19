@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-    var p = true
+    var check = true
 
 
     // Selector de ID = #
@@ -14,11 +14,11 @@ $(document).ready(function () {
     $("span").addClass("course");
 
     $(document).on("click","#span1Dam", function () {
-        if (p) {
+        if (check) {
             $(this).html("🐵 1 DAM")
         } else {
             $(this).html("🥳 1º DAM")
         }
-        p = !p;
+        check = !check;
     })
 });
