@@ -18,7 +18,19 @@
      */
 
 $(document).ready(function () {
+
+    var horaActual = new Date().getHours();
     var currentMode = true; // true for Light, false for Dark.
+
+    if (horaActual > 8 && horaActual < 20) {
+        $("#toggleModeBtn").html("Change Mode🌑")
+        $("body").removeClass("darkMode")
+        $("body").addClass("lightMode")
+    } else {
+        $("#toggleModeBtn").html("☀️Change Mode")
+        $("body").addClass("darkMode")
+        $("body").removeClass("lightMode")
+    }
 
     $(document).on("click","#toggleModeBtn",function() {
         console.log("click")
