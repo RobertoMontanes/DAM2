@@ -1,0 +1,42 @@
+* {
+    font-family: Arial, sans-serif;
+}
+
+.darkMode {
+    background-color: black;
+    color: white;
+    #toggleModeBtn {
+        background-color: white;
+        color: black;
+    }
+}
+
+.lightMode {
+    background-color: white;
+    color: black;
+    #toggleModeBtn {
+        background-color: black;
+        color: white;
+    }
+}  
+
+.text {
+    text-align: justify;
+    margin: 20px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#toggleModeBtn {
+
+    width: 50%;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
