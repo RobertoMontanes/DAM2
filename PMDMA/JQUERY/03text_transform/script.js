@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-    var palabrotas = ["gilipollas","tonto","anormal","gilipuertas"];
     var output = ""
 
     $(document).on("click", "#btnAction", function () {
@@ -8,7 +7,6 @@ $(document).ready(function () {
         var selectVal = $("#selectAction").val();
         var checkPolite = $("#checkboxPolite").prop("checked");
 
-        console.log(input);
         
         if (input == "") {            
             alert("Tienes que escribir algun contenido")
@@ -17,14 +15,11 @@ $(document).ready(function () {
                 alert("Debes seleccionar una opcion valida.")
             } else {
 
-                console.log(checkPolite);
-
                 if (checkPolite) {
                     input = borrarPalabrotas(input);
                 }
 
                 if (selectVal == "upper") {
-                    console.log(input);
                     output = upperCase(input)
                 } else if (selectVal == "lower") {
                     output = lowerCase(input)
@@ -47,9 +42,14 @@ function lowerCase(str) {
 }
 
 function borrarPalabrotas(str) {
+    var palabrotas = ["gilipollas","tonto","anormal","gilipuertas"];
+
+    str = lowerCase(str)
 
     palabrotas.forEach(insulto => {
-        str = str.replace(insulto, "");
+        while (str.includes(insulto)) {
+            str = str.replace(insulto, "");
+        }
     });
 
     return str;
