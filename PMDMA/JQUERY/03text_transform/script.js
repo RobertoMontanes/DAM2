@@ -42,16 +42,12 @@ function lowerCase(str) {
 }
 
 function borrarPalabrotas(str) {
-    var palabrotas = ["gilipollas","tonto","anormal","gilipuertas"];
-
-    str = lowerCase(str)
+    var palabrotas = ["gilipollas", "tonto", "anormal", "gilipuertas"];
 
     palabrotas.forEach(insulto => {
-        while (str.includes(insulto)) {
-            str = str.replace(insulto, "");
-        }
+        var regex = new RegExp(insulto, "gi");
+        str = str.replace(regex, "***");
     });
 
     return str;
-    
 }
