@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    var palabrotas = ["gilipollas","tonto","anormal","gilipuertas"];
     var output = ""
 
     $(document).on("click", "#btnAction", function () {
@@ -46,11 +47,9 @@ function lowerCase(str) {
 }
 
 function borrarPalabrotas(str) {
-    
-    var palabrotas = ["gilipollas","tonto","anormal","gilipuertas"]
 
     palabrotas.forEach(insulto => {
-            str = str.replace(insulto, "")
+        str = str.replace(insulto, "");
     });
 
     return str;
