@@ -29,10 +29,10 @@ $(document).ready(function () {
 
 })
 
-function upperCase(input) {
-    return input.toUpperCase()
+function upperCase(str) {
+    return str.toUpperCase()
 }
 
-function lowerCase(input) {
-    return input.toLowerCase()
+function lowerCase(str) {
+    return str.toLowerCase()
 }
