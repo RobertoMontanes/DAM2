@@ -5,6 +5,7 @@ $(document).ready(function () {
     $(document).on("click", "#btnAction", function () {
         var input = $("#textInput").val()
         var selectVal = $("#selectAction").val();
+        var checkPolite = $("#checkboxPolite").prop("checked");
 
         console.log(input);
         
@@ -14,6 +15,13 @@ $(document).ready(function () {
             if (selectVal == "null") {
                 alert("Debes seleccionar una opcion valida.")
             } else {
+
+                console.log(checkPolite);
+
+                if (checkPolite) {
+                    input = borrarPalabrotas(input);
+                }
+
                 if (selectVal == "upper") {
                     console.log(input);
                     output = upperCase(input)
@@ -35,4 +43,16 @@ function upperCase(str) {
 
 function lowerCase(str) {
     return str.toLowerCase()
+}
+
+function borrarPalabrotas(str) {
+    
+    var palabrotas = ["gilipollas","tonto","anormal","gilipuertas"]
+
+    palabrotas.forEach(insulto => {
+            str = str.replace(insulto, "")
+    });
+
+    return str;
+    
 }
