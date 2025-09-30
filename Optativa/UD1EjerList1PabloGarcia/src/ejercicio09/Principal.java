@@ -36,6 +36,12 @@ public class Principal {
             System.out.println("The lowest rolled number is: " + dado.returnLower(numbersRolled,max));
             System.out.println((numbersRolled.size() > 1 ? textChange[0] : textChange[1]) + dado.buscarMasRepetido(numbersRolled,min) );
 
+            System.out.println("Wich number do you want to check how many times did it appear? ");
+            opcion = Integer.parseInt(scanner.nextLine());
+            System.out.println("The number: " + opcion + " appear " + dado.contarNumero(numbersRolled,opcion) + " times. ");
+
+            System.out.println("The addition of all the numbers is: " + dado.obtenerSuma(numbersRolled));
+
             System.out.println("Do you want to repeat? 1-Yes,0-No");
             opcion = Integer.parseInt(scanner.nextLine());
 

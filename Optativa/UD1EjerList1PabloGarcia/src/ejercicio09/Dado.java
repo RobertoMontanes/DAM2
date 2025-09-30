@@ -5,7 +5,6 @@ import java.util.*;
 public class Dado {
 
     public List<Integer> roll(int longitud,int min, int max){
-        int menor=-1,mayor=-1;
         List<Integer> listaNum = new ArrayList<>();
         Random rnd = new Random(System.nanoTime());
 
@@ -15,6 +14,23 @@ public class Dado {
 
         return listaNum;
     }
+
+    public int contarNumero(List<Integer> listaNum, int numero) {
+        int[] cont = {0};
+        listaNum.forEach(i -> {
+            if (i == numero) {
+                cont[0]++;
+            }
+        });
+        return cont[0];
+    }
+
+    public int obtenerSuma(List<Integer> tiradas) {
+        int[] cont = {0};
+        tiradas.forEach(i -> {
+            cont[0]+= i;
+        });
+        return cont[0];    }
 
     public Integer returnHigher(List<Integer> listaNum,int min) {
 
@@ -45,7 +61,6 @@ public class Dado {
     public Map<Integer,Integer> clasificarMap(List<Integer> listaNum){
 
         Map<Integer,Integer> numDict = new HashMap<>();
-        int mayor = -1;
 
         for (int num:listaNum) {
             if (numDict.containsKey(num)) {
@@ -60,7 +75,7 @@ public class Dado {
 
     public List<Integer> buscarMasRepetido(List<Integer> listaNum, int min) {
         Map<Integer,Integer> numDict = clasificarMap(listaNum);
-        int mayor = -1 , mayorQt= returnHigher(new ArrayList<Integer>(numDict.values()),min);
+        int mayorQt= returnHigher(new ArrayList<>(numDict.values()),min);
         return deOrder(numDict,mayorQt);
     }
 
