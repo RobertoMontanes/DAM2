@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostify - Gestión de Apartamentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #53A5E0;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-[var(--primary)]">Hostify</h1>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#servicios" class="hover:text-[var(--primary)]">Servicios</a>
+                <a href="#beneficios" class="hover:text-[var(--primary)]">Beneficios</a>
+                <a href="#precios" class="hover:text-[var(--primary)]">Precios</a>
+                <a href="#contacto" class="hover:text-[var(--primary)]">Contacto</a>
+            </nav>
+            <a href="#contacto"
+                class="bg-[var(--primary)] text-white px-4 py-2 rounded-lg shadow hover:bg-blue-500 transition">Empezar</a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="bg-[var(--primary)] text-white text-center pt-32 pb-20 px-6">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">Gestión Integral de Apartamentos</h2>
+        <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">En Hostify nos encargamos de todo: limpieza, mantenimiento,
+            reparaciones, publicación en plataformas y gestión con inquilinos.</p>
+        <a href="#precios"
+            class="bg-white text-[var(--primary)] font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition">Ver
+            Planes</a>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios" class="max-w-7xl mx-auto py-20 px-6">
+        <h3 class="text-3xl font-bold text-center mb-12">Nuestros Servicios</h3>
+        <div class="grid md:grid-cols-3 gap-10">
+            <div class="bg-white shadow-md rounded-2xl p-6 text-center">
+                <h4 class="text-xl font-semibold mb-4 text-[var(--primary)]">Limpieza Profesional</h4>
+                <p>Mantenemos tus apartamentos impecables para cada huésped, garantizando la mejor experiencia.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-2xl p-6 text-center">
+                <h4 class="text-xl font-semibold mb-4 text-[var(--primary)]">Mantenimiento & Reparaciones</h4>
+                <p>Nos ocupamos de solucionar cualquier problema de manera rápida y eficiente.</p>
+            </div>
+            <div class="bg-white shadow-md rounded-2xl p-6 text-center">
+                <h4 class="text-xl font-semibold mb-4 text-[var(--primary)]">Gestión de Anuncios</h4>
+                <p>Publicamos y optimizamos tus apartamentos en plataformas como Airbnb, Booking y más.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section id="beneficios" class="bg-gray-50 py-20 px-6">
+        <h3 class="text-3xl font-bold text-center mb-12">¿Por qué elegir Hostify?</h3>
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="p-6 text-center">
+                <h4 class="font-semibold text-lg text-[var(--primary)]">Ahorro de Tiempo</h4>
+                <p>Nos encargamos de todo para que tú solo disfrutes de los ingresos.</p>
+            </div>
+            <div class="p-6 text-center">
+                <h4 class="font-semibold text-lg text-[var(--primary)]">Más Reservas</h4>
+                <p>Optimización de anuncios y precios dinámicos para aumentar la ocupación.</p>
+            </div>
+            <div class="p-6 text-center">
+                <h4 class="font-semibold text-lg text-[var(--primary)]">Tranquilidad Total</h4>
+                <p>Gestión completa con inquilinos, desde el check-in hasta el check-out.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Precios -->
+    <section id="precios" class="max-w-7xl mx-auto py-20 px-6">
+        <h3 class="text-3xl font-bold text-center mb-12">Planes de Suscripción</h3>
+        <div class="grid md:grid-cols-3 gap-10">
+            <div class="bg-white shadow-lg rounded-2xl p-8 text-center border">
+                <h4 class="text-xl font-semibold mb-4">Básico</h4>
+                <p class="text-4xl font-bold text-[var(--primary)] mb-6">€99<span
+                        class="text-lg font-normal">/mes</span></p>
+                <ul class="mb-6 space-y-2">
+                    <li>✔ Limpieza Básica</li>
+                    <li>✔ Gestión de Reservas</li>
+                    <li>✔ Publicación en Plataformas</li>
+                </ul>
+                <a href="#contacto"
+                    class="bg-[var(--primary)] text-white px-5 py-3 rounded-lg hover:bg-blue-500 transition">Elegir
+                    Plan</a>
+            </div>
+            <div class="bg-white shadow-lg rounded-2xl p-8 text-center border-2 border-[var(--primary)] scale-105">
+                <h4 class="text-xl font-semibold mb-4">Premium</h4>
+                <p class="text-4xl font-bold text-[var(--primary)] mb-6">€199<span
+                        class="text-lg font-normal">/mes</span></p>
+                <ul class="mb-6 space-y-2">
+                    <li>✔ Limpieza Premium</li>
+                    <li>✔ Mantenimiento y Reparaciones</li>
+                    <li>✔ Gestión Completa de Inquilinos</li>
+                </ul>
+                <a href="#contacto"
+                    class="bg-[var(--primary)] text-white px-5 py-3 rounded-lg hover:bg-blue-500 transition">Elegir
+                    Plan</a>
+            </div>
+            <div class="bg-white shadow-lg rounded-2xl p-8 text-center border">
+                <h4 class="text-xl font-semibold mb-4">Enterprise</h4>
+                <p class="text-4xl font-bold text-[var(--primary)] mb-6">A Medida</p>
+                <ul class="mb-6 space-y-2">
+                    <li>✔ Soporte Dedicado</li>
+                    <li>✔ Estrategia de Rentabilidad</li>
+                    <li>✔ Soluciones Personalizadas</li>
+                </ul>
+                <a href="#contacto"
+                    class="bg-[var(--primary)] text-white px-5 py-3 rounded-lg hover:bg-blue-500 transition">Contactar</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="bg-[var(--primary)] text-white py-20 px-6">
+        <h3 class="text-3xl font-bold text-center mb-12">Lo que dicen nuestros clientes</h3>
+        <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+            <div class="bg-white text-gray-800 rounded-2xl shadow-md p-6">
+                <p>"Gracias a Hostify mis apartamentos siempre están ocupados y sin preocupaciones para mí."</p>
+                <h4 class="mt-4 font-semibold text-[var(--primary)]">- Ana López</h4>
+            </div>
+            <div class="bg-white text-gray-800 rounded-2xl shadow-md p-6">
+                <p>"Excelente servicio. Me despreocupé totalmente de las reparaciones y limpieza."</p>
+                <h4 class="mt-4 font-semibold text-[var(--primary)]">- Carlos Pérez</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="max-w-5xl mx-auto py-20 px-6 text-center">
+        <h3 class="text-3xl font-bold mb-6">¿Listo para empezar?</h3>
+        <p class="mb-8">Déjanos tus datos y te contactaremos para ayudarte a maximizar la rentabilidad de tus
+            apartamentos.</p>
+        <form class="max-w-2xl mx-auto grid gap-6">
+            <input type="text" placeholder="Nombre" class="p-4 border rounded-lg w-full">
+            <input type="email" placeholder="Email" class="p-4 border rounded-lg w-full">
+            <input type="text" placeholder="Número de Teléfono" class="p-4 border rounded-lg w-full">
+            <textarea placeholder="Mensaje" class="p-4 border rounded-lg w-full" rows="4"></textarea>
+            <button
+                class="bg-[var(--primary)] text-white px-6 py-3 rounded-lg shadow hover:bg-blue-500 transition">Enviar</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 text-center">
+        <p>&copy; 2025 Hostify. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+
+</html>
