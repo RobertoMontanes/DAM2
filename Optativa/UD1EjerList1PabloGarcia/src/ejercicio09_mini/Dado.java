@@ -36,6 +36,7 @@ public class Dado {
     }
 
     public List<Integer> buscarRepetido(List<Integer> tiradas) {
+        // [0,0,0,0,0,0,0]
         int[] arrayOrden = new int[7];
         int mayor = tiradas.getLast();
         List<Integer> listaDev = new ArrayList<>();

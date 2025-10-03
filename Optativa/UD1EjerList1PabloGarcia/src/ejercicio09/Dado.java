@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Dado {
 
-    public List<Integer> roll(int longitud,int min, int max){
+    public List<Integer> roll(int longitud, int min, int max) {
         List<Integer> listaNum = new ArrayList<>();
         Random rnd = new Random(System.nanoTime());
 
@@ -16,77 +16,81 @@ public class Dado {
     }
 
     public int contarNumero(List<Integer> listaNum, int numero) {
-        int[] cont = {0};
-        listaNum.forEach(i -> {
+        int cont = 0;
+        for (int i : listaNum) {
             if (i == numero) {
-                cont[0]++;
+                cont++;
             }
-        });
-        return cont[0];
+        }
+        return cont;
     }
 
     public int obtenerSuma(List<Integer> tiradas) {
         int[] cont = {0};
         tiradas.forEach(i -> {
-            cont[0]+= i;
+            cont[0] += i;
         });
-        return cont[0];    }
-
-    public Integer returnHigher(List<Integer> listaNum,int min) {
-
-        int[] mayorScp = {min-1};
-
-        listaNum.forEach(num -> {
-            if (num > mayorScp[0]){
-                mayorScp[0] = num;
-            }
-        });
-
-        return mayorScp[0];
+        return cont[0];
     }
 
-    public Integer returnLower(List<Integer> listaNum,int max) {
+    public Integer returnHigher(List<Integer> listaNum, int min) {
 
-        int[] menorScp = {max+1};
+//        int[] mayorScp = {min-1};
+//        listaNum.forEach(num -> {
+//            if (num > mayorScp[0]){
+//                mayorScp[0] = num;
+//            }
+//        });
 
-        listaNum.forEach(num -> {
-            if (num < menorScp[0]){
-                menorScp[0] = num;
-            }
-        });
-
-        return menorScp[0];
+        //return mayorScp[0];
+        return listaNum.stream().max(Integer::compareTo).get();
     }
 
-    public Map<Integer,Integer> clasificarMap(List<Integer> listaNum){
+    public Integer returnLower(List<Integer> listaNum, int max) {
 
-        Map<Integer,Integer> numDict = new HashMap<>();
+//        int[] menorScp = {max+1};
+//        listaNum.forEach(num -> {
+//            if (num < menorScp[0]){
+//                menorScp[0] = num;
+//            }
+//        });
+//
+//        return menorScp[0];
 
-        for (int num:listaNum) {
-            if (numDict.containsKey(num)) {
-                int value = numDict.get(num);
-                numDict.put(num,value+1);
+        return listaNum.stream().min(Integer::compareTo).get();
+    }
+
+    public Map<Integer, Integer> clasificarMap(List<Integer> listaNum) {
+
+        Map<Integer, Integer> numMap = new HashMap<>();
+
+        for (int num : listaNum) {
+            int value;
+            if (numMap.containsKey(num)) {
+                value = numMap.get(num);
+                numMap.put(num, value + 1);
             } else {
-                numDict.put(num,1);
+                numMap.put(num, 1);
             }
         }
-        return numDict;
+        return numMap;
     }
 
     public List<Integer> buscarMasRepetido(List<Integer> listaNum, int min) {
-        Map<Integer,Integer> numDict = clasificarMap(listaNum);
-        int mayorQt= returnHigher(new ArrayList<>(numDict.values()),min);
-        return deOrder(numDict,mayorQt);
+        Map<Integer, Integer> numMap = clasificarMap(listaNum);
+        int mayorQt = returnHigher(new ArrayList<>(numMap.values()), min);
+        return deOrder(numMap, mayorQt);
     }
 
-    public List<Integer> deOrder(Map<Integer,Integer> numDict, Integer mayorQt) {
+    public List<Integer> deOrder(Map<Integer, Integer> numMap, int mayorQt) {
         List<Integer> finalList = new ArrayList<>();
-        for (Map.Entry<Integer,Integer> entry : numDict.entrySet()) {
-            if (entry.getValue() == mayorQt) {finalList.add(entry.getKey());}
+        for (Map.Entry<Integer, Integer> entry : numMap.entrySet()) {
+            if (entry.getValue() == mayorQt) {
+                finalList.add(entry.getKey());
+            }
         }
         return finalList;
     }
-
 
 
 }

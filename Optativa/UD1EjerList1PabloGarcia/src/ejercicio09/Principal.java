@@ -1,7 +1,7 @@
 package ejercicio09;
 
 // Crea una clase dado con algun metodo como  lanzar que devuelva
-// un numero aleatoriio entre 1 y . Simula 10 tiradas y muesla puntuacion mayor,
+// un numero aleatoriio entre 1 y 6. Simula 10 tiradas y muesla puntuacion mayor,
 // la menor y que numero se ha repetido mas veces.
 
 import java.util.List;
