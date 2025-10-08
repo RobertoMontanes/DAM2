@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caesar Cypher</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Cifrado César</h2>
+                        <div class="mb-3">
+                            <label for="cypherTEXT" class="form-label">Texto a cifrar/descifrar:</label>
+                            <textarea class="form-control" id="cypherTEXT" rows="4" placeholder="Escribe tu texto aquí..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cypherNum" class="form-label">Valor de cifrado:</label>
+                            <input type="number" class="form-control w-25" id="cypherNum" value="3" min="1" max="25">
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button id="cypherBTN" class="btn btn-primary px-4">Cifrar</button>
+                            <button id="unCypherBTN" class="btn btn-secondary px-4">Descifrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
