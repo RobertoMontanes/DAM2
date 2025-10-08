@@ -29,7 +29,7 @@ $(document).ready(function () {
                     newText += letter
                 } else {
 
-                    newText += abecedario[index + cypherCode % (abecedario.length/2)]
+                    newText += abecedario[index + cypher % (abecedario.length/2)]
 
                     // len = newText.length
 
