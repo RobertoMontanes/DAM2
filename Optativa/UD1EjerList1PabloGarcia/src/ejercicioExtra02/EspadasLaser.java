@@ -4,8 +4,8 @@ public class EspadasLaser extends Producto {
 //
     private String tipo;
 
-    public EspadasLaser(double precioBase, int unidadesAlmacen, String nombre, String tipo) {
-        super(precioBase, unidadesAlmacen, nombre);
+    public EspadasLaser(String nombre, double precioBase, int unidadesAlmacen, int unidadesVendidas, String tipo) {
+        super(nombre, precioBase, unidadesAlmacen, unidadesVendidas);
         this.tipo = tipo;
     }
 
@@ -19,5 +19,10 @@ public class EspadasLaser extends Producto {
         }
 
         return precioFinal;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Tipo: " + tipo;
     }
 }

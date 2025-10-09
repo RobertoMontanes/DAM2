@@ -10,25 +10,26 @@ public class Principal {
 
         String[] menuOpciones = {
                 "Abandonar el programa",
-                "Listar productos disponibles",
+                "Listar productos",
                 "Mostrar stock del almacén",
-                "Calcular el PVP de un producto",
-                "Calcular el total de todas las ventas",
+                "Calcular PVP de un producto",
+                "Calcular total de ventas",
                 "Calcular cambio a devolver"
         };
 
         int opcionAbandonar = 0, opcionEscogida, ajustarOpcionesArray = 1, idObjetivo, cantidad;
-        double porcentaje = 0.25; // 25% de ganancia
-        int cantidadFija = 100;   // fijo añadido a las espadas dobles
+        double porcentaje = 0.25; // porcentaje de ganancia del vendedor
+        int cantidadFija = 100;   // recargo fijo para espadas dobles
         Producto productoObjetivo;
 
-        // Crear los productos
-        Producto[] listaProductos = new Producto[5];
+        // Crear productos iniciales
+        Producto[] listaProductos = new Producto[6];
         listaProductos[0] = new Moviles("Samsung Galaxy S22", 800, 5, 2, "Samsung", "Galaxy S22");
         listaProductos[1] = new Moviles("iPhone 14", 1200, 3, 1, "Apple", "iPhone 14");
-        listaProductos[2] = new EspadasLaser("Espada Jedi", 600, 2, 1, "simple");
-        listaProductos[3] = new EspadasLaser("Darth Maul Edition", 950, 1, 2, "doble");
-        listaProductos[4] = new EspadasLaser("Luke Skywalker Blue", 850, 2, 1, "simple");
+        listaProductos[2] = new Moviles("Xiaomi Redmi Note 12", 400, 4, 1, "Xiaomi", "Redmi Note 12");
+        listaProductos[3] = new EspadasLaser("Espada Jedi Azul", 600, 2, 1, "simple");
+        listaProductos[4] = new EspadasLaser("Espada Sith Roja", 950, 1, 2, "doble");
+        listaProductos[5] = new EspadasLaser("Espada Verde Maestro Yoda", 850, 3, 0, "simple");
 
         Ventas gestorVentas = new Ventas(listaProductos);
 
@@ -71,11 +72,14 @@ public class Principal {
                     } else {
                         double pvp = productoObjetivo.calcularPVP(porcentaje, cantidadFija);
                         System.out.println("El PVP del producto \"" + productoObjetivo.getNombre() + "\" es: " + pvp + " €");
+                        if (productoObjetivo instanceof EspadasLaser) {
+                            System.out.println("¡Cuidadín al sacarla de la bolsa, que hace pupa!");
+                        }
                     }
                     break;
 
                 case 4:
-                    System.out.println("El total recaudado hasta ahora es: "
+                    System.out.println("El total recaudado entre todas las ventas es: "
                             + gestorVentas.calcularTotalVentas(porcentaje, cantidadFija) + " €");
                     break;
 
@@ -89,7 +93,7 @@ public class Principal {
                         break;
                     }
 
-                    System.out.print("¿Cuántas unidades comprará el cliente?: ");
+                    System.out.print("¿Cuántas unidades ha comprado el cliente?: ");
                     cantidad = Integer.parseInt(sc.nextLine());
 
                     System.out.print("Introduce el dinero entregado por el cliente: ");
@@ -117,6 +121,7 @@ public class Principal {
         sc.close();
     }
 
+    // Buscar producto por ID
     private static Producto buscarProductoPorID(Producto[] lista, int id) {
         for (Producto p : lista) {
             if (p != null && p.getId() == id) {

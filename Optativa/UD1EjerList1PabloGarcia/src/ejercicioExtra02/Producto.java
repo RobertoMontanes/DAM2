@@ -2,6 +2,8 @@ package ejercicioExtra02;
 
 public abstract class Producto {
 
+    private static int contador = 0;
+    private int id;
 	private double precioBase;
 	private int unidadesAlmacen;
 	private String nombre;
@@ -9,11 +11,15 @@ public abstract class Producto {
 
     public abstract double calcularPVP(double porcentaje, int cantidadFija);
 
-    public Producto(double precioBase, int unidadesAlmacen, String nombre) {
+    public Producto(String nombre, double precioBase, int unidadesAlmacen, int unidadesVendidas) {
+        this.id = ++contador;
+        this.nombre = nombre;
         this.precioBase = precioBase;
         this.unidadesAlmacen = unidadesAlmacen;
-        this.nombre = nombre;
+        this.unidadesVendidas = unidadesVendidas;
     }
+
+    public int getId() { return id; }
 
     public double getPrecioBase() {
         return precioBase;
@@ -45,5 +51,11 @@ public abstract class Producto {
 
     public void setUnidadesVendidas(int unidadesVendidas) {
         this.unidadesVendidas = unidadesVendidas;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + " | " + nombre + " | Precio base: " + precioBase +
+                " € | Vendidas: " + unidadesVendidas + " | En almacén: " + unidadesAlmacen;
     }
 }
