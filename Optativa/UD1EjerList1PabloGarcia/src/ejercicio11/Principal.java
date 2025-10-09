@@ -3,7 +3,7 @@ package ejercicio11;
 import java.util.ArrayList;
 import java.util.List;
 
-public class main {
+public class Principal {
 
     /*
     Haz un estudio de los distintos puestos que pueden tener los empleados de una empresa de programación
