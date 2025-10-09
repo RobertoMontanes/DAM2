@@ -22,38 +22,33 @@ $(document).ready(function () {
                 let len = 0
 
                 index = buscarAbecedario(letter);
-                console.log(index);
 
 
                 if (index == -1) {
                     newText += letter
                 } else {
 
-                    newText += abecedario[index + cypher % (abecedario.length/2)]
+                    len = newText.length
 
-                    // len = newText.length
+                    if (index >= 26) {
+                        if (index + cypherCode >= 52) {
+                            newText += abecedario[index + cypherCode - 26]
+                        }
+                    } else {
+                        if (index +cypherCode >= 26) {
+                            newText += abecedario[index + cypherCode - 26]
+                        }
+                    }
 
-                    // if (index >= 26) {
-                    //     if (index + 3 >= 52 ) {
-                    //         newText += abecedario[index + cypherCode - 26]
-                    //     }
-                    // } else {
-                    //     if (index + 3 >= 26) {
-                    //         newText += abecedario[index + cypherCode - 26]
-                    //     }
-                    // }
-
-                    // if (newText.length == len) {                        
-                    //     newText += abecedario[index + cypherCode ]
-                    // }
+                    if (newText.length == len) {
+                        newText += abecedario[index + cypherCode]
+                    }
 
                 }
 
             }
 
             $("#cypherTEXT").val(newText)
-
-            alert("Codigo cifrado.")
 
         }
     })
@@ -79,24 +74,21 @@ $(document).ready(function () {
                     newText += letter
                 } else {
 
-                    newText += abecedario[index - cypherCode % (abecedario.length/2)]
+                    len = newText.length
 
+                    if (index >= 26) {
+                        if (index - cypherCode < 26) {
+                            newText += abecedario[index - cypherCode + 26]
+                        }
+                    } else {
+                        if (index - cypherCode < 0) {
+                            newText += abecedario[index - cypherCode + 26]
+                        }
+                    }
 
-                    // len = newText.length
-
-                    // if (index >= 26) {
-                    //     if (index - 3 < 26) {
-                    //         newText += abecedario[index - cypherCode + 26]
-                    //     }
-                    // } else {
-                    //     if (index - 3 < 0) {
-                    //         newText += abecedario[index - cypherCode + 26]
-                    //     }
-                    // }
-
-                    // if (newText.length == len) {
-                    //     newText += abecedario[index - cypherCode]
-                    // }
+                    if (newText.length == len) {
+                        newText += abecedario[index - cypherCode]
+                    }
 
                 }
 
