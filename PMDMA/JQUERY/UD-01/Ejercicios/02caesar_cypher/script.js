@@ -9,6 +9,7 @@ $(document).ready(function () {
     $(document).on("click", "#cypherBTN", function () {
 
         cypherCode = parseInt($("#cypherNum").val());
+        cypherCode = cypherCode > 26 ? cypherCode % 26 : cypherCode
 
         let originalText = $("#cypherTEXT").val();
         let newText = ""
@@ -56,6 +57,7 @@ $(document).ready(function () {
     $(document).on("click", "#unCypherBTN", function () {
 
         cypherCode = $("#cypherNum").val();
+        cypherCode = cypherCode > 26 ? cypherCode % 26 : cypherCode        
 
         let originalText = $("#cypherTEXT").val();
         let newText = ""
@@ -95,9 +97,6 @@ $(document).ready(function () {
             }
 
             $("#cypherTEXT").val(newText)
-
-            alert("Codigo cifrado.")
-
         }
     })
 
