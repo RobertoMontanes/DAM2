@@ -65,7 +65,7 @@ public class Principal {
                 case 3:
                     System.out.print("Indica el ID del producto para calcular su PVP: ");
                     idObjetivo = Integer.parseInt(sc.nextLine());
-                    productoObjetivo = buscarProductoPorID(listaProductos, idObjetivo);
+                    productoObjetivo = gestorVentas.buscarProductoPorID(idObjetivo);
 
                     if (productoObjetivo == null) {
                         System.out.println("No se encontró ningún producto con ID " + idObjetivo);
@@ -86,7 +86,7 @@ public class Principal {
                 case 5:
                     System.out.print("Indica el ID del producto: ");
                     idObjetivo = Integer.parseInt(sc.nextLine());
-                    productoObjetivo = buscarProductoPorID(listaProductos, idObjetivo);
+                    productoObjetivo = gestorVentas.buscarProductoPorID(idObjetivo);
 
                     if (productoObjetivo == null) {
                         System.out.println("No se encontró ningún producto con ID " + idObjetivo);
@@ -119,16 +119,6 @@ public class Principal {
 
         System.out.println("Gracias por tu visita. ¡Que la Fuerza te acompañe!");
         sc.close();
-    }
-
-    // Buscar producto por ID
-    private static Producto buscarProductoPorID(Producto[] lista, int id) {
-        for (Producto p : lista) {
-            if (p != null && p.getId() == id) {
-                return p;
-            }
-        }
-        return null;
     }
 
 }

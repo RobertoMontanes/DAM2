@@ -24,7 +24,7 @@ public class Principal {
         System.out.println("Los sueldos de los diferentes empleados son: ");
 
         for (Empleado e: empleados) {
-            System.out.println(e.getNombre() + " es un " + e.getClass().getName() + " y cobra: " + e.calcularSueldo() + " euros");
+            System.out.println(e.getNombre() + " es un " + e.getClass().getName() + " y cobra: " + e.calcularSueldo() + " euros" );
         }
 
 

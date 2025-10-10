@@ -35,4 +35,13 @@ public class Ventas {
         }
     }
 
+    public Producto buscarProductoPorID( int id) {
+        for (Producto p : ventas) {
+            if (p != null && p.getId() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
+
 }
