@@ -7,11 +7,12 @@ public class Principal {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        boolean esPrimo = true;
+        int numero;
 
         System.out.print("Introduce un número: ");
-        int numero = sc.nextInt();
+        numero = sc.nextInt();
 
-        boolean esPrimo = true;
 
         if (numero <= 1) {
             esPrimo = false;
