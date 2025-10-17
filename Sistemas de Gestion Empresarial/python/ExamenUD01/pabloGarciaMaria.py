@@ -1,3 +1,8 @@
+# Cosas Mejorables: 
+  # Modificar la inicializacion de variables para que los que son de EUROS (SueldoBase, SueldoFinal, cat1Extra, cat2Extra, cat3Extra, cat4Extra) sean float en vez de int.
+  # Eliminar algunos continues que no son necesarios.
+  # NO LO HAGAS MAS EN ESPAÑOL, TILDES MIERDONES
+  # Meterle un match case en vez de ifs para el menu inicial. 
 sueldoBase = -1
 sueldoFinal = -1
 
