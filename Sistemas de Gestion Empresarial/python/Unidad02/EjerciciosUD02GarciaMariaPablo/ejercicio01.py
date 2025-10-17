@@ -5,7 +5,8 @@ print("Hola, en el programa de hoy vamos a ver que Operaciones existen para trab
 print()
 
 print("### OBTENER ###")
-print("Vamos a ver como obtener elementos de una lista, para ello llamaremos a la variable de lista y entre corchetes pondremos el indice del elemento que queremos obtener, por ejemplo listaString[0], devolveria el primer valor de la lista.")
+print("Vamos a ver como obtener elementos de una lista, para ello llamaremos a la variable de lista y entre corchetes pondremos el indice del elemento que queremos obtener,"+
+    " por ejemplo listaString[0], devolveria el primer valor de la lista.")
 print("El primer valor de la lista es:", listaString[0])
 
 print()
@@ -18,7 +19,8 @@ print()
 
 
 print("### TROCEAR ###")
-print("Tambien podemos trocear una lista, para ello usaremos dos indices separados por dos puntos dentro de los corchetes, por ejemplo listaString[1:4], devolveria los elementos desde el indice 1 hasta el indice 3 (el indice 4 no se incluye).")
+print("Tambien podemos trocear una lista, para ello usaremos dos indices separados por dos puntos dentro de los corchetes, por ejemplo listaString[1:4], devolveria los elementos "+
+    "desde el indice 1 hasta el indice 3 (el indice 4 no se incluye).")
 print("Los valores desde el indice 1 hasta el indice 3 son:", listaString[1:4])
 print("Los valores desde el indice 2 hasta el final son:", listaString[2:])
 
@@ -37,7 +39,8 @@ listaString.append("NuevoElemento")
 print("La lista despues de añadir un elemento es:", listaString)
 
 print()
-print("Aunque tambien podemos usar el metodo insert() para añadir un elemento en una posicion concreta, por ejemplo listaString.insert(2, 'ElementoEnPosicion2') añadira 'ElementoEnPosicion2' en la posicion 2 de la lista.")
+print("Aunque tambien podemos usar el metodo insert() para añadir un elemento en una posicion concreta, por ejemplo listaString.insert(2, 'ElementoEnPosicion2') añadira "+
+    "'ElementoEnPosicion2' en la posicion 2 de la lista.")
 listaString.insert(2, "ElementoEnPosicion2")
 print("La lista despues de añadir un elemento en una posicion concreta es:", listaString)
 
@@ -57,13 +60,15 @@ print("La lista despues de eliminar el primer elemento es:", listaString)
 
 print()
 print("### MODIFICAR ###")
-print("Para modificar un elemento de la lista simplemente llamamos a la posicion del elemento y le asignamos un nuevo valor, por ejemplo listaString[1] = 'ElementoModificado' modificara el elemento en la posicion 1 de la lista.")
+print("Para modificar un elemento de la lista simplemente llamamos a la posicion del elemento y le asignamos un nuevo valor, por ejemplo listaString[1] = 'ElementoModificado' "+
+    "modificara el elemento en la posicion 1 de la lista.")
 listaString[1] = "ElementoModificado"
 print("La lista despues de modificar el elemento en la posicion 1 es:", listaString)
 
 print()
 print("### VERACIDAD MULTIPLE ###")
-print("Las listas pueden contener elementos de diferentes tipos de datos, por ejemplo podemos tener una lista con booleanos, y podriamos usar estos booleanos para comprobar las condiciones almacenadas dentro de ellos, por ejemplo podriamos hacer una lista cuyo primer elemento fuera una comprobacion de '4 < 3', que se quedaria como falso.")
+print("Las listas pueden contener elementos de diferentes tipos de datos, por ejemplo podemos tener una lista con booleanos, y podriamos usar estos booleanos para comprobar las "+
+    "condiciones almacenadas dentro de ellos, por ejemplo podriamos hacer una lista cuyo primer elemento fuera una comprobacion de '4 < 3', que se quedaria como falso.")
 listaVeracidad = [4 < 3, 5 == 5, 10 > 2]
 print("La lista de veracidad es:", listaVeracidad)
 print("Podemos usar esta lista para comprobar las condiciones almacenadas en ella, por ejemplo:")
@@ -81,19 +86,23 @@ print("Para buscar un elemento en la lista usaremos el metodo index(), por ejemp
 indice = listaString.index("Genial")
 print("El indice del elemento 'Genial' es:", indice)
 print("Si el elemento no existe en la lista, se generara un error.")
-print("Tambien podemos usar el operador in para comprobar si un elemento existe en la lista, por ejemplo 'Genial' in listaString devolvera True si 'Genial' existe en la lista y False si no existe.")
+print("Tambien podemos usar el operador in para comprobar si un elemento existe en la lista, por ejemplo 'Genial' in listaString devolvera True si 'Genial' existe en la lista y"+
+    " False si no existe.")
 existe = "Genial" in listaString
 print("¿El elemento 'Genial' existe en la lista?:", existe)
 
 print()
-print("Tambien podemos contar el numero de veces que aparece un elemento en la lista con la funcion .count(), por ejemplo listaString.count('Genial') devolvera el numero de veces que 'Genial' aparece en la lista.")
+print("Tambien podemos contar el numero de veces que aparece un elemento en la lista con la funcion .count(), por ejemplo listaString.count('Genial') devolvera el numero de veces"+
+    " que 'Genial' aparece en la lista.")
 contador = listaString.count("Genial")
 print("El elemento 'Genial' aparece", contador, "veces en la lista.")
 
 print()
 print("### RECORRER ###")
-print("Para recorrer una lista disponemos de diversas maneras, entre ellas podemos o bien iterar por lo elementos o iterar por la longitud, para este segundo caso deberemos usar la funcion len() para obtener la longitud de la lista.")
-print("Por ejemplo, en el estado actual de la lista tenemos los siguientes elementos:" + str(len(listaString)) + " elementos, y con un for i in range(len(listaString)) podemos recorrer la lista por indices:")
+print("Para recorrer una lista disponemos de diversas maneras, entre ellas podemos o bien iterar por lo elementos o iterar por la longitud, para este segundo caso deberemos usar"+
+    " la funcion len() para obtener la longitud de la lista.")
+print("Por ejemplo, en el estado actual de la lista tenemos los siguientes elementos:" + str(len(listaString)) + " elementos, y con un for i in range(len(listaString)) podemos "+
+    "recorrer la lista por indices:")
 for i in range(len(listaString)):
     print("Elemento en la posicion", i, "es:", listaString[i])
 print("Otra forma de recorrer la lista es directamente por los elementos, usando for elemento in listaString:")
@@ -173,7 +182,8 @@ print()
 print("### OTRAS OPERACIONES ###")
 
 
-print("Tambien podemos trocear algun elemento para convertirlo en cadena usando .split() para convertir una cadena de texto en una lista, por ejemplo 'Hola Mundo Python'.split() devolveria una lista con los elementos separados por espacios.")
+print("Tambien podemos trocear algun elemento para convertirlo en cadena usando .split() para convertir una cadena de texto en una lista, por ejemplo 'Hola Mundo Python'.split()"+
+      " devolveria una lista con los elementos separados por espacios.")
 cadena = "Hola Mundo Python"
 listaDesdeCadena = cadena.split()
 print("La lista creada a partir de la cadena es:", listaDesdeCadena)
