@@ -182,8 +182,8 @@ print()
 print("### OTRAS OPERACIONES ###")
 
 
-print("Tambien podemos trocear algun elemento para convertirlo en cadena usando .split() para convertir una cadena de texto en una lista, por ejemplo 'Hola Mundo Python'.split()"+
-      " devolveria una lista con los elementos separados por espacios.")
+print("Tambien podemos trocear algun elemento para convertirlo en cadena usando .split() para convertir una cadena de texto en una lista, por ejemplo 'Hola Mundo Python'.split() "+
+    "devolveria una lista con los elementos separados por espacios.")
 cadena = "Hola Mundo Python"
 listaDesdeCadena = cadena.split()
 print("La lista creada a partir de la cadena es:", listaDesdeCadena)
