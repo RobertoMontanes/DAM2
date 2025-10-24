@@ -1,0 +1,34 @@
+<div class="container my-4">
+    <div class="row">
+        @for (task of tasks; track $index) {
+            <div class="col-12 col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{task.title}}</h5>
+                            @if (task.done) {
+                                <span class="badge bg-success">Completada</span>
+                            } @else {
+                                <span class="badge bg-warning text-dark">Pendiente</span>
+                            }
+                        </div>
+
+                        <p class="card-text text-muted mb-3">
+                            @if (task.done) {
+                                Tarea realizada correctamente
+                            } @else {
+                                Tarea pendiente
+                            }
+                        </p>
+
+                        <div class="mt-auto d-flex justify-content-end">
+                            <button class="btn btn-outline-primary btn-sm" (click)="modificarEstado(task.id)">
+                                Modificar estado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
