@@ -1,0 +1,40 @@
+<div class="container mt-4">
+    <div class="card mx-auto" style="max-width:800px;">
+        <div class="card-body">
+            <h4 class="card-title mb-4">Perfil</h4>
+
+            <form>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input id="name" name="name" [(ngModel)]="nombre" type="text" class="form-control" placeholder="Tu nombre">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="surname" class="form-label">Apellidos</label>
+                        <input id="surname" name="surname" [(ngModel)]="apellidos" type="text" class="form-control" placeholder="Tus apellidos">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" name="email" [(ngModel)]="email" type="email" class="form-control" placeholder="tu@ejemplo.com">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="age" class="form-label">Edad</label>
+                        <input id="age" name="age" [(ngModel)]="edad" type="number" class="form-control" min="0" placeholder="Edad">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer text-muted">
+            <strong>Vista previa:</strong>
+            <div class="mt-2">Hola {{nombre}} {{apellidos}}, de email {{email}}, con {{edad}}</div>
+        </div>
+    </div>
+</div>
