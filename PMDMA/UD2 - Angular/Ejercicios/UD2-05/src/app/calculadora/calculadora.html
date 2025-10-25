@@ -1,0 +1,47 @@
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-3" style="max-width: 360px; width:100%;">
+        
+    @if (calc) {
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-truncate text-muted small" style="max-width:220px;">
+                {{valor0}} {{operador}} {{valor1}} =
+            </div>
+        </div>
+    }@else if (operador != "") {
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-truncate text-muted small" style="max-width:260px;">
+                {{valor0}} {{operador}}
+            </div>
+        </div>
+    }
+
+        <div class="card-body">
+            <div class="mb-3">
+                <div class="form-control text-end fs-3" aria-label="display">{{showDown}}</div>
+            </div>
+
+            <div class="row g-2">
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(7)">7</button></div>
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(8)">8</button></div>
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(9)">9</button></div>
+                <div class="col-3"><button class="btn btn-warning w-100" (click)="setOperador('+')">+</button></div>
+
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(4)">4</button></div>
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(5)">5</button></div>
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(6)">6</button></div>
+                <div class="col-3"><button class="btn btn-warning w-100" (click)="setOperador('-')">-</button></div>
+
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(1)">1</button></div>
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(2)">2</button></div>
+                <div class="col-3"><button class="btn btn-outline-secondary w-100" (click)="addValue(3)">3</button></div>
+                <div class="col-3">
+                    <button class="btn btn-outline-secondary w-100 btn-danger" (click)="removeLast()" aria-label="borrar"><span style="color: black;">⌫</span></button>
+                </div>
+
+                <div class="col-6"><button class="btn btn-outline-secondary w-100" (click)="addValue(0)">0</button></div>
+                <div class="col-6"><button class="btn btn-success w-100" (click)="calcular()">=</button></div>
+            </div>
+        </div>
+    </div>
+</div>
