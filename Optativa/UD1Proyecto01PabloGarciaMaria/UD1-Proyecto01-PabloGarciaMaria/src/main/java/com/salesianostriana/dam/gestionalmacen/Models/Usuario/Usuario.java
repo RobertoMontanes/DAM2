@@ -16,15 +16,28 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(
+        name = "usuarios",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_username",columnNames = "username"),
+                @UniqueConstraint(name = "uk_id",columnNames = "id"),
+                @UniqueConstraint(name = "uk_email",columnNames = "email")
+        }
+)
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private long id;
     private String nombre;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String username;
+
     private String password;
     private LocalDate fechaCreacion;
     private boolean activo;
