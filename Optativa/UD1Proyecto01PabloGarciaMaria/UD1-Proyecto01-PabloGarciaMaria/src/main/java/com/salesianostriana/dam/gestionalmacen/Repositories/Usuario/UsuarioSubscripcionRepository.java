@@ -1,4 +1,9 @@
 package com.salesianostriana.dam.gestionalmacen.Repositories.Usuario;
 
-public interface UsuarioSubscripcionRepository {
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.UsuarioSubscripcion;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UsuarioSubscripcionRepository extends JpaRepository<UsuarioSubscripcion,Long> {
 }

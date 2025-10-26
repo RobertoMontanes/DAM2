@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen.Models.Enums;
+package com.salesianostriana.dam.gestionalmacen.Models.Almacen.Enums;
 
 public enum CategoriasAlmacen {
 

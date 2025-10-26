@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen.Repositories;
+package com.salesianostriana.dam.gestionalmacen.Repositories.Producto;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Producto.Lote;
 import org.springframework.data.jpa.repository.JpaRepository;

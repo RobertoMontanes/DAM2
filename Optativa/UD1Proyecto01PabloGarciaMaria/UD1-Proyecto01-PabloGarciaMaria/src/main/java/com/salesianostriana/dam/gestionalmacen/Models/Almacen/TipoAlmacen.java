@@ -1,11 +1,24 @@
-package com.salesianostriana.dam.gestionalmacen.Models;
+package com.salesianostriana.dam.gestionalmacen.Models.Almacen;
 
-import com.salesianostriana.dam.gestionalmacen.Models.Enums.CategoriasAlmacen;
-import jakarta.persistence.Id;
+import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Enums.CategoriasAlmacen;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class TipoAlmacen {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private long id;
 
     private String nombre;
@@ -15,5 +28,8 @@ public class TipoAlmacen {
     private double temperatura;
 
     private String requisitosEspeciales;
+
+    @OneToMany(mappedBy = "tipoAlmacen")
+    private List<Almacen> almacenes;
 
 }
