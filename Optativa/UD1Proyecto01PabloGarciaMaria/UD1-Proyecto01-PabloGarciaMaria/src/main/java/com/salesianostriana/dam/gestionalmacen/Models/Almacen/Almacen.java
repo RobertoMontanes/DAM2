@@ -23,10 +23,10 @@ public class Almacen {
 
     private String nombre;
     private String ubicacion;
-    private EstadosAlmacen estadoAlmacen;
     private double superficie;
-
     private boolean seguridad;
+
+    private EstadosAlmacen estadoAlmacen;
 
     @OneToMany(mappedBy = "almacen")
     private List<Lote> lotes;

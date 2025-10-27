@@ -10,12 +10,10 @@ import com.salesianostriana.dam.gestionalmacen.Utils.APIResponse.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -31,7 +29,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
 	public ResponseEntity<ApiResponse<ListarUsuario_UsuarioDTO>> crearUsuario(NuevoUsuario_UsuarioDTO usuario) { // C
         Usuario newUser = usuario.UsuarioDTOtoUsuario();
         repository.save(newUser);
-        log.info("Usuario creado: " + newUser.getUsername());
+        log.info("Usuario creado: {}", newUser.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(ListarUsuario_UsuarioDTO.UsuarioToUsuarioDTO(newUser)));
     }
