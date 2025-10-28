@@ -27,4 +27,13 @@ public class NuevaSubscripcion_SubscripcionDTO {
                 .build();
     }
 
+    public Subscripcion fromDTO() {
+        return Subscripcion.builder()
+                .nombre(this.nombre)
+                .precio(this.precio)
+                .num_almacenes(this.num_almacenes)
+                .soportePrioritario(this.soportePrioritario)
+                .duracionMeses(this.duracionMeses)
+                .build();
+    }
 }
