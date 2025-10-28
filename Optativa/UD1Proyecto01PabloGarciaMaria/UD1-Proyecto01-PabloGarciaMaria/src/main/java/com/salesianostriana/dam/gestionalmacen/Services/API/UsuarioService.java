@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
+public class  UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
 
     public ResponseEntity<ApiResponse<NuevoUsuario_UsuarioDTO>> obtenerPlantillaUsuario() { // C
         NuevoUsuario_UsuarioDTO plantilla = new NuevoUsuario_UsuarioDTO();

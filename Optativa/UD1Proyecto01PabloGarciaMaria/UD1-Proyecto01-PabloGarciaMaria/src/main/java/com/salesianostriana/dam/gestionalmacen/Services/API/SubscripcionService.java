@@ -15,7 +15,6 @@ public class SubscripcionService extends BaseServiceImpl<Subscripcion, Long, Sub
     public ResponseEntity<ApiResponse<NuevaSubscripcion_SubscripcionDTO>> obtenerPlantillaSubscripcion() { // C
         NuevaSubscripcion_SubscripcionDTO plantilla = new NuevaSubscripcion_SubscripcionDTO();
         return ResponseEntity.ok(ApiResponse.success(plantilla));
-
     }
 
 
