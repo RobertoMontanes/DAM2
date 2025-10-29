@@ -1,4 +1,23 @@
-import { Component } from '@angular/core';
+import { Component,input } from '@angular/core';
+
+interface Person {
+  name: string;
+  height: string;
+  mass: string;
+  hair_color: string;
+  skin_color: string;
+  eye_color: string;
+  birth_year: string;
+  gender: string;
+  homeworld: string;
+  films: string[];
+  species: string[];
+  vehicles: string[];
+  starships: string[];
+  created: string;
+  edited: string;
+  url: string;
+}
 
 @Component({
   selector: 'app-star-wars-person',
@@ -8,6 +27,6 @@ import { Component } from '@angular/core';
 })
 export class StarWarsPerson {
 
-  Persona = input('');
+    persona = input<Person>();
 
 }

@@ -1,14 +1,34 @@
 import { Component } from '@angular/core';
+import { StarWarsPerson } from "../star-wars-person/star-wars-person";
+
+interface Person {
+  name: string;
+  height: string;
+  mass: string;
+  hair_color: string;
+  skin_color: string;
+  eye_color: string;
+  birth_year: string;
+  gender: string;
+  homeworld: string;
+  films: string[];
+  species: string[];
+  vehicles: string[];
+  starships: string[];
+  created: string;
+  edited: string;
+  url: string;
+}
 
 @Component({
   selector: 'app-star-wars-person-list',
-  imports: [],
+  imports: [StarWarsPerson],
   templateUrl: './star-wars-person-list.html',
   styleUrl: './star-wars-person-list.css',
 })
 export class StarWarsPersonList {
 
-  Persona = [
+  personas: Person[] = [
     {
 	"name": "Luke Skywalker",
 	"height": "172",
@@ -94,8 +114,32 @@ export class StarWarsPersonList {
 	"created": "2014-12-10T15:11:50.376000Z",
 	"edited": "2014-12-20T21:17:50.311000Z",
 	"url": "https://swapi.dev/api/people/3/"
+},{
+	"name": "Darth Vader",
+	"height": "202",
+	"mass": "136",
+	"hair_color": "none",
+	"skin_color": "white",
+	"eye_color": "yellow",
+	"birth_year": "41.9BBY",
+	"gender": "male",
+	"homeworld": "https://swapi.dev/api/planets/1/",
+	"films": [
+		"https://swapi.dev/api/films/1/",
+		"https://swapi.dev/api/films/2/",
+		"https://swapi.dev/api/films/3/",
+		"https://swapi.dev/api/films/6/"
+	],
+	"species": [],
+	"vehicles": [],
+	"starships": [
+		"https://swapi.dev/api/starships/13/"
+	],
+	"created": "2014-12-10T15:18:20.704000Z",
+	"edited": "2014-12-20T21:17:50.313000Z",
+	"url": "https://swapi.dev/api/people/4/"
 }
 
-  ] 
+  ];
 
 }

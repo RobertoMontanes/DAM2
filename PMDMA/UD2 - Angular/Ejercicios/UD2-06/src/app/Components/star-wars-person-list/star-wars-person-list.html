@@ -1,1 +1,13 @@
-<p>star-wars-person-list works!</p>
+<div class="container mt-4">
+  <h2 class="mb-4">Lista Star Wars</h2>
+  
+  <div class="row">
+    @for (persona of personas; track persona.name) {
+      <div class="col-lg-4 col-md-6 mb-4">
+        <app-star-wars-person
+          [persona]="persona">
+        </app-star-wars-person>
+      </div>
+    }
+  </div>
+</div>
