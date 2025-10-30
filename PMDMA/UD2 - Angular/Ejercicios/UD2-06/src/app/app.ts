@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { StarWarsPerson } from "./Components/star-wars-person/star-wars-person";
+import { StarWarsPersonList } from "./Components/star-wars-person-list/star-wars-person-list";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, StarWarsPerson],
+  imports: [RouterOutlet, StarWarsPersonList],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

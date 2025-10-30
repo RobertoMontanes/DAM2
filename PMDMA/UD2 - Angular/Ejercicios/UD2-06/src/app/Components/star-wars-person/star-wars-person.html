@@ -1,4 +1,80 @@
+<div class="card character-card shadow-sm border-0">
+  <!-- Header -->
+  <div class="card-header bg-dark text-white text-center py-3">
+    <h5 class="card-title mb-0 fw-bold">{{ persona()?.name }}</h5>
+  </div>
 
-<p>{{ Persona.name }}</p>
-<p>{{ Persona.height }}</p>
-<p>{{ Persona.mass }}</p>
+  <div class="card-body p-4">
+    <!-- Información Básica -->
+    <div class="row mb-3">
+      <div class="col-6">
+        <div class="info-item">
+          <small class="text-muted">Altura</small>
+          <div class="fw-bold">{{ persona()?.height }} cm</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="info-item">
+          <small class="text-muted">Peso</small>
+          <div class="fw-bold">{{ persona()?.mass }} kg</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <div class="info-item">
+          <small class="text-muted">Género</small>
+          <div class="fw-bold text-capitalize">{{ persona()?.gender }}</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="info-item">
+          <small class="text-muted">Nacimiento</small>
+          <div class="fw-bold">{{ persona()?.birth_year }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Características Físicas -->
+    <div class="physical-traits mb-4">
+      <h6 class="section-title mb-2">Apariencia</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span class="badge bg-light text-dark border">
+          Cabello: {{ persona()?.hair_color }}
+        </span>
+        <span class="badge bg-light text-dark border">
+          Piel: {{ persona()?.skin_color }}
+        </span>
+        <span class="badge bg-light text-dark border">
+          Ojos: {{ persona()?.eye_color }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="stats-section">
+      <h6 class="section-title mb-3">En la Saga</h6>
+      <div class="row text-center">
+        <div class="col-4">
+          <div class="stat">
+            <div class="stat-number text-primary">{{ persona()?.films?.length || 0 }}</div>
+            <small class="text-muted">Películas</small>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="stat">
+            <div class="stat-number text-success">{{ persona()?.vehicles?.length || 0 }}</div>
+            <small class="text-muted">Vehículos</small>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="stat">
+            <div class="stat-number text-warning">{{ persona()?.starships?.length || 0 }}</div>
+            <small class="text-muted">Naves</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
