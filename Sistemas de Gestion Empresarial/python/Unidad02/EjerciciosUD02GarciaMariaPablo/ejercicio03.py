@@ -18,6 +18,7 @@ print("Ejercicio 02: Funciones matemáticas en Python")
 print("En el siguiente ejercicio, crearemos una lista con las diferentes notas de un examen y basandonos en esas notas, calcularemos el promedio, la nota más alta y la nota más baja utilizando funciones matemáticas.")
 
 while opcion != opcionAbandonar:
+    notas = []
     print("\nVamos a definir como ingresaremos las notas.")
     # print("- Indique 0 para salir del programa.")
     # print("- Indique 1 para ingresar la cantidad de notas que desea evaluar: ")
