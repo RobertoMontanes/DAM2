@@ -6,8 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './star-wars-person.html',
   styleUrl: './star-wars-person.css',
 })
-export class StarWarsPerson {
-
-  Persona = input('');
+export class StarWarsPersersona = input('');
 
 }

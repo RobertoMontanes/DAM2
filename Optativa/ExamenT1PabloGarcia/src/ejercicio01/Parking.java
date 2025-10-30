@@ -91,7 +91,7 @@ public class Parking {
         double sum = 0;
         for (Vehiculo v : vehiculos) {
             if (v instanceof Moto) {
-                sum += v.calcularPrecio(tasaParking,tasaLongitud,tamTasa,descuentoCC,tamCC);
+                sum += v.calcularPrecio (tasaParking,tasaLongitud,tamTasa,descuentoCC,tamCC);
             }
         }
         return sum;
