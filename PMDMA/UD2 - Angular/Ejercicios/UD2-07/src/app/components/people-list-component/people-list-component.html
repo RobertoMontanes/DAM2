@@ -1,0 +1,18 @@
+<body class="bg-dark text-light">
+    <div class="container py-4">
+        <header class="text-center mb-5">
+            <h1 class="display-4 text-warning">Personajes de Star Wars</h1>
+            <p class="lead">Explora los personajes de la galaxia</p>
+        </header>
+
+
+        <!-- Listado de personajes -->
+        <div class="row" id="charactersList">
+            @for (people of peopleList; track people.name) {
+                <div class="col-md-6 col-lg-6 mb-4">
+                    <app-people-component [person]="people"></app-people-component>
+                </div>
+            }
+        </div>
+    </div>
+</body>
