@@ -2,26 +2,25 @@ package com.salesianostriana.dam.gestionalmacen.Models.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
 @Table(
-        name = "usuarios",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_username",columnNames = "username"),
-                @UniqueConstraint(name = "uk_id",columnNames = "id"),
-                @UniqueConstraint(name = "uk_email",columnNames = "email")
+    name = "usuario",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_username_usuario",columnNames = "username"),
+        @UniqueConstraint(name = "uk_id_usuario",columnNames = "id"),
+        @UniqueConstraint(name = "uk_email_usuario",columnNames = "email")
         }
 )
 public class Usuario {
@@ -30,16 +29,23 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private long id;
+
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Column(nullable = false)
     private String nombre;
 
     @Column(nullable = false)
+    @Email(message = "El email debe tener un formato válido")
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "El username no puede estar vacío")
+    @Size(min = 3, max = 30, message = "El username debe tener entre 3 y 30 caracteres")
     private String username;
 
     private String password;
-    private LocalDate fechaCreacion;
+    @Builder.Default
+    private LocalDate fechaCreacion = LocalDate.now();
     private boolean activo;
 
     @OneToMany(mappedBy = "usuario")

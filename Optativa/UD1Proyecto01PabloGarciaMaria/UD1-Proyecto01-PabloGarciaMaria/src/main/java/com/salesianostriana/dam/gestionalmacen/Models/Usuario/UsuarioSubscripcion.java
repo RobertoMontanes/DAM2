@@ -21,14 +21,21 @@ public class UsuarioSubscripcion {
     @JoinColumn(name = "usuario_id")
     @ToString.Exclude
     private Usuario usuario;
+
+
     @ManyToOne
     @JoinColumn(name = "subscripcion_id")
     @ToString.Exclude
     private Subscripcion subscripcion;
 
-    private LocalDate fechaInicio;
+    @Builder.Default
+    @Column(nullable = false)
+    private LocalDate fechaInicio = LocalDate.now();
+
+    @Column(nullable = false)
     private LocalDate fechaFin;
 
+    @Column(nullable = false)
     private boolean activa;
 
 }

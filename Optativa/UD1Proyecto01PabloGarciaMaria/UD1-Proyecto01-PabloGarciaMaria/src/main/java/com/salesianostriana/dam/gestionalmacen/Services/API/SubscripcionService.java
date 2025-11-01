@@ -1,13 +1,9 @@
 package com.salesianostriana.dam.gestionalmacen.Services.API;
 
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.ListarSubscripcion_SubscripcionDTO;
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.ListarUsuario_UsuarioDTO;
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.NuevaSubscripcion_SubscripcionDTO;
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.NuevoUsuario_UsuarioDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.ListarSubscripcion_SubscripcionDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.NuevaSubscripcion_SubscripcionDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Subscripcion;
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.SubscripcionRepository;
-import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.UsuarioRepository;
 import com.salesianostriana.dam.gestionalmacen.Services.Base.BaseServiceImpl;
 import com.salesianostriana.dam.gestionalmacen.Utils.APIResponse.ApiResponse;
 import org.slf4j.Logger;
@@ -17,18 +13,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubscripcionService extends BaseServiceImpl<Subscripcion, Long, SubscripcionRepository> {
 
     private static final Logger log = LoggerFactory.getLogger(SubscripcionService.class);
 
-    public ResponseEntity<ApiResponse<NuevaSubscripcion_SubscripcionDTO>> obtenerPlantillaSubscripcion() { // C
+    public ResponseEntity<ApiResponse<NuevaSubscripcion_SubscripcionDTO>> obtenerPlantilla() { // C
         NuevaSubscripcion_SubscripcionDTO plantilla = new NuevaSubscripcion_SubscripcionDTO();
         return ResponseEntity.ok(ApiResponse.success(plantilla));
     }
 
-    public ResponseEntity<ApiResponse<ListarSubscripcion_SubscripcionDTO>> crearSubscripcion(NuevaSubscripcion_SubscripcionDTO s) { // C
+    public ResponseEntity<ApiResponse<ListarSubscripcion_SubscripcionDTO>> crear(NuevaSubscripcion_SubscripcionDTO s) { // C
         Subscripcion newSub = s.fromDTO();
         repository.save(newSub);
         log.info("Subscripción creado: {}", newSub.getNombre());
@@ -36,12 +33,34 @@ public class SubscripcionService extends BaseServiceImpl<Subscripcion, Long, Sub
                 .body(ApiResponse.success(ListarSubscripcion_SubscripcionDTO.toDTO(newSub)));
     }
 
-    public ResponseEntity<ApiResponse<List<ListarSubscripcion_SubscripcionDTO>>> obtenerSubscripciones() { // R
+    public ResponseEntity<ApiResponse<List<ListarSubscripcion_SubscripcionDTO>>> listar() { // R
         List<ListarSubscripcion_SubscripcionDTO> subscripciones = repository.findAll().stream()
                 .map(ListarSubscripcion_SubscripcionDTO::toDTO)
                 .toList();
 
         return ResponseEntity.ok(ApiResponse.success(subscripciones));
+    }
+
+    public ResponseEntity<ApiResponse<ListarSubscripcion_SubscripcionDTO>> actualizar(ListarSubscripcion_SubscripcionDTO subscripcionDTO) {
+        Subscripcion s;
+        Optional<Subscripcion> sOrg = repository.findById(subscripcionDTO.getId());
+        if (sOrg.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Subscripción no encontrado"));
+        }
+        s = repository.save(sOrg.get().modify(subscripcionDTO.fromDTO()));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(ListarSubscripcion_SubscripcionDTO.toDTO(s)));
+    }
+
+    public ResponseEntity<ApiResponse<ListarSubscripcion_SubscripcionDTO>> eliminar(long id) { // D
+        return repository.findById(id)
+                .map(s -> {
+                    repository.delete(s);
+                    log.info("Subscripción eliminada: {}", s.getNombre());
+                    ListarSubscripcion_SubscripcionDTO dto = ListarSubscripcion_SubscripcionDTO.toDTO(s);
+                    return ResponseEntity.ok(ApiResponse.success(dto));
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error("Subscripción no encontrado")));
     }
 
 

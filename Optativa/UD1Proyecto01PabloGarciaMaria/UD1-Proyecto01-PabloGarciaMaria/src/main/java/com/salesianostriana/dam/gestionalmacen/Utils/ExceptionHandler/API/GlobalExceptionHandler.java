@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,6 +26,8 @@ public class GlobalExceptionHandler {
             errorGenerator = "El email";
         } else if (e.getMessage().toLowerCase().contains("uk_username")) {
             errorGenerator = "El username";
+        } else if (e.getMessage().toLowerCase().contains("uk_nombre")) {
+            errorGenerator = "El nombre";
         } else {
             errorGenerator = "Dato desconocido";
         }
@@ -31,6 +36,22 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body("Error: "+errorGenerator+" ya existe o es nulo");
     }
+
+    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolation(jakarta.validation.ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getConstraintViolations().forEach(violation -> {
+            String field = violation.getPropertyPath().toString();
+            String message = violation.getMessage();
+            errors.put(field, message);
+        });
+
+        log.error("Errores de validación: {}", errors);
+
+        return ResponseEntity.badRequest().body(errors);
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException e) {
@@ -45,7 +66,7 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body("El recurso solicitado no existe");
+                .body("Error: El recurso solicitado no existe");
     }
 
     @ExceptionHandler(Exception.class)

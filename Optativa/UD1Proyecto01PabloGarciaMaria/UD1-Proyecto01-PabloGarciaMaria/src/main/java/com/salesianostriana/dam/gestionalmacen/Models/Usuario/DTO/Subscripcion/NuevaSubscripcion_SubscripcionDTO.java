@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO;
+package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Subscripcion;
 import lombok.AllArgsConstructor;

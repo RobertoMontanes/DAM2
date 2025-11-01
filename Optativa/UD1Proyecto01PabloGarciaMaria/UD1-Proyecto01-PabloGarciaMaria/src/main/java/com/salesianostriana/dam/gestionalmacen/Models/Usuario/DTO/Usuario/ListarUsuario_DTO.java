@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO;
+package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ListarUsuario_UsuarioDTO {
+public class ListarUsuario_DTO {
 
     private long id;
     private String nombre;
@@ -32,8 +32,8 @@ public class ListarUsuario_UsuarioDTO {
                 .build();
     }
 
-    public static ListarUsuario_UsuarioDTO UsuarioToUsuarioDTO(Usuario usuario) {
-        return ListarUsuario_UsuarioDTO.builder()
+    public static ListarUsuario_DTO UsuarioToUsuarioDTO(Usuario usuario) {
+        return ListarUsuario_DTO.builder()
                 .id(usuario.getId())
                 .nombre(usuario.getNombre())
                 .email(usuario.getEmail())

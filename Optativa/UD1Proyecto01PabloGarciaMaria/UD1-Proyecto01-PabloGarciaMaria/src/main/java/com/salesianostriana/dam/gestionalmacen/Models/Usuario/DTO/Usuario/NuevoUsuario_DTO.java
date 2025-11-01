@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO;
+package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import lombok.AllArgsConstructor;
@@ -9,13 +9,15 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
-public class NuevoUsuario_UsuarioDTO {
+public class NuevoUsuario_DTO {
 
     private String nombre;
     private String email;
     private String username;
     private String password;
     private boolean activo;
+    @Builder.Default
+    private String fechaCreacion = LocalDate.now().toString();
 
     public Usuario UsuarioDTOtoUsuario() {
         return Usuario.builder()
@@ -23,7 +25,7 @@ public class NuevoUsuario_UsuarioDTO {
                 .email(this.email)
                 .username(this.username)
                 .password(this.password)
-                .fechaCreacion(LocalDate.now())
+                .fechaCreacion(LocalDate.parse(fechaCreacion))
                 .activo(this.activo)
                 .build();
     }
