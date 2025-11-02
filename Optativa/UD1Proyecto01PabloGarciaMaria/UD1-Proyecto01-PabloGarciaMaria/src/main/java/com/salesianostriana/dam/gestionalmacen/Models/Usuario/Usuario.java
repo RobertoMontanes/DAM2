@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Getter
+@ToString
 @Table(
     name = "usuario",
     uniqueConstraints = {
@@ -51,9 +52,9 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     @Builder.Default
     private List<Almacen> almacenesAsignados = new ArrayList<>();
+
     @OneToMany(mappedBy = "usuario")
     @Builder.Default
-    
     private List<Membresia> historialSubscripciones = new ArrayList<>();
     
 	public Usuario modify(Usuario u) {

@@ -54,13 +54,13 @@ public class MembresiaController {
         log.info("Actualizando subscripcion con id: {}", subscripcionDTO.getId());
         return service.actualizar(subscripcionDTO);
     }
-//
-//    // ✅ D - Eliminar subscripcion
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<ApiResponse<ListarMembresia_DTO>> eliminar(
-//            @PathVariable long id) {
-//        log.info("Eliminando usuario con id: {}", id);
-//        return service.eliminar(id);
-//    }
+
+    // ✅ D - Eliminar subscripcion
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<ListarMembresia_DTO>> eliminar(
+            @PathVariable long id) {
+        log.info("Eliminando usuario con id: {}", id);
+        return service.eliminar(id);
+    }
 
 }

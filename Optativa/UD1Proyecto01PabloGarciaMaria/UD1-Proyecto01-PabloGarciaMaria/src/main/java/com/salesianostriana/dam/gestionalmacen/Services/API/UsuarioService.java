@@ -35,6 +35,7 @@ public class  UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepos
     }
     
     public ResponseEntity<ApiResponse<List<ListarUsuario_DTO>>> obtenerUsuarios() { // R
+
         List<ListarUsuario_DTO> usuarios = repository.findAll().stream()
                 .map(ListarUsuario_DTO::UsuarioToUsuarioDTO)
                 .toList();

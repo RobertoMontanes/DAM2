@@ -2,6 +2,7 @@ package com.salesianostriana.dam.gestionalmacen.Services.API;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.ListarMembresia_DTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.NuevoMembresia_DTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.ListarSubscripcion_SubscripcionDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Subscripcion;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Membresia;
@@ -65,7 +66,6 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
     }
     
     public ResponseEntity<ApiResponse<List<ListarMembresia_DTO>>> listar() {
-
         return ResponseEntity.ok(
                 ApiResponse.success(
                         repository.findAll().stream()
@@ -122,6 +122,18 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
                 .activa(membresiaDTO.isActiva())
                 .cancelado(membresiaDTO.isCancelado())
                 .build();
+    }
+
+    public ResponseEntity<ApiResponse<ListarMembresia_DTO>> eliminar(long id) { // D
+        return repository.findById(id)
+                .map(s -> {
+                    repository.delete(s);
+                    log.info("Membresia eliminada: {}", s.getId());
+                    ListarMembresia_DTO dto = ListarMembresia_DTO.toDTO(s);
+                    return ResponseEntity.ok(ApiResponse.success(dto));
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error("Subscripción no encontrado")));
     }
 
     private Membresia fromDTO(NuevoMembresia_DTO us) {
