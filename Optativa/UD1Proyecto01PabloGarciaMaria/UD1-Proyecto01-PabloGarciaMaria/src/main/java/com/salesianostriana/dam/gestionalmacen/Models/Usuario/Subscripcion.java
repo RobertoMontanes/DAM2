@@ -14,11 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table(
-        name = "subscripciones",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_id_sub",columnNames = "id"),
-                @UniqueConstraint(name = "uk_nombre_sub",columnNames = "nombre")
-        }
+        name = "subscripciones"
 )
 public class Subscripcion {
 
