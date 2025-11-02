@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${producto.id != null} ? 'Editar Producto - Gestión de Almacenes' : 'Nuevo Producto - Gestión de Almacenes'">Nuevo Producto - Gestión de Almacenes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        .required-label::after {
+            content: " *";
+            color: #dc3545;
+        }
+        .form-section {
+            border-left: 4px solid #0d6efd;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        .form-section h6 {
+            color: #0d6efd;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid py-4">
+
+    <!-- Modal de Error -->
+    <div th:if="${error}" class="modal fade" id="modalError" tabindex="-1" aria-labelledby="modalErrorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalErrorLabel">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Error
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger mb-0">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <span th:text="${error}">Mensaje de error</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}" class="text-decoration-none">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/productos}" class="text-decoration-none">
+                            <i class="fas fa-boxes"></i> Productos
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <i th:class="${producto.id != null} ? 'fas fa-edit' : 'fas fa-plus'"></i>
+                        <span th:text="${producto.id != null} ? 'Editar Producto' : 'Nuevo Producto'">Nuevo Producto</span>
+                    </li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-1">
+                        <i th:class="${producto.id != null} ? 'fas fa-edit text-warning' : 'fas fa-plus-circle text-primary'"
+                           class="fas fa-plus-circle text-primary me-2"></i>
+                        <span th:text="${producto.id != null} ? 'Editar Producto' : 'Nuevo Producto'">Nuevo Producto</span>
+                    </h1>
+                    <p class="text-muted mb-0" th:text="${producto.id != null} ?
+                        'Modifique la información del producto existente' :
+                        'Complete el formulario para agregar un nuevo producto al inventario'">
+                        Complete el formulario para agregar un nuevo producto al inventario
+                    </p>
+                    <small th:if="${producto.id != null}" class="text-muted">
+                        ID: <strong th:text="${producto.id}"></strong>
+                    </small>
+                </div>
+                <div>
+                    <a th:href="@{/productos}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Volver al Listado
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        <span th:text="${producto.id != null} ? 'Información del Producto' : 'Información del Nuevo Producto'">
+                            Información del Producto
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Formulario para Editar -->
+                    <form th:if="${producto.id != null}"
+                          th:action="@{/productos/editar/{id}(id=${producto.id})}"
+                          th:object="${producto}"
+                          method="post"
+                          id="productoForm">
+
+                        <input type="hidden" name="_method" value="put">
+
+                        <!-- Información Básica -->
+                        <div class="form-section">
+                            <h6 class="mb-3">Información Básica</h6>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombre" class="form-label required-label">
+                                        <i class="fas fa-tag me-1"></i>Nombre del Producto
+                                    </label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="nombre"
+                                           th:field="*{nombre}"
+                                           placeholder="Ingrese el nombre del producto"
+                                           required
+                                           minlength="2"
+                                           maxlength="100">
+                                    <div class="form-text">
+                                        Nombre descriptivo del producto (mín. 2 caracteres)
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese un nombre válido para el producto.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="categoriaProducto" class="form-label required-label">
+                                        <i class="fas fa-folder me-1"></i>Categoría
+                                    </label>
+                                    <select class="form-select"
+                                            id="categoriaProducto"
+                                            th:field="*{categoriaProducto}"
+                                            required>
+                                        <option value="">Seleccione una categoría</option>
+                                        <option th:each="categoria : ${categorias}"
+                                                th:value="${categoria}"
+                                                th:selected="${producto.categoriaProducto == categoria}"
+                                                th:text="${categoria}">
+                                        </option>
+                                    </select>
+                                    <div class="form-text">
+                                        Seleccione la categoría a la que pertenece el producto
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor seleccione una categoría.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cantidad" class="form-label required-label">
+                                        <i class="fas fa-boxes me-1"></i>Cantidad en Stock
+                                    </label>
+                                    <input type="number"
+                                           class="form-control"
+                                           id="cantidad"
+                                           th:field="*{cantidad}"
+                                           placeholder="0"
+                                           min="0"
+                                           max="100000"
+                                           required>
+                                    <div class="form-text">
+                                        Cantidad actual en inventario (mín. 0)
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese una cantidad válida.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="peso" class="form-label required-label">
+                                        <i class="fas fa-weight-hanging me-1"></i>Peso Unitario (kg)
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number"
+                                               class="form-control"
+                                               id="peso"
+                                               th:field="*{peso}"
+                                               placeholder="0.00"
+                                               step="0.01"
+                                               min="0"
+                                               max="10000"
+                                               required>
+                                        <span class="input-group-text">kg</span>
+                                    </div>
+                                    <div class="form-text">
+                                        Peso por unidad en kilogramos
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese un peso válido.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Asignación de Usuario -->
+                        <div class="form-section">
+                            <h6 class="mb-3">Asignación de Usuario</h6>
+
+                            <div class="mb-3">
+                                <label for="usuario" class="form-label required-label">
+                                    <i class="fas fa-user me-1"></i>Usuario Responsable
+                                </label>
+                                <select class="form-select"
+                                        id="usuario"
+                                        th:field="*{usuarioID}"
+                                        required>
+                                    <option value="">Seleccione un usuario</option>
+                                    <option th:each="usuario : ${usuarios}"
+                                            th:value="${usuario.id}"
+                                            th:selected="${producto.usuario != null and producto.usuario.id == usuario.id}"
+                                            th:text="${usuario.nombre + ' ' + usuario.apellido + ' (' + usuario.email + ')'}">
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    Seleccione el usuario responsable del producto
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione un usuario.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ubicación en Almacén -->
+                        <div class="form-section">
+                            <h6 class="mb-3">Ubicación en Almacén</h6>
+
+                            <div class="mb-3">
+                                <label for="almacen" class="form-label">
+                                    <i class="fas fa-warehouse me-1"></i>Almacén de Almacenamiento
+                                </label>
+                                <select class="form-select"
+                                        id="almacen"
+                                        th:field="*{almacenID}">
+                                    <option value="">Seleccione un almacén</option>
+                                    <option th:each="almacen : ${almacenes}"
+                                            th:value="${almacen.id}"
+                                            th:selected="${producto.almacen != null and producto.almacen.id == almacen.id}"
+                                            th:text="${almacen.nombre}">
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    Seleccione el almacén donde se ubicará el producto (opcional)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de Acción para Editar -->
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-2">
+                                <a th:href="@{/productos}" class="btn btn-outline-secondary w-100">
+                                    <i class="fas fa-times me-1"></i> Cancelar
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <button type="submit" class="btn btn-warning w-100" id="btnSubmit">
+                                    <i class="fas fa-save me-1"></i> Actualizar Producto
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Formulario para Crear -->
+                    <form th:unless="${producto.id != null}"
+                          th:action="@{/productos}"
+                          th:object="${producto}"
+                          method="post"
+                          id="productoForm">
+
+                        <!-- Información Básica -->
+                        <div class="form-section">
+                            <h6 class="mb-3">Información Básica</h6>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombre" class="form-label required-label">
+                                        <i class="fas fa-tag me-1"></i>Nombre del Producto
+                                    </label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="nombre"
+                                           th:field="*{nombre}"
+                                           placeholder="Ingrese el nombre del producto"
+                                           required
+                                           minlength="2"
+                                           maxlength="100">
+                                    <div class="form-text">
+                                        Nombre descriptivo del producto (mín. 2 caracteres)
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese un nombre válido para el producto.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="categoriaProducto" class="form-label required-label">
+                                        <i class="fas fa-folder me-1"></i>Categoría
+                                    </label>
+                                    <select class="form-select"
+                                            id="categoriaProducto"
+                                            th:field="*{categoriaProducto}"
+                                            required>
+                                        <option value="">Seleccione una categoría</option>
+                                        <option th:each="categoria : ${categorias}"
+                                                th:value="${categoria}"
+                                                th:text="${categoria}">
+                                        </option>
+                                    </select>
+                                    <div class="form-text">
+                                        Seleccione la categoría a la que pertenece el producto
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor seleccione una categoría.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cantidad" class="form-label required-label">
+                                        <i class="fas fa-boxes me-1"></i>Cantidad en Stock
+                                    </label>
+                                    <input type="number"
+                                           class="form-control"
+                                           id="cantidad"
+                                           th:field="*{cantidad}"
+                                           placeholder="0"
+                                           min="0"
+                                           max="100000"
+                                           required>
+                                    <div class="form-text">
+                                        Cantidad inicial en inventario (mín. 0)
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese una cantidad válida.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="peso" class="form-label required-label">
+                                        <i class="fas fa-weight-hanging me-1"></i>Peso Unitario (kg)
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number"
+                                               class="form-control"
+                                               id="peso"
+                                               th:field="*{peso}"
+                                               placeholder="0.00"
+                                               step="0.01"
+                                               min="0"
+                                               max="10000"
+                                               required>
+                                        <span class="input-group-text">kg</span>
+                                    </div>
+                                    <div class="form-text">
+                                        Peso por unidad en kilogramos
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese un peso válido.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Asignación de Usuario -->
+                        <div class="form-section">
+                            <h6 class="mb-3">Asignación de Usuario</h6>
+
+                            <div class="mb-3">
+                                <label for="usuario" class="form-label required-label">
+                                    <i class="fas fa-user me-1"></i>Usuario Responsable
+                                </label>
+                                <select class="form-select"
+                                        id="usuario"
+                                        th:field="*{usuarioID}"
+                                        required>
+                                    <option value="">Seleccione un usuario</option>
+                                    <option th:each="usuario : ${usuarios}"
+                                            th:value="${usuario.id}"
+                                            th:text="${usuario.nombre + ' (' + usuario.email + ')'}">
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    Seleccione el usuario responsable del producto
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor seleccione un usuario.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ubicación en Almacén -->
+                        <div class="form-section">
+                            <h6 class="mb-3">Ubicación en Almacén</h6>
+
+                            <div class="mb-3">
+                                <label for="almacen" class="form-label">
+                                    <i class="fas fa-warehouse me-1"></i>Almacén de Almacenamiento
+                                </label>
+                                <select class="form-select"
+                                        id="almacen"
+                                        th:field="*{almacenID}">
+                                    <option value="">Seleccione un almacén</option>
+                                    <option th:each="almacen : ${almacenes}"
+                                            th:value="${almacen.id}"
+                                            th:text="${almacen.nombre}">
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    Seleccione el almacén donde se ubicará el producto (opcional)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de Acción para Crear -->
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-2">
+                                <button type="button" class="btn btn-outline-secondary w-100" onclick="history.back()">
+                                    <i class="fas fa-times me-1"></i> Cancelar
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <button type="submit" class="btn btn-primary w-100" id="btnSubmit">
+                                    <i class="fas fa-save me-1"></i> Guardar Producto
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Botones adicionales solo para creación -->
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <button type="submit" name="guardarYAgregar" value="true"
+                                        class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-save me-1"></i> Guardar y Agregar Otro
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Información de ayuda -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-info-circle text-info me-2"></i>Información Importante
+                    </h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-1">
+                            <small class="text-muted">
+                                <i class="fas fa-asterisk text-danger me-1"></i>
+                                Los campos marcados con asterisco (*) son obligatorios
+                            </small>
+                        </li>
+                        <li class="mb-1">
+                            <small class="text-muted">
+                                <i class="fas fa-exclamation-triangle text-warning me-1"></i>
+                                Verifique la información antes de guardar
+                            </small>
+                        </li>
+                        <li>
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>
+                                El usuario responsable es obligatorio para el seguimiento
+                            </small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script th:if="${error}">
+    document.addEventListener('DOMContentLoaded', function() {
+        const errorModal = new bootstrap.Modal(document.getElementById('modalError'));
+        errorModal.show();
+    });
+</script>
+</body>
+</html>

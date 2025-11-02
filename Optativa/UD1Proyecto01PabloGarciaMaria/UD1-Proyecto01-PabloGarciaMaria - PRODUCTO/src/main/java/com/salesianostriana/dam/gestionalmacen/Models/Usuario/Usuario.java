@@ -56,5 +56,15 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     @Builder.Default
     private List<Membresia> historialSubscripciones = new ArrayList<>();
+    
+	public Usuario modify(Usuario u) {
+		this.nombre = u.getNombre();
+		this.email = u.getEmail();
+		this.username = u.getUsername();
+		this.password = u.getPassword();
+		this.fechaCreacion = u.getFechaCreacion();
+		this.activo = u.isActivo();
+		return this;
+	}
 
 }

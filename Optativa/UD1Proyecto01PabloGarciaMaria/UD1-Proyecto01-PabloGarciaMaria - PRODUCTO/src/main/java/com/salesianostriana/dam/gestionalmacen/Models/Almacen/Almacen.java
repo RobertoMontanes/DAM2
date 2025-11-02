@@ -1,6 +1,8 @@
 package com.salesianostriana.dam.gestionalmacen.Models.Almacen;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Enums.EstadosAlmacen;
+import com.salesianostriana.dam.gestionalmacen.Models.Producto.Lote;
+import com.salesianostriana.dam.gestionalmacen.Models.Producto.Producto;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,6 +27,11 @@ public class Almacen {
     private boolean seguridad;
 
     private EstadosAlmacen estadoAlmacen;
+
+    @OneToMany(mappedBy = "almacen")
+    private List<Lote> lotes;
+    @OneToMany(mappedBy = "almacen")
+    private List<Producto> productos;
 
     @ManyToOne
     @ToString.Exclude
