@@ -30,7 +30,7 @@ public class Subscripcion {
     private String nombre;
 
     private double precio;
-    private int num_almacenes;
+    private int numAlmacenes;
     private boolean soportePrioritario;
     private int duracionMeses;
 
@@ -42,7 +42,7 @@ public class Subscripcion {
                 .id(this.id)
                 .nombre(subscripcion.getNombre())
                 .precio(subscripcion.getPrecio())
-                .num_almacenes(subscripcion.getNum_almacenes())
+                .numAlmacenes(subscripcion.getNumAlmacenes())
                 .soportePrioritario(subscripcion.isSoportePrioritario())
                 .duracionMeses(subscripcion.getDuracionMeses())
                 .build();

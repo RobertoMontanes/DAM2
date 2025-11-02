@@ -1,8 +1,7 @@
-package com.salesianostriana.dam.gestionalmacen.Services.API;
+package com.salesianostriana.dam.gestionalmacen.Services.API.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.ListarMembresia_DTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.NuevoMembresia_DTO;
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.ListarSubscripcion_SubscripcionDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Subscripcion;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Membresia;

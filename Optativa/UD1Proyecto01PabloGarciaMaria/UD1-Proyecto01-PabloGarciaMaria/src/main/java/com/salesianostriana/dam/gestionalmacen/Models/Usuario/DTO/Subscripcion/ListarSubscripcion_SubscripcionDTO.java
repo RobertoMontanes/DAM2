@@ -15,7 +15,7 @@ public class ListarSubscripcion_SubscripcionDTO {
     private long id;
     private String nombre;
     private double precio;
-    private int num_almacenes;
+    private int numAlmacenes;
     private boolean soportePrioritario;
     private int duracionMeses;
 
@@ -24,7 +24,7 @@ public class ListarSubscripcion_SubscripcionDTO {
                 .id(subscripcion.getId())
                 .nombre(subscripcion.getNombre())
                 .precio(subscripcion.getPrecio())
-                .num_almacenes(subscripcion.getNum_almacenes())
+                .numAlmacenes(subscripcion.getNumAlmacenes())
                 .soportePrioritario(subscripcion.isSoportePrioritario())
                 .duracionMeses(subscripcion.getDuracionMeses())
                 .build();
@@ -34,7 +34,7 @@ public class ListarSubscripcion_SubscripcionDTO {
         return Subscripcion.builder()
                 .nombre(this.nombre)
                 .precio(this.precio)
-                .num_almacenes(this.num_almacenes)
+                .numAlmacenes(this.numAlmacenes)
                 .soportePrioritario(this.soportePrioritario)
                 .duracionMeses(this.duracionMeses)
                 .build();

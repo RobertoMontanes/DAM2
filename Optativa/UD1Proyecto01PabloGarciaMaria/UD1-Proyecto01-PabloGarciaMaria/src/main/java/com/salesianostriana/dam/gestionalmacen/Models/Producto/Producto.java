@@ -3,15 +3,14 @@ package com.salesianostriana.dam.gestionalmacen.Models.Producto;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Producto.Enum.CategoriaProducto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -33,6 +32,18 @@ public class Producto {
     private Almacen almacen;
 
     @OneToMany(mappedBy = "producto")
+    @ToString.Exclude
     private List<LotesProductos> lotes;
 
+    public Producto modify(Producto producto) {
+        return Producto.builder()
+                .id(producto.getId())
+                .nombre(producto.getNombre())
+                .cantidad(producto.getCantidad())
+                .peso(producto.getPeso())
+                .categoriaProducto(producto.getCategoriaProducto())
+                .almacen(producto.getAlmacen())
+                .lotes(producto.getLotes())
+                .build();
+    }
 }

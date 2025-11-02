@@ -1,8 +1,8 @@
-package com.salesianostriana.dam.gestionalmacen.Controllers.API;
+package com.salesianostriana.dam.gestionalmacen.Controllers.API.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.ListarSubscripcion_SubscripcionDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.NuevaSubscripcion_SubscripcionDTO;
-import com.salesianostriana.dam.gestionalmacen.Services.API.SubscripcionService;
+import com.salesianostriana.dam.gestionalmacen.Services.API.Usuario.SubscripcionService;
 import com.salesianostriana.dam.gestionalmacen.Utils.APIResponse.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class SubscripcionController {
     // ✅ C - Obtener plantilla vacía
     @GetMapping("/nuevo")
     public ResponseEntity<ApiResponse<NuevaSubscripcion_SubscripcionDTO>> obtenerPlantilla() {
-        log.info("Obteniendo plantilla de usuario");
+        log.info("Obteniendo plantilla de subscripcion");
         return service.obtenerPlantilla();
     }
 

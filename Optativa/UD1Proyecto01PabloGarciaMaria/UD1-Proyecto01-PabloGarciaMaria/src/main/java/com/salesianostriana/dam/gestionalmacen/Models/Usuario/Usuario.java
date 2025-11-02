@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @ToString
 @Table(
-    name = "usuario",
+    name = "usuarios",
     uniqueConstraints = {
         @UniqueConstraint(name = "uk_username_usuario",columnNames = "username"),
         @UniqueConstraint(name = "uk_id_usuario",columnNames = "id"),

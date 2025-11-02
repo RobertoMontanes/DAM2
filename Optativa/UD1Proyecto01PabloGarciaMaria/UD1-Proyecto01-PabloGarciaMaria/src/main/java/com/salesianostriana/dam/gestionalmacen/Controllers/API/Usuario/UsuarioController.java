@@ -1,8 +1,8 @@
-package com.salesianostriana.dam.gestionalmacen.Controllers.API;
+package com.salesianostriana.dam.gestionalmacen.Controllers.API.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.ListarUsuario_DTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.NuevoUsuario_DTO;
-import com.salesianostriana.dam.gestionalmacen.Services.API.UsuarioService;
+import com.salesianostriana.dam.gestionalmacen.Services.API.Usuario.UsuarioService;
 import com.salesianostriana.dam.gestionalmacen.Utils.APIResponse.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
