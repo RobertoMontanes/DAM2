@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data @AllArgsConstructor
@@ -29,4 +30,14 @@ public class Lote {
     @JoinColumn(name = "almacen_id")
     private Almacen almacen;
 
+
+    public Lote modify(Lote lote) {
+        return Lote.builder()
+                .id(lote.getId())
+                .fechaAccion(lote.getFechaAccion())
+                .accion(lote.getAccion())
+                .almacen(lote.getAlmacen())
+                .productos(lote.getProductos())
+                .build();
+    }
 }
