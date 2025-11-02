@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.gestionalmacen.Models.Usuario;
 
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.ListarMembresia_DTO;
 import jakarta.persistence.*;
 import lombok.*;
 
