@@ -54,7 +54,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     @Builder.Default
     
-    private List<UsuarioSubscripcion> historialSubscripciones = new ArrayList<>();
+    private List<Membresia> historialSubscripciones = new ArrayList<>();
     
 	public Usuario modify(Usuario u) {
 		this.nombre = u.getNombre();

@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.gestionalmacen.Models.Usuario;
 
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.ListarMembresia_DTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UsuarioSubscripcion {
+public class Membresia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +39,7 @@ public class UsuarioSubscripcion {
     @Column(nullable = false)
     private boolean activa;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean cancelado = false;
 }

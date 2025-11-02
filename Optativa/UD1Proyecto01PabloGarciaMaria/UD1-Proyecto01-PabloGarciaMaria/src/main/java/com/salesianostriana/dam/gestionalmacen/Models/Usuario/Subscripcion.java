@@ -35,7 +35,7 @@ public class Subscripcion {
     private int duracionMeses;
 
     @OneToMany(mappedBy = "subscripcion")
-    private List<UsuarioSubscripcion> historialUsuarios;
+    private List<Membresia> historialUsuarios;
 
     public Subscripcion modify(Subscripcion subscripcion) {
         return Subscripcion.builder()

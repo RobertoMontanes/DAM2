@@ -1,18 +1,16 @@
-package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.UsuarioSubscripcion;
+package com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia;
 
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.UsuarioSubscripcion;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Membresia;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ListarUsuarioSubscripcion_DTO {
+public class ListarMembresia_DTO {
 
     private long id;
     private long usuarioId;
@@ -20,15 +18,17 @@ public class ListarUsuarioSubscripcion_DTO {
     private String fechaInicio;
     private String fechaFin;
     private boolean activa;
+    private boolean cancelado;
 
-    public static ListarUsuarioSubscripcion_DTO toDTO(UsuarioSubscripcion us) {
-        return ListarUsuarioSubscripcion_DTO.builder()
+    public static ListarMembresia_DTO toDTO(Membresia us) {
+        return ListarMembresia_DTO.builder()
                 .id(us.getId())
                 .usuarioId(us.getUsuario().getId())
                 .subscripcionId(us.getSubscripcion().getId())
                 .fechaInicio(us.getFechaInicio().toString())
                 .fechaFin(us.getFechaFin().toString())
                 .activa(us.isActiva())
+                .cancelado(us.isCancelado())
                 .build();
     }
 
