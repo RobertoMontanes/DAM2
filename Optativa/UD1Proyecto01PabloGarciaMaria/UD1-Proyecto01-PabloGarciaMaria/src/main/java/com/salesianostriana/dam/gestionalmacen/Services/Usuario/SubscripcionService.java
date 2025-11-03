@@ -38,5 +38,5 @@ public class SubscripcionService extends BaseServiceImpl<Subscripcion,Long, Subs
     public String eliminar(Model model, Long id, RedirectAttributes redirectAttributes) {
         return "redirect:/subscripciones";
     }
-    
+
 }
