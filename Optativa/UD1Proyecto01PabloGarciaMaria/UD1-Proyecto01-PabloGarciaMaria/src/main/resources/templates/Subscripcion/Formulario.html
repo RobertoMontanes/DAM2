@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<h1 th:text="${crear} ? 'Creacion de subscripciones' : 'Editar subscripciones'"></h1>
+
+<form th:method="${crear} ? 'POST' : 'PUT'" action="/subscripciones" th:object="${subscripcion}">
+
+    <input th:if="${!crear}" type="hidden" th:field="*{id}">
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" th:field="*{nombre}" required>
+    <br>
+
+    <label for="precio">Precio:</label>
+    <input type="number" step="0.01" id="precio" th:field="*{precio}" required>
+    <br>
+
+    <label for="numAlmacenes">Número de Almacenes:</label>
+    <input type="number" id="numAlmacenes" th:field="*{numAlmacenes}" required>
+    <br>
+
+    <label for="duracion">Duración (meses):</label>
+    <input type="number" id="duracion" th:field="*{duracionMeses}" required>
+    <br>
+
+    <label for="soportePrioritario">Soporte Prioritario: </label>
+    <input type="checkbox" id="soportePrioritario" th:field="*{soportePrioritario}">
+
+    <button type="submit" th:text="${crear} ? 'Crear Usuario' : 'Actualizar Usuario'"></button>
+    <button type="button" onclick="window.location.href='/usuarios'">Cancelar</button>
+
+</form>
+
+
+</body>
+</html>
