@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Lista de Subscripciones</h1>
+<table  border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th> Numero Almacenes</th>
+        <th>Duración (meses)</th>
+        <th>Soporte Prioritario</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="subscripcion : ${subscripciones}">
+        <td th:text="${subscripcion.id}">1</td>
+        <td th:text="${subscripcion.nombre}">Nombre de la Subscripción</td>
+        <td th:text="${subscripcion.precio}">9.99</td>
+        <td th:text="${subscripcion.numAlmacenes}">5</td>
+        <td th:text="${subscripcion.duracionMeses}">12</td>
+        <td th:text="${subscripcion.soportePrioritario}">true</td>
+        <td>
+            <a th:href="@{'/subscripciones/' + ${subscripcion.id}}" >DETALLES</a>
+            <a th:href="@{'/subscripciones/editar/' + ${subscripcion.id}}">EDITAR</a>
+            <form th:action="@{'/subscripciones/' + ${subscripcion.id}}" th:method="delete">
+                <button style="margin: 0" type="submit">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/subscripciones/nuevo">Crear subscripcion</a>
+<a href="/">Volver al principal.</a>
+
+</body>
+</html>

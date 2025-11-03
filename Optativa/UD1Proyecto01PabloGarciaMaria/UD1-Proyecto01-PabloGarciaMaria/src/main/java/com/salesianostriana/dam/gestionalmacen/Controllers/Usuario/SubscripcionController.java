@@ -32,8 +32,8 @@ public class SubscripcionController {
     }
 
     @GetMapping("/editar/{id}")
-    public String editar(Model model, @PathVariable Integer id) {
-        return service.editar(model,id);
+    public String editar(Model model, @PathVariable Integer id,RedirectAttributes redirectAttributes) {
+        return service.editar(model,id,redirectAttributes);
     }
 
     @PostMapping

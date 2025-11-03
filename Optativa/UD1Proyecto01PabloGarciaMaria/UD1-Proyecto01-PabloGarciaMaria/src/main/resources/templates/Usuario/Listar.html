@@ -31,12 +31,14 @@
             <a th:href="@{'/usuarios/editar/' + ${usuario.id}}">Editar</a>
             <a th:href="@{'/usuarios/' + ${usuario.id}}">Detalles</a>
             <form th:action="@{'/usuarios/' + ${usuario.id}}" th:method="delete">
-                <button style="margin: 0" type="submit" onclick="confirm('Estas seguro de que quieres eliminar este usuario?')">Eliminar</button>
+                <button style="margin: 0" type="submit">Eliminar</button>
             </form>
         </td>
     </tr>
     </tbody>
 </table>
 <a href="/usuarios/nuevo">Agregar Nuevo Usuario</a>
+
+<a href="/">Volver al principal.</a>
 </body>
 </html>

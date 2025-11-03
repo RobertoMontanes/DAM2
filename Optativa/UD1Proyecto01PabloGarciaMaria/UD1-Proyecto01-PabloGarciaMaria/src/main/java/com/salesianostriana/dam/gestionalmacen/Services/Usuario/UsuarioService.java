@@ -23,7 +23,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
     private final MembresiaService membresiaService;
 
     public String listar(Model model) {
-        model.addAttribute("usuarios", repository.findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
+        model.addAttribute("usuarios", findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
         return "Usuario/Listar";
     }
 
@@ -38,13 +38,13 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
 
     public String crear(Model model, Nuevo_UsuarioDTO usuarioDTO, RedirectAttributes redirectAttributes) {
         Usuario u = usuarioDTO.fromDTO();
-        repository.save(u);
+        save(u);
         redirectAttributes.addFlashAttribute("success", "Usuario creado correctamente");
         return "redirect:/usuarios";
     }
 
     public String actualizar(Model model, Nuevo_UsuarioDTO usuarioDTO, RedirectAttributes redirectAttributes) {
-        Optional<Usuario> uOpt = repository.findById(usuarioDTO.getId());
+        Optional<Usuario> uOpt = findById(usuarioDTO.getId());
         Usuario uOrg;
         if (uOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Usuario no encontrado");
@@ -54,13 +54,13 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         if (usuarioDTO.getPassword().isEmpty()) {
             usuarioDTO.setPassword(uOrg.getPassword());
         }
-        repository.save(uOrg.modify(usuarioDTO.fromDTO()));
+        save(uOrg.modify(usuarioDTO.fromDTO()));
         redirectAttributes.addFlashAttribute("success", "Usuario editado correctamente");
         return "redirect:/usuarios";
     }
 
     public String eliminar(Model model, Long id, RedirectAttributes redirectAttributes) {
-        Usuario u = repository.findById(id).orElse(null);
+        Usuario u = findById(id).orElse(null);
         if (u == null) {
             redirectAttributes.addFlashAttribute("error", "Usuario no encontrado");
             return "redirect:/usuarios";
@@ -70,20 +70,20 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
             almacenService.save(almacen);
         }
         u.getHistorialSubscripciones().forEach(membresiaService::delete);
-        repository.delete(u);
+        delete(u);
         redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente");
         return "redirect:/usuarios";
     }
 
     public String editar(Model model, Integer id) {
-        Usuario u = repository.findById(Long.valueOf(id)).orElseThrow();
+        Usuario u = findById(Long.valueOf(id)).orElseThrow();
         model.addAttribute("usuario", Nuevo_UsuarioDTO.toDTO(u));
         model.addAttribute("crear", false);
         return "Usuario/Formulario";
     }
 
     public String ver(Model model, Long id, RedirectAttributes redirectAttributes) {
-        Usuario u = repository.findById(id).orElse(null);
+        Usuario u = findById(id).orElse(null);
         if (u == null){
             redirectAttributes.addFlashAttribute("error","Usuario no encontrado");
             return "redirect:/usuarios";
