@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+
+    <a href="/usuarios">Volver al listado de usuarios</a>
+    <h1>Detalles del Usuario</h1>
+    <p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
+    <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
+    <p><strong>Apellidos:</strong> <span th:text="${usuario.apellidos}"></span></p>
+    <p><strong>Username:</strong> <span th:text="${usuario.username}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
+    <p><strong>Fecha de Creacion:</strong> <span th:text="${usuario.fechaCreacion}"></span></p>
+    <p><strong>Activo:</strong> <span th:text="${usuario.activo} ? 'Si' : 'No'"></span></p>
+
+    <a href="/usuarios">Volver al listado de usuarios</a>
+    <a href="/usuarios/nuevo">Agregar Usuario</a>
+    <a href="/usuarios/editar">Editar Usuario</a>
+    <form th:action="@{'/usuarios/' + ${usuario.id}}" th:method="delete">
+        <button type="submit" onclick="confirm('Estas seguro de que quieres eliminar este usuario?')">Eliminar</button>
+    </form>
+
+</body>
+</html>

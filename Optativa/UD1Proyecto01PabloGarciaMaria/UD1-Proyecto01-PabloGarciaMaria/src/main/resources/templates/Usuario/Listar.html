@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Lista de Usuarios</h1>
+
+<span th:if="${success}" th:text="${success}"></span>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Email</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="usuario : ${usuarios}">
+        <td th:text="${usuario.id}">1</td>
+        <td th:text="${usuario.nombre}">Nombre</td>
+        <td th:text="${usuario.apellidos}">Apellido</td>
+        <td th:text="${usuario.email}"></td>
+        <td>
+            <a th:href="@{'/usuarios/editar/' + ${usuario.id}}">Editar</a>
+            <a th:href="@{'/usuarios/' + ${usuario.id}}">Detalles</a>
+            <form th:action="@{'/usuarios/' + ${usuario.id}}" th:method="delete">
+                <button style="margin: 0" type="submit" onclick="confirm('Estas seguro de que quieres eliminar este usuario?')">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a href="/usuarios/nuevo">Agregar Nuevo Usuario</a>
+</body>
+</html>
