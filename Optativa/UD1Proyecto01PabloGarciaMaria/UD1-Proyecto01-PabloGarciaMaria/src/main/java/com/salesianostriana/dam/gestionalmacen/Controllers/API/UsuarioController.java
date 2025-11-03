@@ -25,7 +25,7 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
     
-    // ✅ C - Obtener plantilla vacía
+    // ✅ C - Obtener plantilla v                                                                                                                  acía
     @GetMapping("/nuevo")
     public ResponseEntity<ApiResponse<NuevoUsuario_UsuarioDTO>> obtenerPlantillaUsuario() {
         log.info("Obteniendo plantilla de usuario");
