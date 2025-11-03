@@ -1,0 +1,23 @@
+  <div class="card bg-secondary h-100">
+    <div class="card-header bg-dark">
+      <h5 class="card-title text-warning mb-0">{{person()?.name}}</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-6">
+          <p class="mb-1"><strong>Altura:</strong> {{person()?.height}} cm</p>
+          <p class="mb-1"><strong>Peso:</strong> {{person()?.mass}} kg</p>
+          <p class="mb-1"><strong>Color de pelo:</strong> {{person()?.hair_color}}</p>
+        </div>
+        <div class="col-6">
+          <p class="mb-1"><strong>Color de piel:</strong> {{person()?.skin_color}}</p>
+          <p class="mb-1"><strong>Color de ojos:</strong> {{person()?.eye_color}}</p>
+          <p class="mb-1"><strong>Género:</strong> {{person()?.gender}}</p>
+        </div>
+      </div>
+      <p class="mb-1"><strong>Año de nacimiento:</strong> {{person()?.birth_year}}</p>
+      <p class="mb-1"><strong>Películas:</strong> {{person()?.films?.length}}</p>
+      <p class="mb-1"><strong>Naves:</strong> {{person()?.starships?.length}}</p>
+      <p class="mb-1"><strong>Vehículos:</strong> {{person()?.vehicles?.length}}</p>
+    </div>
+  </div>
