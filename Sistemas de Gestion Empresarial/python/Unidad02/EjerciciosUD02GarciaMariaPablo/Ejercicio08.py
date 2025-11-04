@@ -16,8 +16,9 @@ for j in range(len(arrayArrays)):
 print("Now, we are going to delete words from the first array using the ones that appear on the second one.")
 
 for w in arrayArrays[1]:
-    while w in arrayArrays[0]:
-        arrayArrays[0].remove(w)
+    for w2 in arrayArrays[0]:
+        if w2 == w:
+            arrayArrays[0].remove(w2)
     
 print(f"The final first array is: {arrayArrays[0]}")
 print(f"The final second array is: {arrayArrays[1]}")
