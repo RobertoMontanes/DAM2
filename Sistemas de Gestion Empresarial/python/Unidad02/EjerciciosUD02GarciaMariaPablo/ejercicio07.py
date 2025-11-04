@@ -13,7 +13,12 @@ for i in range (1, numPalabras+1):
 print("The word array is: " + str(arrayPalabras))
 
 objetiveWord = input("Wich word do you want to delete from the array? ")
-while objetiveWord in arrayPalabras:
-    arrayPalabras.remove(objetiveWord)
+
+if objetiveWord not in arrayPalabras:
+    print(f"The word {objetiveWord} is not in the array.")
+
+for palabra in arrayPalabras:
+    if palabra == objetiveWord:
+        arrayPalabras.remove(palabra)
         
 print(f"After deleting the Word {objetiveWord} the array is: {arrayPalabras}")
