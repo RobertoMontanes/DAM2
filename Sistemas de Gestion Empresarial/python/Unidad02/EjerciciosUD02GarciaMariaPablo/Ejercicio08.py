@@ -14,7 +14,6 @@ for j in range(len(arrayArrays)):
     print("The word array is: " + str(arrayArrays[j]))
     
 print("Now, we are going to delete words from the first array using the ones that appear on the second one.")
-
 for w in arrayArrays[1]:
     for w2 in arrayArrays[0]:
         if w2 == w:
