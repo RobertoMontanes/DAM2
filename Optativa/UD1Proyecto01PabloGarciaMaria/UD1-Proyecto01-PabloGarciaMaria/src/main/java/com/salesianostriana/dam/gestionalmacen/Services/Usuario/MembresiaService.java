@@ -74,7 +74,6 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
         return "Membresia/Formulario";
     }
 
-
     public String actualizar(Model model, Nuevo_MembresiaDTO subscripcionDTO, RedirectAttributes redirectAttributes) throws Exception {
 
         Membresia m = findById(subscripcionDTO.getId()).orElse(null);

@@ -17,7 +17,7 @@ public class Almacen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private long id;
+    private Long id;
 
     private String nombre;
     private String ubicacion;
@@ -37,4 +37,16 @@ public class Almacen {
     private TipoAlmacen tipoAlmacen;
 
 
+    public Almacen modify(Almacen almacen) {
+        return Almacen.builder()
+                .id(this.id)
+                .nombre(almacen.getNombre())
+                .ubicacion(almacen.getUbicacion())
+                .superficie(almacen.getSuperficie())
+                .seguridad(almacen.isSeguridad())
+                .estadoAlmacen(almacen.getEstadoAlmacen())
+                .usuario(almacen.getUsuario())
+                .tipoAlmacen(almacen.getTipoAlmacen())
+                .build();
+    }
 }
