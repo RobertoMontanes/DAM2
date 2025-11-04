@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Almacenes</title>
+</head>
+<body>
+
+<h1>Lista de Almacenes</h1>
+
+<span th:if="${success}" th:text="${success}"></span>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Ubicación</th>
+        <th>Superficie</th>
+        <th>Seguridad</th>
+        <th>Estado</th>
+        <th>Usuario ID</th>
+        <th>Tipo Almacén ID</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="almacen : ${almacenes}">
+        <td th:text="${almacen.id}">1</td>
+        <td th:text="${almacen.nombre}">Nombre</td>
+        <td th:text="${almacen.ubicacion}">Ubicación</td>
+        <td th:text="${almacen.superficie}">1000.0</td>
+        <td th:text="${almacen.seguridad} ? 'Sí' : 'No'">Sí</td>
+        <td th:text="${almacen.estadoAlmacen}">Activo</td>
+        <td th:text="${almacen.usuario}">1</td>
+        <td th:text="${almacen.tipoAlmacen}">2</td>
+        <td>
+            <a th:href="@{'/almacenes/editar/' + ${almacen.id}}">Editar</a>
+            <a th:href="@{'/almacenes/' + ${almacen.id}}">Detalles</a>
+            <form th:action="@{'/almacenes/' + ${almacen.id}}" th:method="delete">
+                <button style="margin: 0" type="submit">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/almacenes/nuevo">Agregar Nuevo Almacén</a>
+
+<br><br>
+<a href="/">Volver al principal</a>
+
+</body>
+</html>
