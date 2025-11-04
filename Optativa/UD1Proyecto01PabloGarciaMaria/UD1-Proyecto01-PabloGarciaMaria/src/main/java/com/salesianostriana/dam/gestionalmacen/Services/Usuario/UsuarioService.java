@@ -4,6 +4,7 @@ import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.Nuevo_UsuarioDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
+import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.MembresiaRepository;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.UsuarioRepository;
 import com.salesianostriana.dam.gestionalmacen.Services.Almacen.AlmacenService;
 import com.salesianostriana.dam.gestionalmacen.Services.Base.BaseServiceImpl;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
 
     private final AlmacenService almacenService;
-    private final MembresiaService membresiaService;
+    private final MembresiaRepository membresiaRepository;
 
     public String listar(Model model) {
         model.addAttribute("usuarios", findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
@@ -69,7 +70,9 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
             almacen.setUsuario(null);
             almacenService.save(almacen);
         }
-        u.getHistorialSubscripciones().forEach(membresiaService::delete);
+
+        membresiaRepository.deleteAll(u.getHistorialSubscripciones());
+
         delete(u);
         redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente");
         return "redirect:/usuarios";

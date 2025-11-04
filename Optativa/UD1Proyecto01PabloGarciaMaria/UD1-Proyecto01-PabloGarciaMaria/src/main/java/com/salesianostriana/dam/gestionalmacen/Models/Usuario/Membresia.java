@@ -15,7 +15,7 @@ public class Membresia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -41,4 +41,16 @@ public class Membresia {
     @Column(nullable = false)
     @Builder.Default
     private boolean cancelado = false;
+
+    public Membresia modify(Membresia membresia) {
+        return Membresia.builder()
+                .id(this.id)
+                .usuario(membresia.getUsuario())
+                .subscripcion(membresia.getSubscripcion())
+                .fechaInicio(membresia.getFechaInicio())
+                .fechaFin(membresia.getFechaFin())
+                .activa(membresia.isActiva())
+                .cancelado(membresia.isCancelado())
+                .build();
+    }
 }

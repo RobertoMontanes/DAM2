@@ -90,5 +90,5 @@ public class SubscripcionService extends BaseServiceImpl<Subscripcion,Long, Subs
         redirectAttributes.addFlashAttribute("success", "Subscripción eliminada correctamente.");
         return "redirect:/subscripciones";
     }
-    
+
 }
