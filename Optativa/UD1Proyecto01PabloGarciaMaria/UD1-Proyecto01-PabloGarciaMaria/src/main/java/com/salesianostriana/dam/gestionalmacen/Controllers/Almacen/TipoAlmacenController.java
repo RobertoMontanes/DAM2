@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.gestionalmacen.Controllers.Almacen;
 
-import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Almacen.Nuevo_AlmacenDTO;
-import com.salesianostriana.dam.gestionalmacen.Services.Almacen.AlmacenService;
+import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.TipoAlmacen.Nuevo_TipoAlmacenDTO;
+import com.salesianostriana.dam.gestionalmacen.Services.Almacen.TipoAlmacenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,10 +10,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/almacenes")
-public class AlmacenController {
+@RequestMapping("/almacenes/tipos")
+public class TipoAlmacenController {
 
-    private final AlmacenService service;
+    private final TipoAlmacenService service;
 
     @GetMapping
     public String listar(Model model) {
@@ -21,7 +21,7 @@ public class AlmacenController {
     }
 
     @GetMapping("/{id}")
-    public String     ver(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String ver(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
         return service.ver(model,id,redirectAttributes);
     }
 
@@ -36,13 +36,13 @@ public class AlmacenController {
     }
 
     @PostMapping
-    public String crear(Model model, @ModelAttribute("almacen") Nuevo_AlmacenDTO almacenDTO, RedirectAttributes redirectAttributes) throws Exception {
-        return service.crear(model,almacenDTO,redirectAttributes);
+    public String crear(Model model, @ModelAttribute("tipoAlmacen") Nuevo_TipoAlmacenDTO tipoAlmacenDTO, RedirectAttributes redirectAttributes) throws Exception {
+        return service.crear(model,tipoAlmacenDTO,redirectAttributes);
     }
 
     @PutMapping
-    public String actualizar(Model model,@ModelAttribute("almacen") Nuevo_AlmacenDTO almacenDTO, RedirectAttributes redirectAttributes) throws Exception {
-        return service.actualizar(model, almacenDTO, redirectAttributes);
+    public String actualizar(Model model,@ModelAttribute("tipoAlmacen") Nuevo_TipoAlmacenDTO tipoAlmacenDTO, RedirectAttributes redirectAttributes) throws Exception {
+        return service.actualizar(model, tipoAlmacenDTO, redirectAttributes);
     }
 
     @DeleteMapping("/{id}")

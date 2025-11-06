@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Capacidad</th>
+            <th>Categoria</th>
+            <th>Temperatura</th>
+            <th>Requisitos Especiales</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tipoAlmacen : ${tiposAlmacen}">
+            <td th:text="${tipoAlmacen.id}">ID</td>
+            <td th:text="${tipoAlmacen.nombre}">Nombre</td>
+            <td th:text="${tipoAlmacen.descripcion}">Descripcion</td>
+            <td th:text="${tipoAlmacen.capacidad}">Capacidad</td>
+            <td th:text="${tipoAlmacen.categoria}">Categoria</td>
+            <td th:text="${tipoAlmacen.temperatura}">Temperatura</td>
+            <td th:text="${tipoAlmacen.requisitosEspeciales}">Requisitos Especiales</td>
+        </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

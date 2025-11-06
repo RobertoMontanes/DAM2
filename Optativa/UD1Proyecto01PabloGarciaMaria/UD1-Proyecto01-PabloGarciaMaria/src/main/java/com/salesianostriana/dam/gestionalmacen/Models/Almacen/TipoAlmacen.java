@@ -19,7 +19,7 @@ public class TipoAlmacen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private long id;
+    private Long id;
 
     private String nombre;
     private double capacidad;
@@ -32,4 +32,12 @@ public class TipoAlmacen {
     @OneToMany(mappedBy = "tipoAlmacen")
     private List<Almacen> almacenes;
 
+    public TipoAlmacen modify(TipoAlmacen tipoAlmacen) {
+        this.nombre = tipoAlmacen.getNombre();
+        this.capacidad = tipoAlmacen.getCapacidad();
+        this.categoria = tipoAlmacen.getCategoria();
+        this.temperatura = tipoAlmacen.getTemperatura();
+        this.requisitosEspeciales = tipoAlmacen.getRequisitosEspeciales();
+        return this;
+    }
 }

@@ -1,10 +1,7 @@
-package com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO;
+package com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Almacen;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Enums.EstadosAlmacen;
-import com.salesianostriana.dam.gestionalmacen.Models.Almacen.TipoAlmacen;
-import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
-import jakarta.persistence.*;
 import lombok.*;
 
 @Builder

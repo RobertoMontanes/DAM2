@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO;
+package com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Almacen;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import lombok.AllArgsConstructor;

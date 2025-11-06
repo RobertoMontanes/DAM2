@@ -1,8 +1,8 @@
 package com.salesianostriana.dam.gestionalmacen.Services.Almacen;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
-import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Listar_AlmacenDTO;
-import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Nuevo_AlmacenDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Almacen.Listar_AlmacenDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Almacen.Nuevo_AlmacenDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Enums.EstadosAlmacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.TipoAlmacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
