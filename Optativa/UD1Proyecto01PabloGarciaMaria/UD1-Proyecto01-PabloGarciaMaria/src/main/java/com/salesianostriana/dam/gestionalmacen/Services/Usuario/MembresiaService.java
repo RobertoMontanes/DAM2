@@ -2,6 +2,8 @@ package com.salesianostriana.dam.gestionalmacen.Services.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.Listar_MembresiaDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Membresia.Nuevo_MembresiaDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.Listar_SubscripcionDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Membresia;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Membresia;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Subscripcion;
@@ -38,13 +40,16 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
         return "Membresia/Detalles";
     }
 
-    public String nuevo(Model model, Nuevo_MembresiaDTO subscripcionDTO) {
+    public String nuevo(Model model, Nuevo_MembresiaDTO membresiaDTO) {
 
-        if (subscripcionDTO == null) {
-            subscripcionDTO = new Nuevo_MembresiaDTO();
+        System.out.println(membresiaDTO);
+        if (membresiaDTO == null) {
+            membresiaDTO = new Nuevo_MembresiaDTO();
         }
 
-        model.addAttribute("membresia", subscripcionDTO);
+        model.addAttribute("membresia", membresiaDTO);
+        model.addAttribute("subscripciones", subscripcionService.findAll().stream().map(Listar_SubscripcionDTO::toDTO).toList());
+        model.addAttribute("usuarios", usuarioService.findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
         model.addAttribute("crear",true);
 
         return "Membresia/Formulario";
@@ -69,6 +74,8 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
         }
 
         model.addAttribute("membresia",Nuevo_MembresiaDTO.toDTO(s));
+        model.addAttribute("subscripciones", subscripcionService.findAll().stream().map(Listar_SubscripcionDTO::toDTO).toList());
+        model.addAttribute("usuarios", usuarioService.findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
         model.addAttribute("crear",false);
 
         return "Membresia/Formulario";
@@ -113,11 +120,12 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
         if (s == null) {
             throw new Exception("No hay subscripcion en la membresia.");
         }
-        LocalDate fechaFin = membresiaDTO.getFechaInicio().plusMonths(s.getDuracionMeses());
+        LocalDate fechaIncio = LocalDate.parse(membresiaDTO.getFechaInicio());
+        LocalDate fechaFin = fechaIncio.plusMonths(s.getDuracionMeses());
 
         return Membresia.builder()
                 .id(membresiaDTO.getId())
-                .fechaInicio(membresiaDTO.getFechaInicio())
+                .fechaInicio(fechaIncio)
                 .activa(membresiaDTO.isActiva())
                 .fechaFin(fechaFin)
                 .usuario(u)

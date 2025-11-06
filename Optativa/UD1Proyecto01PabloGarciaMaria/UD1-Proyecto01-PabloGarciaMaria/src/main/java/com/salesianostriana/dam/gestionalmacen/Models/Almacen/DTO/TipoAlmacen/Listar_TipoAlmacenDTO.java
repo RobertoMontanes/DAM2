@@ -3,10 +3,12 @@ package com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.TipoAlmacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.TipoAlmacen;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor @NoArgsConstructor
+@Data
 public class Listar_TipoAlmacenDTO {
 
     private long id;
