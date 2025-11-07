@@ -1,28 +1,304 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Usuario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, 
+                #e40303 0%, 
+                #ff8c00 16.66%, 
+                #ffed00 33.33%, 
+                #008026 50%, 
+                #24408e 66.66%, 
+                #732982 83.33%, 
+                #732982 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            background: linear-gradient(90deg, 
+                #e40303, 
+                #ff8c00, 
+                #ffed00, 
+                #008026, 
+                #24408e, 
+                #732982);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .details-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .detail-row {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid transparent;
+            border-image: linear-gradient(180deg, 
+                #e40303, 
+                #ff8c00, 
+                #ffed00, 
+                #008026, 
+                #24408e, 
+                #732982) 1;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .detail-row:hover {
+            background: linear-gradient(90deg, 
+                rgba(228, 3, 3, 0.1), 
+                rgba(255, 140, 0, 0.1), 
+                rgba(255, 237, 0, 0.1), 
+                rgba(0, 128, 38, 0.1), 
+                rgba(36, 64, 142, 0.1), 
+                rgba(115, 41, 130, 0.1));
+            transform: translateX(5px);
+        }
+
+        .detail-row strong {
+            background: linear-gradient(90deg, 
+                #e40303, 
+                #ff8c00, 
+                #ffed00, 
+                #008026, 
+                #24408e, 
+                #732982);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.1rem;
+            display: inline-block;
+            min-width: 180px;
+            font-weight: 700;
+        }
+
+        .detail-row span {
+            color: #555;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .actions-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .btn-back {
+            background: linear-gradient(90deg, #732982, #24408e, #008026);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(36, 64, 142, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .btn-add {
+            background: linear-gradient(90deg, 
+                #e40303, 
+                #ff8c00, 
+                #ffed00, 
+                #008026, 
+                #24408e, 
+                #732982);
+        }
+
+        .btn-add:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-edit {
+            background: linear-gradient(90deg, #ffed00, #008026, #24408e);
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 128, 38, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .btn-delete {
+            background: linear-gradient(90deg, #e40303, #ff8c00, #ffed00);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(228, 3, 3, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .delete-form {
+            display: inline;
+            margin: 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        .status-active {
+            background: linear-gradient(90deg, #008026, #ffed00);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .status-inactive {
+            background: linear-gradient(90deg, #e40303, #ff8c00);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .detail-row {
+                padding: 0.8rem;
+            }
+
+            .detail-row strong {
+                display: block;
+                min-width: auto;
+                margin-bottom: 0.3rem;
+            }
+
+            .actions-container {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>🏳️‍🌈 Detalles del Usuario 🏳️‍🌈</h1>
+        
+        <div class="details-card">
+            <div class="detail-row">
+                <strong>🆔 ID:</strong>
+                <span th:text="${usuario.id}">1</span>
+            </div>
+            
+            <div class="detail-row">
+                <strong>👤 Nombre:</strong>
+                <span th:text="${usuario.nombre}">Nombre</span>
+            </div>
+            
+            <div class="detail-row">
+                <strong>👥 Apellidos:</strong>
+                <span th:text="${usuario.apellidos}">Apellidos</span>
+            </div>
+            
+            <div class="detail-row">
+                <strong>🔑 Username:</strong>
+                <span th:text="${usuario.username}">username</span>
+            </div>
+            
+            <div class="detail-row">
+                <strong>📧 Email:</strong>
+                <span th:text="${usuario.email}">email@ejemplo.com</span>
+            </div>
+            
+            <div class="detail-row">
+                <strong>📅 Fecha de Creación:</strong>
+                <span th:text="${usuario.fechaCreacion}">2024-01-01</span>
+            </div>
+            
+            <div class="detail-row">
+                <strong>✨ Estado:</strong>
+                <span th:text="${usuario.activo} ? 'Sí' : 'No'">Sí</span>
+                <span th:class="${usuario.activo} ? 'status-badge status-active' : 'status-badge status-inactive'"
+                      th:text="${usuario.activo} ? '✓ Activo' : '✗ Inactivo'">✓ Activo</span>
+            </div>
+        </div>
 
-    <a href="/usuarios">Volver al listado de usuarios</a>
-    <h1>Detalles del Usuario</h1>
-    <p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
-    <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
-    <p><strong>Apellidos:</strong> <span th:text="${usuario.apellidos}"></span></p>
-    <p><strong>Username:</strong> <span th:text="${usuario.username}"></span></p>
-    <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
-    <p><strong>Fecha de Creacion:</strong> <span th:text="${usuario.fechaCreacion}"></span></p>
-    <p><strong>Activo:</strong> <span th:text="${usuario.activo} ? 'Si' : 'No'"></span></p>
-
-    <a href="/usuarios">Volver al listado de usuarios</a>
-    <a href="/usuarios/nuevo">Agregar Usuario</a>
-    <a href="/usuarios/editar">Editar Usuario</a>
-    <form th:action="@{'/usuarios/' + ${usuario.id}}" th:method="delete">
-        <button type="submit" onclick="confirm('Estas seguro de que quieres eliminar este usuario?')">Eliminar</button>
-    </form>
-
+        <div class="actions-container">
+            <a href="/usuarios" class="btn btn-back">🔙 Volver al Listado</a>
+            <a href="/usuarios/nuevo" class="btn btn-add">➕ Agregar Usuario</a>
+            <a th:href="@{'/usuarios/editar/' + ${usuario.id}}" class="btn btn-edit">✏️ Editar Usuario</a>
+            <form th:action="@{'/usuarios/' + ${usuario.id}}" th:method="delete" class="delete-form"
+                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">
+                <button type="submit" class="btn btn-delete">🗑️ Eliminar Usuario</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

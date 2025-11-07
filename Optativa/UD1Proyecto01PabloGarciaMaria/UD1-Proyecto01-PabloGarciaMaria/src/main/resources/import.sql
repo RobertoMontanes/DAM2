@@ -135,7 +135,6 @@ INSERT INTO tipo_almacen (nombre, capacidad, categoria, temperatura, requisitos_
 INSERT INTO tipo_almacen (nombre, capacidad, categoria, temperatura, requisitos_especiales) VALUES ('Vivero Logístico Murcia', 9500.0, 4, 18.5, 'Temperatura y luz reguladas según el tipo de especie');
 INSERT INTO tipo_almacen (nombre, capacidad, categoria, temperatura, requisitos_especiales) VALUES ('Depósito de Material Peligroso Sur', 8500.0, 5, 21.0, 'Zonas de aislamiento químico y sensores de movimiento');
 
-
 INSERT INTO almacenes (nombre, ubicacion, superficie, seguridad, estado_almacen, usuario_id, tipo_almacen_id) VALUES ('Almacén Central Madrid', 'Madrid', 4200.5, true, 0, 3, 1);
 INSERT INTO almacenes (nombre, ubicacion, superficie, seguridad, estado_almacen, usuario_id, tipo_almacen_id) VALUES ('Depósito Norte Bilbao', 'Bilbao', 3100.0, false, 1, 7, 2);
 INSERT INTO almacenes (nombre, ubicacion, superficie, seguridad, estado_almacen, usuario_id, tipo_almacen_id) VALUES ('Centro Económico Sevilla', 'Sevilla', 2300.0, false, 0, NULL, 3);

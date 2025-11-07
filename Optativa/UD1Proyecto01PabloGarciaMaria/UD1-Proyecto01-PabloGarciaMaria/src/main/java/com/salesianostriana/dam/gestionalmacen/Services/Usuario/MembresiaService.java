@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,13 +56,29 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
         return "Membresia/Formulario";
     }
 
-    public String crear(Model model, Nuevo_MembresiaDTO subscripcionDTO, RedirectAttributes redirectAttributes) throws Exception {
+    public String crear(Model model, Nuevo_MembresiaDTO membresiaDTO, RedirectAttributes redirectAttributes) throws Exception {
 
-        Membresia s = fromDTO(subscripcionDTO);
+        Optional<Usuario> usuarioOptional = usuarioService.findById(membresiaDTO.getUsuarioId());
+        Optional<Membresia> membresiaExist;
+
+        if (usuarioOptional.isEmpty()) {
+            model.addAttribute("error", "El usuario seleccionado no existe.");
+            return nuevo(model, membresiaDTO);
+        }
+
+        membresiaExist = repository.findMembresiaByUsuarioNombreAndActivaIsTrue(usuarioOptional.get().getNombre());
+
+        if (membresiaExist.isPresent()) {
+            model.addAttribute("error", "El usuario seleccionado ya tiene una membresía activa.");
+            return nuevo(model, membresiaDTO);
+        }
+
+
+        Membresia s = fromDTO(membresiaDTO);
         s.setId(null);
         save(s);
 
-        redirectAttributes.addFlashAttribute("success", "Subscripción creada correctamente.");
+        redirectAttributes.addFlashAttribute("success", "Membresia creada correctamente.");
 
         return "redirect:/membresias";
     }

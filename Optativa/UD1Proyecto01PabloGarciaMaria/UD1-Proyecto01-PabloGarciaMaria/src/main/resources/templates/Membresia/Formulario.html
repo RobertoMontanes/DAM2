@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<span th:if="${success}" th:text="${success}"></span>
+<span th:if="${error}" th:text="${error}"></span>
 
 <h1 th:text="${crear} ? 'Creacion de membresias' : 'Editar membresias'"></h1>
 
@@ -14,13 +16,13 @@
     <input th:if="${!crear}" type="hidden" th:field="*{id}">
 
     <select th:field="*{usuarioId}" required>
-        <option selected value="null"> Select an Option</option>
+        <option value="" selected hidden>Select an option</option>
         <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></option>
     </select>
     <br>
 
     <select th:field="*{subscripcionId}" >
-        <option selected value="null"> Select an Option</option>
+        <option value="" selected hidden>Select an option</option>
         <option th:each="subscripcion : ${subscripciones}" th:value="${subscripcion.id}" th:text="${subscripcion.nombre}"></option>
     </select>
     <br>

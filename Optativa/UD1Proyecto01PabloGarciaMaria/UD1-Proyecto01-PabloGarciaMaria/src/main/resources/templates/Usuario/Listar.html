@@ -1,13 +1,15 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 
-<h1>Lista de Usuarios</h1>
+        <div th:if="${success}" class="success-message">
+            <span th:text="${success}"></span>
+        </div>
 
 <span th:if="${success}" th:text="${success}"></span>
 
