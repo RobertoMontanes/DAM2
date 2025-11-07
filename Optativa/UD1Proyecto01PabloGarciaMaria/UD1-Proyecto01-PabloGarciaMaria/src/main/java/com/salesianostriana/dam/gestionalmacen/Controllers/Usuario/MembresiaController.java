@@ -26,7 +26,7 @@ public class MembresiaController {
         return service.ver(model,id,redirectAttributes);
     }
 
-    @GetMapping("/nuevo")
+    @GetMapping("/nueva")
     public String nuevo(Model model) {
         return service.nuevo(model,null);
     }

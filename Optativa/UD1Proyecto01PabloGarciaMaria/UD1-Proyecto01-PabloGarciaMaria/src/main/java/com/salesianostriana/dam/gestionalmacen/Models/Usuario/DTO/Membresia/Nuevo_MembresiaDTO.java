@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Builder @Data @AllArgsConstructor @NoArgsConstructor
 public class Nuevo_MembresiaDTO {
@@ -14,9 +15,9 @@ public class Nuevo_MembresiaDTO {
     private Long id;
     private Long usuarioId;
     private Long subscripcionId;
-    private LocalDate fechaInicio;
-    private boolean activa;
-    private boolean cancelado;
+    private String fechaInicio = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private boolean activa = true;
+    private boolean cancelado = false;
 
 
     public static Nuevo_MembresiaDTO toDTO(Membresia s) {
@@ -24,7 +25,7 @@ public class Nuevo_MembresiaDTO {
                 .id(s.getId())
                 .usuarioId(s.getUsuario().getId())
                 .subscripcionId(s.getSubscripcion().getId())
-                .fechaInicio(s.getFechaInicio())
+                .fechaInicio(s.getFechaInicio().toString())
                 .activa(s.isActiva())
                 .cancelado(s.isCancelado())
                 .build();

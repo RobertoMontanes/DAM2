@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<h1 th:text="${crear} ? 'Creacion de membresias' : 'Editar membresias'"></h1>
+
+<form th:method="${crear} ? 'POST' : 'PUT'" action="/membresias" th:object="${membresia}">
+
+    <input th:if="${!crear}" type="hidden" th:field="*{id}">
+
+    <select th:field="*{usuarioId}" required>
+        <option selected value="null"> Select an Option</option>
+        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></option>
+    </select>
+    <br>
+
+    <select th:field="*{subscripcionId}" >
+        <option selected value="null"> Select an Option</option>
+        <option th:each="subscripcion : ${subscripciones}" th:value="${subscripcion.id}" th:text="${subscripcion.nombre}"></option>
+    </select>
+    <br>
+
+    <label for="fechaInicio">Fecha de Inicio:</label>
+    <input type="date" id="fechaInicio" th:field="*{fechaInicio}" required>
+    <br>
+
+    <label for="activa">Activa: </label>
+    <input type="checkbox" id="activa" th:field="*{activa}">
+    <br>
+
+    <label for="cancelado">Cancelado: </label>
+    <input type="checkbox" id="cancelado" th:field="*{cancelado}">
+    <br>
+
+    <button type="submit" th:text="${crear} ? 'Crear Membresia' : 'Actualizar Membresia'"></button>
+    <button type="button" onclick="window.location.href='/membresias'">Cancelar</button>
+
+</form>
+
+</body>
+</html>
