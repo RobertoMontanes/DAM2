@@ -106,6 +106,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         }
 
         return  aplicarFiltros(usuarios,searchTerm,membresia,fechaDesde,fechaHasta, estado)
+                .reversed()
                 .stream()
                 .skip(page * limit)
                 .limit(limit)

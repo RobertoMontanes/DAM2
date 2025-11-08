@@ -21,9 +21,14 @@ public class Nuevo_UsuarioDTO {
     private String username;
     private String password;
 
+    private String telefono;
+    private String direccion;
+    private String observaciones;
+
     @Builder.Default
     private String fechaCreacion = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    private boolean activo;
+    @Builder.Default
+    private boolean activo = true;
 
 
     public static Nuevo_UsuarioDTO toDTO(Usuario u) {
