@@ -74,4 +74,13 @@ public class Usuario {
                 .historialSubscripciones(usuario.getHistorialSubscripciones())
                 .build();
     }
+
+    public Membresia getMembresiaActiva() {
+        for (Membresia m : this.historialSubscripciones) {
+            if (m.isActiva()) {
+                return m;
+            }
+        }
+        return null;
+    }
 }

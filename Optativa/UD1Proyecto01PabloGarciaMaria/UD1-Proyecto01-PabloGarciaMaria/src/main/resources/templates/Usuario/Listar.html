@@ -1,44 +1,925 @@
-
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Usuarios</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .page-title {
+            color: #343a40;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 2px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            background: white;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .table-responsive {
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #495057;
+            position: sticky;
+            top: 0;
+        }
+
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            margin: 0 2px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.1);
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .action-cell {
+            white-space: nowrap;
+        }
+
+        .badge-subscription {
+            font-size: 0.75em;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--success-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-section:hover {
+            box-shadow: var(--hover-shadow);
+        }
+
+        .filter-toggle {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .filter-toggle:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .filter-content {
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .filter-content.collapsed {
+            max-height: 0;
+        }
+
+        .filter-content.expanded {
+            max-height: 500px;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .user-row {
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .user-row:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.01);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-btn.show {
+            opacity: 1;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            display: none;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        .limit-reached {
+            text-align: center;
+            padding: 1rem;
+            color: #6c757d;
+            font-style: italic;
+            display: none;
+        }
+
+        .export-buttons {
+            margin-left: 10px;
+        }
+
+        .user-details-modal .modal-content {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .user-details-modal .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .subscription-history {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions .btn {
+                margin-top: 10px;
+            }
+
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .header-buttons .btn {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .floating-btn {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
+<!-- Barra de navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-warehouse me-2"></i>
+            Sistema de Gestión de Almacenes
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/almacenes">Almacenes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/usuarios">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/suscripciones">Suscripciones</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-        <div th:if="${success}" class="success-message">
-            <span th:text="${success}"></span>
+<!-- Contenido principal -->
+<div class="container my-4">
+    <!-- Mensajes de éxito -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Encabezado de página -->
+    <div class="header-actions">
+        <h1 class="page-title">
+            <i class="fas fa-users me-2"></i>Gestión de Usuarios
+        </h1>
+        <div class="header-buttons">
+            <div class="btn-group export-buttons">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-download me-1"></i>Exportar
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" id="exportPdf"><i class="fas fa-file-pdf me-2"></i>PDF</a></li>
+                    <li><a class="dropdown-item" href="#" id="exportExcel"><i class="fas fa-file-excel me-2"></i>Excel</a></li>
+                    <li><a class="dropdown-item" href="#" id="exportCsv"><i class="fas fa-file-csv me-2"></i>CSV</a></li>
+                </ul>
+            </div>
+            <a href="/usuarios/nuevo" class="btn btn-primary pulse">
+                <i class="fas fa-plus me-1"></i>Agregar Nuevo Usuario
+            </a>
+        </div>
+    </div>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stats-card" data-filter="all">
+                <i class="fas fa-users fa-2x text-primary"></i>
+                <div class="stats-value" th:text="${totalUsuarios}">0</div>
+                <div class="stats-label">Total Usuarios</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card" data-filter="nuevos-mes">
+                <i class="fas fa-user-clock fa-2x text-info"></i>
+                <div class="stats-value" th:text="${nuevosEsteMes}">0</div>
+                <div class="stats-label">Nuevos Este Mes</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card" data-filter="activos">
+                <i class="fas fa-user-check fa-2x text-success"></i>
+                <div class="stats-value" th:text="${usuariosActivos}">0</div>
+                <div class="stats-label">Usuarios Activos</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card" data-filter="con-membresia">
+                <i class="fas fa-id-card fa-2x text-warning"></i>
+                <div class="stats-value" th:text="${usuariosConMembresia}">0</div>
+                <div class="stats-label">Con Membresía Activa</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros de Búsqueda</h5>
+            <span class="filter-toggle" id="filterToggle">
+                <i class="fas fa-sliders-h me-2"></i>Mostrar Filtros
+            </span>
         </div>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Email</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="usuario : ${usuarios}">
-        <td th:text="${usuario.id}">1</td>
-        <td th:text="${usuario.nombre}">Nombre</td>
-        <td th:text="${usuario.apellidos}">Apellido</td>
-        <td th:text="${usuario.email}"></td>
-        <td>
-            <a th:href="@{'/usuarios/editar/' + ${usuario.id}}">Editar</a>
-            <a th:href="@{'/usuarios/' + ${usuario.id}}">Detalles</a>
-            <form th:action="@{'/usuarios/' + ${usuario.id}}" th:method="delete">
-                <button style="margin: 0" type="submit">Eliminar</button>
+        <div class="filter-content collapsed" id="filterContent">
+            <form id="filterForm" th:action="@{/usuarios}" method="get">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="searchTerm" class="form-label">Buscar</label>
+                        <input type="text" class="form-control" id="searchTerm" name="searchTerm"
+                               th:value="${param.searchTerm}" placeholder="Nombre, email...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="subscripcion" class="form-label">Subscripcion</label>
+                        <select class="form-select" id="subscripcion" name="subscripcion">
+                            <option value="">Todas las subscripciones</option>
+                            <option value="sin-subscripcion">Sin subscripcion</option>
+                            <option value="con-subscripcion">Con subscripcion</option>
+                            <option th:each="subscripcion : ${subscripciones}"
+                                    th:value="${subscripcion.id}"
+                                    th:text="${subscripcion.nombre}">Membresía</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select class="form-select" id="estado" name="estado">
+                            <option value="">Todos los estados</option>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fechaDesde" class="form-label">Fecha desde</label>
+                        <input type="date" class="form-control" id="fechaDesde" name="fechaDesde"
+                               th:value="${param.fechaDesde}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fechaHasta" class="form-label">Fecha hasta</label>
+                        <input type="date" class="form-control" id="fechaHasta" name="fechaHasta"
+                               th:value="${param.fechaHasta}">
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-1"></i>Aplicar Filtros
+                            </button>
+                            <a th:href="@{/usuarios}" class="btn btn-outline-secondary">
+                                <i class="fas fa-undo me-1"></i>Limpiar Filtros
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<a href="/usuarios/nuevo">Agregar Nuevo Usuario</a>
+        </div>
+    </div>
 
-<a href="/">Volver al principal.</a>
+    <!-- Tarjeta con la tabla de usuarios -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0">Lista de Usuarios</h5>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="autoLoadToggle" checked>
+                    <label class="form-check-label" for="autoLoadToggle">Carga automática</label>
+                </div>
+            </div>
+
+            <div class="table-responsive" id="usersTableContainer">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Membresía</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    <!-- Los usuarios se cargan aquí -->
+                    <tr th:each="usuario, iter : ${usuarios}" class="user-row" th:attr="data-page=${currentPage}">
+                        <td th:text="${usuario.id}">1</td>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar" th:text="${#strings.substring(usuario.nombre, 0, 1) + #strings.substring(usuario.apellidos, 0, 1)}">
+                                    NA
+                                </div>
+                                <div>
+                                    <div th:text="${usuario.nombre + ' ' + usuario.apellidos}">Nombre Apellido</div>
+                                    <small class="text-muted" th:text="${'Registrado: ' + #temporals.format(usuario.fechaCreacion, 'dd/MM/yyyy')}" th:if="${usuario.fechaCreacion}">Registrado: 01/01/2023</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${usuario.email}">usuario@ejemplo.com</td>
+                        <td>
+                            <span class="badge bg-info badge-subscription" th:text="${usuario.membresia?.nombre}" th:if="${usuario.membresia}">Premium</span>
+                            <span class="badge bg-secondary badge-subscription" th:unless="${usuario.membresia}">Sin membresía</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-success" th:if="${usuario.activo}">Activo</span>
+                            <span class="badge bg-danger" th:unless="${usuario.activo}">Inactivo</span>
+                        </td>
+                        <td class="action-cell">
+                            <a th:href="@{'/usuarios/editar/' + ${usuario.id}}" class="btn btn-sm btn-outline-primary btn-action" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-info btn-action view-user-details"
+                               title="Ver detalles" th:attr="data-user-id=${usuario.id}">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <form th:action="@{'/usuarios/' + ${usuario.id}}" th:method="delete" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger btn-action" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- Mensaje cuando no hay usuarios -->
+                <div class="no-results" id="noResults">
+                    <i class="fas fa-users-slash"></i>
+                    <h4>No se encontraron usuarios</h4>
+                    <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+                    <a th:href="@{/usuarios}" class="btn btn-primary mt-2">
+                        <i class="fas fa-undo me-1"></i>Ver todos los usuarios
+                    </a>
+                </div>
+            </div>
+
+            <!-- Spinner de carga para scroll infinito -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-2 text-muted">Cargando más usuarios...</p>
+            </div>
+
+            <p class="limit-reached" id="limitReached">
+                <i class="fas fa-flag-checkered me-1"></i>Has llegado al final de la lista <span> | Usuarios en lista: <span th:text="${usuariosTotal}">0</span></span>
+            </p>
+
+            <div class="d-flex justify-content-center mt-3">
+                <button class="btn btn-outline-primary" id="loadMoreBtn" style="display: none;">
+                    <i class="fas fa-plus me-1"></i>Cargar más usuarios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enlace para volver al inicio -->
+    <div class="mt-4">
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Volver al inicio
+        </a>
+    </div>
+</div>
+
+<!-- Botón flotante para volver arriba -->
+<button class="btn btn-primary btn-lg floating-btn rounded-circle" id="backToTopBtn">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Modal para detalles de usuario -->
+<div class="modal fade user-details-modal" id="userDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del Usuario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="userDetailsContent">
+                <!-- Los detalles se cargan dinámicamente aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Control de filtros desplegables
+        const filterToggle = document.getElementById('filterToggle');
+        const filterContent = document.getElementById('filterContent');
+
+        filterToggle.addEventListener('click', function() {
+            if (filterContent.classList.contains('collapsed')) {
+                filterContent.classList.remove('collapsed');
+                filterContent.classList.add('expanded');
+                filterToggle.innerHTML = '<i class="fas fa-sliders-h me-2"></i>Ocultar Filtros';
+            } else {
+                filterContent.classList.remove('expanded');
+                filterContent.classList.add('collapsed');
+                filterToggle.innerHTML = '<i class="fas fa-sliders-h me-2"></i>Mostrar Filtros';
+            }
+        });
+
+        // Mostrar/ocultar mensaje de no resultados
+        const usersTableBody = document.getElementById('usersTableBody');
+        const noResults = document.getElementById('noResults');
+
+        if (usersTableBody.children.length === 0) {
+            noResults.style.display = 'block';
+        }
+
+        // Variables para scroll infinito
+        let currentPage = 0;
+        let limit = 10;
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const limitReached = document.getElementById('limitReached');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const autoLoadToggle = document.getElementById('autoLoadToggle');
+        let isLoading = false;
+        let hasMore = true;
+
+        // Botón para volver arriba
+        const backToTopBtn = document.getElementById('backToTopBtn');
+
+        // Mostrar/ocultar botón de volver arriba según el scroll
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        // Función para volver arriba
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        //input values
+        let searchTerm = document.getElementById("searchTerm").value;
+        const urlParams = new URLSearchParams(window.location.search);
+        let subscripcion = urlParams.get('subscripcion') || '';
+        let estado = urlParams.get('estado') || '';
+        let fechaDesde = document.getElementById("fechaDesde").value;
+        let fechaHasta = document.getElementById("fechaHasta").value;
+
+        // Verificar si hay más páginas disponibles
+        async function checkHasMorePages() {
+            try {
+                const response = await fetch(`/usuarios/paginacion/paginas?limit=${limit}&searchTerm=${searchTerm}&subscripcion=${subscripcion}&estado=${estado}&fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
+
+                const totalPages = await response.json();
+                return currentPage < totalPages;
+            } catch (error) {
+                console.error("Error al verificar páginas:", error);
+                return false;
+            }
+        }
+
+        // Configurar el comportamiento de carga
+        function setupLoadBehavior() {
+            if (autoLoadToggle.checked) {
+                loadMoreBtn.style.display = 'none';
+                window.addEventListener('scroll', handleScroll);
+            } else {
+                window.removeEventListener('scroll', handleScroll);
+                loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+                loadMoreBtn.addEventListener('click', loadMoreUsers);
+            }
+        }
+
+        // Manejar el scroll para carga automática
+        async function handleScroll() {
+            if (isLoading || !hasMore || !autoLoadToggle.checked) return;
+
+            const scrollTop = document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            // Cargar más cuando estemos cerca del final (200px antes)
+            if (scrollTop + windowHeight >= documentHeight - 200) {
+                await loadMoreUsers();
+            }
+        }
+
+        // Cambiar entre carga automática y manual
+        autoLoadToggle.addEventListener('change', setupLoadBehavior);
+
+        // Función para cargar más usuarios
+        async function loadMoreUsers() {
+            if (isLoading || !hasMore) return;
+
+            isLoading = true;
+            loadingSpinner.style.display = 'block';
+            loadMoreBtn.style.display = 'none';
+            currentPage++;
+
+            try {
+                const response = await fetch(`/usuarios/paginacion/obtener?page=${currentPage}&limit=${limit}&searchTerm=${searchTerm}&subscripcion=${subscripcion}&estado=${estado}&fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
+                const newUsers = await response.json();
+
+                if (newUsers.length === 0) {
+                    hasMore = false;
+                    limitReached.style.display = 'block';
+                    loadingSpinner.style.display = 'none';
+                    return;
+                }
+
+                newUsers.forEach(function(usuario) {
+                    const row = document.createElement('tr');
+                    row.className = 'user-row';
+                    row.setAttribute('data-page', currentPage);
+
+                    // Formatear fecha
+                    const fechaRegistro = new Date(usuario.fechaCreacion).toLocaleDateString('es-ES');
+
+                    row.innerHTML = `
+                        <td>${usuario.id}</td>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">${usuario.nombre.charAt(0)}${usuario.apellidos.charAt(0)}</div>
+                                <div>
+                                    <div>${usuario.nombre} ${usuario.apellidos}</div>
+                                    <small class="text-muted">Registrado: ${fechaRegistro}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${usuario.email}</td>
+                        <td>
+                            ${usuario.membresia ? `<span class="badge bg-info badge-subscription">${usuario.membresia.nombre}</span>` : `<span class="badge bg-secondary badge-subscription">Sin membresía</span>`}
+                        </td>
+                        <td>
+                            ${usuario.activo ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'}
+                        </td>
+                        <td class="action-cell">
+                            <a href="/usuarios/editar/${usuario.id}" class="btn btn-sm btn-outline-primary btn-action" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-info btn-action view-user-details"
+                               title="Ver detalles" data-user-id="${usuario.id}">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <form action="/usuarios/${usuario.id}" method="post" class="d-inline">
+                                <input type="hidden" name="_method" value="delete">
+                                <button type="submit" class="btn btn-sm btn-outline-danger btn-action" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    `;
+
+                    usersTableBody.appendChild(row);
+                });
+
+                // Actualizar estado
+                hasMore = await checkHasMorePages();
+                if (!hasMore) {
+                    limitReached.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error("Error al cargar más usuarios:", error);
+                currentPage--; // Revertir el incremento en caso de error
+            } finally {
+                isLoading = false;
+                loadingSpinner.style.display = 'none';
+
+                if (!autoLoadToggle.checked && hasMore) {
+                    loadMoreBtn.style.display = 'block';
+                }
+
+                // Reasignar eventos a los nuevos botones de detalles
+                attachDetailViewEvents();
+            }
+        }
+
+        // Verificar estado inicial
+        checkHasMorePages().then(result => {
+            hasMore = result;
+            setupLoadBehavior();
+        });
+
+        // Funcionalidad de las tarjetas de estadísticas como filtros rápidos
+        document.querySelectorAll('.stats-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                document.getElementById("subscripcion").value = ""
+                document.getElementById("fechaDesde").value = ""
+                document.getElementById("estado").value = ""
+
+                if (filter === 'all') {
+                    window.location.href = '/usuarios/';
+                } else if (filter === 'nuevos-mes') {
+                    document.getElementById("fechaDesde").value = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
+                } else if (filter === 'activos') {
+                    document.getElementById("estado").value = "activo"
+                } else if (filter === 'con-membresia') {
+                    document.getElementById("subscripcion").value = "con-subscripcion"
+                }
+                document.getElementById("filterForm").submit()
+            });
+        });
+
+        // Funcionalidad de exportación
+        document.getElementById('exportPdf').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de exportación PDF - En desarrollo');
+        });
+
+        document.getElementById('exportExcel').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de exportación Excel - En desarrollo');
+        });
+
+        document.getElementById('exportCsv').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de exportación CSV - En desarrollo');
+        });
+
+        // Modal para detalles de usuario
+        function attachDetailViewEvents() {
+            document.querySelectorAll('.view-user-details').forEach(button => {
+                button.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    const userId = this.getAttribute('data-user-id');
+
+                    try {
+                        const response = await fetch(`/usuarios/${userId}/detalles`);
+                        const userDetails = await response.json();
+
+                        // Formatear y mostrar detalles en el modal
+                        document.getElementById('userDetailsContent').innerHTML = `
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <div class="user-avatar mx-auto mb-3" style="width: 80px; height: 80px; font-size: 1.5rem;">
+                                        ${userDetails.nombre.charAt(0)}${userDetails.apellidos.charAt(0)}
+                                    </div>
+                                    <h5>${userDetails.nombre} ${userDetails.apellidos}</h5>
+                                    <p class="text-muted">ID: ${userDetails.id}</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <strong>Email:</strong><br>
+                                            ${userDetails.email}
+                                        </div>
+                                        <div class="col-6">
+                                            <strong>Teléfono:</strong><br>
+                                            ${userDetails.telefono || 'No especificado'}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <strong>Estado:</strong><br>
+                                            <span class="badge ${userDetails.activo ? 'bg-success' : 'bg-danger'}">
+                                                ${userDetails.activo ? 'Activo' : 'Inactivo'}
+                                            </span>
+                                        </div>
+                                        <div class="col-6">
+                                            <strong>Membresía:</strong><br>
+                                            ${userDetails.membresia ? `<span class="badge bg-info">${userDetails.membresia.nombre}</span>` : '<span class="badge bg-secondary">Sin membresía</span>'}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <strong>Fecha de registro:</strong><br>
+                                            ${new Date(userDetails.fechaCreacion).toLocaleDateString('es-ES')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        const modal = new bootstrap.Modal(document.getElementById('userDetailsModal'));
+                        modal.show();
+                    } catch (error) {
+                        console.error("Error al cargar detalles del usuario:", error);
+                        alert('Error al cargar los detalles del usuario');
+                    }
+                });
+            });
+        }
+
+        // Inicializar eventos de detalles
+        attachDetailViewEvents();
+
+        // Animaciones al cargar la página
+        const cards = document.querySelectorAll('.card, .stats-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+    });
+</script>
 </body>
 </html>

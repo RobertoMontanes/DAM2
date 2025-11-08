@@ -53,4 +53,8 @@ public class Membresia {
                 .cancelado(membresia.isCancelado())
                 .build();
     }
+
+    public static boolean nonNull(Membresia m) {
+        return m != null;
+    }
 }
