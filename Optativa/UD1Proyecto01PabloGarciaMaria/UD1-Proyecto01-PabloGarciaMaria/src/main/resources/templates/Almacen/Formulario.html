@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1 th:text="${crear} ? 'Creacion de Almacen' : 'Editar Almacen'"></h1>
+
+<form th:method="${crear} ? 'POST' : 'PUT'" action="/almacenes" th:object="${almacen}">
+
+    <input th:if="${!crear}" type="hidden" th:field="*{id}">
+
+
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" th:field="*{nombre}" required>
+    <br>
+
+    <label for="ubicacion">Ubicacion:</label>
+    <input type="text" id="ubicacion" th:field="*{ubicacion}" required>
+    <br>
+
+    <label for="superficie">Superficie:</label>
+    <input type="number" step="0.01" id="superficie" th:field="*{superficie}" required>
+    <br>
+
+    <label for="seguridad" >Seguridad:</label>
+    <input type="checkbox" id="seguridad" th:field="*{seguridad}">
+    <br>
+
+    <label for="estadoAlmacen">Estado del Almacen:</label>
+    <select id="estadoAlmacen" th:field="*{estadoAlmacen}">
+        <option value="" selected hidden>Select an option</option>
+        <option th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}"></option>
+    </select>
+    <br>
+
+    <label for="usuario">Usuario Responsable:</label>
+    <select id="usuario" th:field="*{usuarioID}">
+        <option value="" selected hidden>Select an option</option>
+        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></option>
+    </select>
+    <br>
+
+    <label for="tipoAlmacen">Tipo de Almacen:</label>
+    <select id="tipoAlmacen" th:field="*{tipoAlmacenID}" required>
+        <option value="" selected hidden>Select an option</option>
+        <option th:each="tipo : ${tiposAlmacen}" th:value="${tipo.id}" th:text="${tipo.nombre}"></option>
+    </select>
+    <br>
+
+    <button type="submit" th:text="${crear} ? 'Crear Almacen' : 'Actualizar Almacen'"></button>
+    <button type="button" onclick="window.location.href='/almacenes'">Cancelar</button>
+</form>
+
+
+</body>
+</html>

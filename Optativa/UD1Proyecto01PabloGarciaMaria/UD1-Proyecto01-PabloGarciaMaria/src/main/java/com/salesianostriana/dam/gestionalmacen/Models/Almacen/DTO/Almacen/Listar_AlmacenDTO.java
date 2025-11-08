@@ -15,7 +15,7 @@ public class Listar_AlmacenDTO {
     private boolean seguridad;
     private EstadosAlmacen estadoAlmacen;
     private String usuario;
-    private Long tipoAlmacen;
+    private String tipoAlmacen;
 
     public static Listar_AlmacenDTO toDTO(Almacen almacen) {
         return Listar_AlmacenDTO.builder()
@@ -25,8 +25,8 @@ public class Listar_AlmacenDTO {
                 .superficie(almacen.getSuperficie())
                 .seguridad(almacen.isSeguridad())
                 .estadoAlmacen(almacen.getEstadoAlmacen())
-                .usuario(almacen.getUsuario() != null ? almacen.getUsuario().getNombre() : null)
-                .tipoAlmacen(almacen.getTipoAlmacen() != null ? almacen.getTipoAlmacen().getId() : null)
+                .usuario(almacen.getUsuario() != null ? almacen.getUsuario().getNombre() : "Usuario no asignado")
+                .tipoAlmacen(almacen.getTipoAlmacen() != null ? almacen.getTipoAlmacen().getNombre() : "Tipo no asignado")
                 .build();
     }
 }

@@ -26,8 +26,8 @@ public class Listar_MembresiaDTO {
     public static Listar_MembresiaDTO toDTO(Membresia membresia) {
         return Listar_MembresiaDTO.builder()
                 .id(membresia.getId())
-                .usuario(membresia.getUsuario().getNombre() + " " + membresia.getUsuario().getApellidos())
-                .subscripcion(membresia.getSubscripcion().getNombre())
+                .usuario(membresia.getUsuario() == null ? "Usuario eliminado" : membresia.getUsuario().getNombre() + " " + membresia.getUsuario().getApellidos())
+                .subscripcion(membresia.getSubscripcion() == null ? "Subscroripción eliminada" : membresia.getSubscripcion().getNombre())
                 .fechaInicio(membresia.getFechaInicio())
                 .fechaFin(membresia.getFechaFin())
                 .activa(membresia.isActiva())

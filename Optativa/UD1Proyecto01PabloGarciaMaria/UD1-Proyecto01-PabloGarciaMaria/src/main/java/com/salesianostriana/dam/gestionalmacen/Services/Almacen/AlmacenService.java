@@ -3,8 +3,10 @@ package com.salesianostriana.dam.gestionalmacen.Services.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Almacen.Listar_AlmacenDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.Almacen.Nuevo_AlmacenDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.TipoAlmacen.Listar_TipoAlmacenDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Enums.EstadosAlmacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.TipoAlmacen;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Almacen.AlmacenRepository;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Almacen.TipoAlmacenRepository;
@@ -44,6 +46,9 @@ public class AlmacenService extends BaseServiceImpl<Almacen,Long, AlmacenReposit
             almacenDTO = new Nuevo_AlmacenDTO();
         }
 
+        model.addAttribute("usuarios", usuarioRepository.findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
+        model.addAttribute("tiposAlmacen", tipoAlmacenRepository.findAll().stream().map(Listar_TipoAlmacenDTO::toDTO).toList());
+        model.addAttribute("estados", EstadosAlmacen.values());
         model.addAttribute("almacen", almacenDTO);
         model.addAttribute("crear",true);
 
@@ -68,6 +73,9 @@ public class AlmacenService extends BaseServiceImpl<Almacen,Long, AlmacenReposit
             return "redirect:/almacenes";
         }
 
+        model.addAttribute("usuarios", usuarioRepository.findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
+        model.addAttribute("tiposAlmacen", tipoAlmacenRepository.findAll().stream().map(Listar_TipoAlmacenDTO::toDTO).toList());
+        model.addAttribute("estados", EstadosAlmacen.values());
         model.addAttribute("almacen",Nuevo_AlmacenDTO.toDTO(s));
         model.addAttribute("crear",false);
 
@@ -101,11 +109,14 @@ public class AlmacenService extends BaseServiceImpl<Almacen,Long, AlmacenReposit
     }
 
     private Almacen fromDTO(Nuevo_AlmacenDTO almacenDTO) {
-
-        Usuario u = usuarioRepository.findById(almacenDTO.getUsuarioID())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + almacenDTO.getUsuarioID()));
+        Usuario u = null;
         TipoAlmacen a = tipoAlmacenRepository.findById(almacenDTO.getTipoAlmacenID())
                 .orElseThrow(() -> new IllegalArgumentException("Tipo de Almacén no encontrado con ID: " + almacenDTO.getTipoAlmacenID()));
+
+        if (almacenDTO.getUsuarioID() != null) {
+            u = usuarioRepository.findById(almacenDTO.getUsuarioID())
+                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + almacenDTO.getUsuarioID()));
+        }
 
         return Almacen.builder()
                 .id(almacenDTO.getId())

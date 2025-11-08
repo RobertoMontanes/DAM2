@@ -9,10 +9,43 @@
 <span th:if="${success}" th:text="${success}"></span>
 <span th:if="${error}" th:text="${error}"></span>
 
+<div th:if="${forzar}">
+    <div id="modalOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; display:flex; justify-content:center; align-items:center;">
+        <div id="modalBox" style="background:#fff; padding:1.5rem; border-radius:6px; max-width:480px; width:90%; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+            <h2>El usuario seleccionado ya tiene una membresia</h2>
+            <p>¿Quieres forzar la cancelación de la membresia actual?</p>
+            <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:1rem;">
+                <button type="button" id="btnNo">No</button>
+                <button type="button" id="btnForzar">Forzar</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(){
+            var overlay = document.getElementById('modalOverlay');
+            var btnNo = document.getElementById('btnNo');
+            var btnForzar = document.getElementById('btnForzar');
+            btnNo.addEventListener('click', function(){ overlay.style.display = 'none'; });
+            btnForzar.addEventListener('click', function(){
+                var form = document.getElementById('membresiaForm');
+                if(!form) return;
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'forzar';
+                input.value = 'true';
+                form.action = '/membresias?forzar=true';
+                form.appendChild(input);
+                form.submit();
+            });
+            // evitar interacción por teclado mientras el modal esté visible
+            document.addEventListener('keydown', function(e){ if(overlay && overlay.style.display !== 'none'){ e.stopPropagation(); } }, true);
+        })();
+    </script>
+</div>
+
 <h1 th:text="${crear} ? 'Creacion de membresias' : 'Editar membresias'"></h1>
 
-<form th:method="${crear} ? 'POST' : 'PUT'" action="/membresias" th:object="${membresia}">
-
+<form id="membresiaForm" th:method="${crear} ? 'POST' : 'PUT'" action="/membresias" th:object="${membresia}">
     <input th:if="${!crear}" type="hidden" th:field="*{id}">
 
     <select th:field="*{usuarioId}" required>

@@ -3,14 +3,20 @@ package com.salesianostriana.dam.gestionalmacen.Services.Usuario;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.Listar_SubscripcionDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.Nuevo_SubscripcionDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Subscripcion;
+import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.MembresiaRepository;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.SubscripcionRepository;
 import com.salesianostriana.dam.gestionalmacen.Services.Base.BaseServiceImpl;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
+@RequiredArgsConstructor
 public class SubscripcionService extends BaseServiceImpl<Subscripcion,Long, SubscripcionRepository> {
+
+    private final MembresiaRepository membresiaRepository;
 
     public String listar(Model model) {
         model.addAttribute("subscripciones", findAll().stream().map(Listar_SubscripcionDTO::toDTO).toList());
@@ -82,10 +88,17 @@ public class SubscripcionService extends BaseServiceImpl<Subscripcion,Long, Subs
     public String eliminar(Model model, Long id, RedirectAttributes redirectAttributes) {
 
         Subscripcion s = findById(id).orElse(null);
+
         if (s == null) {
             redirectAttributes.addFlashAttribute("error", "La subscripción con ID " + id + " no existe.");
             return "redirect:/subscripciones";
         }
+
+        s.getHistorialUsuarios().forEach(historialUsuario -> {
+            historialUsuario.setSubscripcion(null);
+            membresiaRepository.save(historialUsuario);
+        });
+
         delete(s);
         redirectAttributes.addFlashAttribute("success", "Subscripción eliminada correctamente.");
         return "redirect:/subscripciones";

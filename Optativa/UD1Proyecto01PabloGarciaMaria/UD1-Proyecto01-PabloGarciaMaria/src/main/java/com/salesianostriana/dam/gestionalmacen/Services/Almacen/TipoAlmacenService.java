@@ -3,7 +3,9 @@ package com.salesianostriana.dam.gestionalmacen.Services.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.TipoAlmacen.Listar_TipoAlmacenDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.DTO.TipoAlmacen.Nuevo_TipoAlmacenDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Enums.CategoriasAlmacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.TipoAlmacen;
+import com.salesianostriana.dam.gestionalmacen.Repositories.Almacen.AlmacenRepository;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Almacen.TipoAlmacenRepository;
 import com.salesianostriana.dam.gestionalmacen.Services.Base.BaseServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Service
 @RequiredArgsConstructor
 public class TipoAlmacenService extends BaseServiceImpl<TipoAlmacen,Long, TipoAlmacenRepository> {
+
+    private final AlmacenRepository almacenRepository;
 
     public String listar(Model model) {
         model.addAttribute("tiposAlmacen", repository.findAll().stream().map(Listar_TipoAlmacenDTO::toDTO).toList());
@@ -39,10 +43,11 @@ public class TipoAlmacenService extends BaseServiceImpl<TipoAlmacen,Long, TipoAl
             a = new Nuevo_TipoAlmacenDTO();
         }
 
+        model.addAttribute("categorias", CategoriasAlmacen.values());
         model.addAttribute("tipoAlmacen", a);
         model.addAttribute("crear",true);
 
-        return "TipoAlmacen/formulario";
+        return "TipoAlmacen/Formulario";
     }
 
 
@@ -80,7 +85,12 @@ public class TipoAlmacenService extends BaseServiceImpl<TipoAlmacen,Long, TipoAl
     }
 
     public String eliminar(Model model, Long id, RedirectAttributes redirectAttributes) {
+
         return findById(id).map(tipoAlmacen -> {
+            tipoAlmacen.getAlmacenes().forEach(almacen  -> {
+                almacen.setTipoAlmacen(null);
+                almacenRepository.save(almacen);
+            });
             delete(tipoAlmacen);
             redirectAttributes.addFlashAttribute("success", "Tipo de almacén eliminado correctamente.");
             return "redirect:/almacenes/tipos";

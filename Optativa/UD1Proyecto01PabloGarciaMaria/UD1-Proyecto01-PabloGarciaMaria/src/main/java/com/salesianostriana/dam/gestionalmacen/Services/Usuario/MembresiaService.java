@@ -56,7 +56,7 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
         return "Membresia/Formulario";
     }
 
-    public String crear(Model model, Nuevo_MembresiaDTO membresiaDTO, RedirectAttributes redirectAttributes) throws Exception {
+    public String crear(Model model, Nuevo_MembresiaDTO membresiaDTO, RedirectAttributes redirectAttributes, boolean forzar) throws Exception {
 
         Optional<Usuario> usuarioOptional = usuarioService.findById(membresiaDTO.getUsuarioId());
         Optional<Membresia> membresiaExist;
@@ -69,8 +69,16 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
         membresiaExist = repository.findMembresiaByUsuarioNombreAndActivaIsTrue(usuarioOptional.get().getNombre());
 
         if (membresiaExist.isPresent()) {
-            model.addAttribute("error", "El usuario seleccionado ya tiene una membresía activa.");
-            return nuevo(model, membresiaDTO);
+            if (!forzar) {
+                model.addAttribute("error", "El usuario seleccionado ya tiene una membresía activa.");
+                model.addAttribute("forzar",true);
+                return nuevo(model, membresiaDTO);
+            } else {
+                Membresia m = membresiaExist.get();
+                m.setActiva(false);
+                m.setCancelado(true);
+                save(m);
+            }
         }
 
 
@@ -149,5 +157,20 @@ public class MembresiaService extends BaseServiceImpl<Membresia, Long, Membresia
                 .subscripcion(s)
                 .cancelado(membresiaDTO.isCancelado())
                 .build();
+    }
+
+    public String cancelarMembresia(Model model, Long id, RedirectAttributes redirectAttributes) {
+        Membresia m = findById(id).orElse(null);
+        if (m == null) {
+            redirectAttributes.addFlashAttribute("error", "La membresía con ID " + id + " no existe.");
+            return "redirect:/membresias";
+        }
+
+        m.setActiva(false);
+        m.setCancelado(true);
+        save(m);
+
+        redirectAttributes.addFlashAttribute("success", "Membresía cancelada correctamente.");
+        return "redirect:/membresias";
     }
 }

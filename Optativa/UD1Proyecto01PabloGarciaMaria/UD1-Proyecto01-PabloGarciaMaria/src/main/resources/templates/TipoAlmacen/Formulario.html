@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1 th:text="${crear} ? 'Creacion de tipos de almacenes' : 'Editar tipos de almacenes'"></h1>
+
+<form th:method="${crear} ? 'POST' : 'PUT'" action="/almacenes/tipos" th:object="${tipoAlmacen}">
+
+    <input th:if="${!crear}" type="hidden" th:field="*{id}">
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" th:field="*{nombre}" required>
+    <br>
+
+    <label for="capacidad">Capacidad:</label>
+    <input type="number" step="0.01" id="capacidad" th:field="*{capacidad}" required>
+    <br>
+
+    <label for="categoria">Categoria:</label>
+        <select id="categoria" th:field="*{categoria}">
+            <option value="" selected hidden>Select an option</option>
+            <option th:each="cat : ${categorias}" th:value="${cat}" th:text="${cat}"></option>
+        </select>
+    <br>
+
+    <label for="temperatura">Temperatura:</label>
+        <input type="number" step="0.01" id="temperatura" th:field="*{temperatura}" required>
+    <br>
+
+    <label for="requisitosEspeciales">Requisitos Especiales:</label>
+        <input type="text" id="requisitosEspeciales" th:field="*{requisitosEspeciales}">
+    <br>
+
+    <button type="submit" th:text="${crear} ? 'Crear Tipo de Almacen' : 'Actualizar Tipo de Almacen'"></button>
+    <button type="button" onclick="window.location.href='/almacenes/tipos'">Cancelar</button>
+</form>
+
+
+</body>
+</html>

@@ -28,4 +28,6 @@ public interface MembresiaRepository extends JpaRepository<Membresia,Long> {
             "SELECT m FROM Membresia m WHERE m.usuario.nombre = :username AND m.activa = true"
     )
     Optional<Membresia> findMembresiaByUsuarioNombreAndActivaIsTrue(@NotBlank(message = "El username no puede estar vacío") @Size(min = 3, max = 30, message = "El username debe tener entre 3 y 30 caracteres") String username);
+
+    List<Membresia> findByUsuario(Usuario u);
 }

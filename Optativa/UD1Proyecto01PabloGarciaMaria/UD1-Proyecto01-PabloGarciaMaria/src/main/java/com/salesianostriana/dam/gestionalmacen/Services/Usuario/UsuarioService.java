@@ -71,7 +71,11 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
             almacenService.save(almacen);
         }
 
-        membresiaRepository.deleteAll(u.getHistorialSubscripciones());
+        for (var m : membresiaRepository.findByUsuario(u)) {
+            m.setUsuario(null);
+            membresiaRepository.save(m);
+        }
+
 
         delete(u);
         redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente");

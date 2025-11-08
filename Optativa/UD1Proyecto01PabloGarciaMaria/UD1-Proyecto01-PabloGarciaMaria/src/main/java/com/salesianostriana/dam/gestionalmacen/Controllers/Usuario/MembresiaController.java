@@ -37,8 +37,8 @@ public class MembresiaController {
     }
 
     @PostMapping
-    public String crear(Model model, @ModelAttribute("membresia") Nuevo_MembresiaDTO membresiaDTO, RedirectAttributes redirectAttributes) throws Exception {
-        return service.crear(model,membresiaDTO,redirectAttributes);
+    public String crear(Model model, @ModelAttribute("membresia") Nuevo_MembresiaDTO membresiaDTO, RedirectAttributes redirectAttributes, @RequestParam(required = false, defaultValue = "false") boolean forzar) throws Exception {
+        return service.crear(model,membresiaDTO,redirectAttributes,forzar);
     }
 
     @PutMapping
@@ -49,6 +49,11 @@ public class MembresiaController {
     @DeleteMapping("/{id}")
     public String eliminar(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
         return service.eliminar(model,id,redirectAttributes);
+    }
+
+    @PutMapping("/cancelar/{id}")
+    public String cancelarMembresia(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+        return service.cancelarMembresia(model,id,redirectAttributes);
     }
 
 }

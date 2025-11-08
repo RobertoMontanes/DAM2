@@ -6,7 +6,9 @@
 </head>
 <body>
 
-    <table>
+<span th:if="${success}" th:text="${success}"></span>
+<span th:if="${error}" th:text="${error}"></span>
+    <table border="1">
         <thead>
         <tr>
             <th>ID</th>
@@ -15,6 +17,7 @@
             <th>Categoria</th>
             <th>Temperatura</th>
             <th>Requisitos Especiales</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -25,11 +28,16 @@
             <td th:text="${tipoAlmacen.categoria}">Categoria</td>
             <td th:text="${tipoAlmacen.temperatura}">Temperatura</td>
             <td th:text="${tipoAlmacen.requisitosEspeciales}">Requisitos Especiales</td>
+            <td>
+                <a th:href="@{'tipos/editar/' + ${tipoAlmacen.id}}">Editar</a>
+                <form th:action="@{'tipos/' + ${tipoAlmacen.id}}" th:method="delete" style="display:inline">
+                    <button type="submit">Eliminar</button>
+                </form>
         </tr>
         </tbody>
     </table>
 
-    <a th:href="@{almacenes/tipos/nuevo}">Crear Nuevo Tipo de Almacen</a>
+    <a th:href="@{tipos/nuevo}">Crear Nuevo Tipo de Almacen</a>
     <a th:href="@{/}">Volver al inicio</a>
 
 </body>
