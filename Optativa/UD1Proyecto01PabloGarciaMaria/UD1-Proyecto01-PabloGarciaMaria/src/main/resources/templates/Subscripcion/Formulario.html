@@ -1,42 +1,499 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${crear} ? 'Crear Subscripción - Sistema de Gestión' : 'Editar Subscripción - Sistema de Gestión'">Gestión de Subscripciones</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .page-title {
+            color: #343a40;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 2px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            background: white;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-outline-secondary {
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .feature-badge {
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .price-preview {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .price-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions .btn {
+                margin-top: 10px;
+            }
+
+            .floating-btn {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
+<!-- Barra de navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-warehouse me-2"></i>
+            Sistema de Gestión de Almacenes
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/almacenes">Almacenes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/usuarios">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/subscripciones">Suscripciones</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
+<!-- Contenido principal -->
+<div class="container my-4">
+    <!-- Mensajes de éxito/error -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
 
-<h1 th:text="${crear} ? 'Creacion de subscripciones' : 'Editar subscripciones'"></h1>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
 
-<form th:method="${crear} ? 'POST' : 'PUT'" action="/subscripciones" th:object="${subscripcion}">
+    <!-- Encabezado de página -->
+    <div class="header-actions">
+        <h1 class="page-title">
+            <i class="fas fa-plus-circle me-2" th:if="${crear}"></i>
+            <i class="fas fa-edit me-2" th:unless="${crear}"></i>
+            <span th:text="${crear} ? 'Crear Nueva Subscripción' : 'Editar Subscripción'"></span>
+        </h1>
+        <a href="/subscripciones" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Volver al Listado
+        </a>
+    </div>
 
-    <input th:if="${!crear}" type="hidden" th:field="*{id}">
+    <!-- Formulario -->
+    <div class="card">
+        <div class="card-body">
+            <form th:method="${crear} ? 'POST' : 'PUT'" th:action="'/subscripciones'" th:object="${subscripcion}">
+                <input th:if="${!crear}" type="hidden" th:field="*{id}">
 
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" th:field="*{nombre}" required>
-    <br>
+                <div class="row">
+                    <!-- Información Básica -->
+                    <div class="col-md-6">
+                        <h5 class="mb-4"><i class="fas fa-info-circle me-2"></i>Información Básica</h5>
 
-    <label for="precio">Precio:</label>
-    <input type="number" step="0.01" id="precio" th:field="*{precio}" required>
-    <br>
+                        <div class="form-group">
+                            <label for="nombre" class="form-label required-field">Nombre de la Subscripción</label>
+                            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required
+                                   placeholder="Ej: Plan Básico, Premium, Empresarial">
+                            <div class="form-text">Nombre descriptivo para identificar el plan de subscripción</div>
+                        </div>
 
-    <label for="numAlmacenes">Número de Almacenes:</label>
-    <input type="number" id="numAlmacenes" th:field="*{numAlmacenes}" required>
-    <br>
+                        <div class="form-group">
+                            <label for="precio" class="form-label required-field">Precio Mensual (€)</label>
+                            <input type="number" step="0.01" class="form-control" id="precio" th:field="*{precio}" required
+                                   placeholder="0.00" min="0">
+                            <div class="form-text">Precio mensual en euros</div>
 
-    <label for="duracion">Duración (meses):</label>
-    <input type="number" id="duracion" th:field="*{duracionMeses}" required>
-    <br>
+                            <!-- Vista previa del precio -->
+                            <div class="price-preview mt-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Precio mensual:</span>
+                                    <span class="price-value" id="pricePreview">€0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-1">
+                                    <span>Precio anual:</span>
+                                    <span class="text-muted" id="annualPricePreview">€0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <label for="soportePrioritario">Soporte Prioritario: </label>
-    <input type="checkbox" id="soportePrioritario" th:field="*{soportePrioritario}">
+                    <!-- Características y Configuración -->
+                    <div class="col-md-6">
+                        <h5 class="mb-4"><i class="fas fa-cogs me-2"></i>Configuración</h5>
 
-    <button type="submit" th:text="${crear} ? 'Crear Usuario' : 'Actualizar Usuario'"></button>
-    <button type="button" onclick="window.location.href='/usuarios'">Cancelar</button>
+                        <div class="form-group">
+                            <label for="numAlmacenes" class="form-label required-field">Número de Almacenes Incluidos</label>
+                            <input type="number" class="form-control" id="numAlmacenes" th:field="*{numAlmacenes}" required
+                                   placeholder="0" min="0">
+                            <div class="form-text">Número máximo de almacenes que incluye esta subscripción</div>
+                        </div>
 
-</form>
+                        <div class="form-group">
+                            <label for="duracion" class="form-label required-field">Duración del Plan (meses)</label>
+                            <input type="number" class="form-control" id="duracion" th:field="*{duracionMeses}" required
+                                   placeholder="12" min="1">
+                            <div class="form-text">Duración del plan de subscripción en meses</div>
+                        </div>
 
+                        <div class="form-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="soportePrioritario" th:field="*{soportePrioritario}">
+                                <label class="form-check-label" for="soportePrioritario">
+                                    <strong>Soporte Prioritario</strong>
+                                </label>
+                            </div>
+                            <div class="form-text">
+                                    <span class="badge bg-warning feature-badge">
+                                        <i class="fas fa-crown me-1"></i>Característica Premium
+                                    </span>
+                                <div class="mt-1">Incluye soporte técnico prioritario 24/7 y tiempo de respuesta garantizado</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Resumen del Plan -->
+                <div class="mt-4 pt-4 border-top">
+                    <h6><i class="fas fa-list-alt me-2"></i>Resumen del Plan</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Nombre del plan:</span>
+                                <strong id="summaryName">-</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Precio mensual:</span>
+                                <strong id="summaryPrice">€0.00</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Almacenes incluidos:</span>
+                                <strong id="summaryStorage">0</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Duración:</span>
+                                <strong id="summaryDuration">0 meses</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Soporte prioritario:</span>
+                                <strong id="summarySupport">No</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="d-flex gap-2 mt-4 pt-4 border-top">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>
+                        <span th:text="${crear} ? 'Crear Subscripción' : 'Actualizar Subscripción'"></span>
+                    </button>
+                    <a href="/suscripciones" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </a>
+                    <button type="reset" class="btn btn-outline-warning ms-auto">
+                        <i class="fas fa-undo me-1"></i>Restablecer
+                        </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Información de ayuda -->
+    <div class="mt-4">
+        <div class="alert alert-info">
+            <h6><i class="fas fa-lightbulb me-2"></i>Consejos para Crear Subscripciones</h6>
+            <ul class="mb-0">
+                <li>Los campos marcados con <span class="text-danger">*</span> son obligatorios</li>
+                <li>Considera ofrecer diferentes niveles (Básico, Standard, Premium) para distintos tipos de usuarios</li>
+                <li>El soporte prioritario es una característica premium que justifica un precio más alto</li>
+                <li>Las duraciones comunes son 1, 6, 12 o 24 meses</li>
+                <li>Verifica que los precios sean competitivos con el mercado</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Botón flotante para volver arriba -->
+<button class="btn btn-primary btn-lg floating-btn rounded-circle" id="backToTopBtn">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elementos del formulario
+        const nombreInput = document.getElementById('nombre');
+        const precioInput = document.getElementById('precio');
+        const almacenesInput = document.getElementById('numAlmacenes');
+        const duracionInput = document.getElementById('duracion');
+        const soporteCheckbox = document.getElementById('soportePrioritario');
+
+        // Elementos de vista previa
+        const pricePreview = document.getElementById('pricePreview');
+        const annualPricePreview = document.getElementById('annualPricePreview');
+
+        // Elementos del resumen
+        const summaryName = document.getElementById('summaryName');
+        const summaryPrice = document.getElementById('summaryPrice');
+        const summaryStorage = document.getElementById('summaryStorage');
+        const summaryDuration = document.getElementById('summaryDuration');
+        const summarySupport = document.getElementById('summarySupport');
+
+        // Función para actualizar las vistas previas
+        function updatePreviews() {
+            // Vista previa de precios
+            const precio = parseFloat(precioInput.value) || 0;
+            const precioAnual = precio * 12;
+
+            pricePreview.textContent = `€${precio.toFixed(2)}`;
+            annualPricePreview.textContent = `€${precioAnual.toFixed(2)}`;
+
+            // Resumen del plan
+            summaryName.textContent = nombreInput.value || '-';
+            summaryPrice.textContent = `€${precio.toFixed(2)}`;
+            summaryStorage.textContent = almacenesInput.value || '0';
+            summaryDuration.textContent = `${duracionInput.value || '0'} meses`;
+            summarySupport.textContent = soporteCheckbox.checked ? 'Sí' : 'No';
+        }
+
+        // Event listeners para actualizar en tiempo real
+        nombreInput.addEventListener('input', updatePreviews);
+        precioInput.addEventListener('input', updatePreviews);
+        almacenesInput.addEventListener('input', updatePreviews);
+        duracionInput.addEventListener('input', updatePreviews);
+        soporteCheckbox.addEventListener('change', updatePreviews);
+
+        // Actualizar inicialmente
+        updatePreviews();
+
+        // Botón para volver arriba
+        const backToTopBtn = document.getElementById('backToTopBtn');
+
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.opacity = '1';
+            } else {
+                backToTopBtn.style.opacity = '0';
+            }
+        });
+
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Validación de formulario
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const nombre = nombreInput.value.trim();
+            const precio = parseFloat(precioInput.value);
+            const almacenes = parseInt(almacenesInput.value);
+            const duracion = parseInt(duracionInput.value);
+
+            if (!nombre || isNaN(precio) || precio < 0 || isNaN(almacenes) || almacenes < 0 || isNaN(duracion) || duracion < 1) {
+                e.preventDefault();
+                alert('Por favor, complete todos los campos obligatorios correctamente.');
+                return;
+            }
+
+            if (precio === 0) {
+                if (!confirm('¿Está seguro de que desea crear una subscripción gratuita?')) {
+                    e.preventDefault();
+                    return;
+                }
+            }
+        });
+
+        // Animaciones al cargar la página
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+    });
+</script>
 </body>
 </html>

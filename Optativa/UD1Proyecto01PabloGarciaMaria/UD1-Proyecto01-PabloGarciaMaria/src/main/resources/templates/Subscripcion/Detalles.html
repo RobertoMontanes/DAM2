@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Subscripción - Sistema de Gestión</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .page-title {
+            color: #343a40;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 2px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            background: white;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .subscription-icon-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--success-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .btn-center-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 200px;
+            margin-right: 1rem;
+        }
+
+        .detail-value {
+            color: #6c757d;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .badge-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: inline-block;
+        }
+
+        .badge-feature {
+            background-color: #e7f3ff;
+            color: #0366d6;
+        }
+
+        .badge-premium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .price-tag-large {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0.5rem 0;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-outline-secondary {
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-btn.show {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li i {
+            color: var(--success-color);
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .text-center-flex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* NUEVO ESTILO PARA CENTRAR EL BOTÓN ESPECÍFICO */
+        .centered-button {
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .detail-label {
+                min-width: auto;
+                margin-bottom: 0.25rem;
+            }
+
+            .detail-value {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+            }
+
+            .floating-btn {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .centered-button {
+                margin: 0;
+                order: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Barra de navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-warehouse me-2"></i>
+            Sistema de Gestión de Almacenes
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/almacenes">Almacenes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/usuarios">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/subscripciones">Subscripciones</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="container my-4">
+    <!-- Mensajes de éxito -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Encabezado de página -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title">
+            <i class="fas fa-receipt me-2"></i>Detalles de la Subscripción
+        </h1>
+        <a href="/subscripciones" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Volver al Listado
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Información Principal -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Icono e Información Básica -->
+                    <div class="text-center mb-4">
+                        <div class="subscription-icon-large">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3 th:text="${subscripcion.nombre}">Nombre de la Subscripción</h3>
+                        <div class="price-tag-large" th:text="${'€' + subscripcion.precio}">€9.99</div>
+                        <div class="price-period" th:text="${subscripcion.duracionMeses + ' meses'}">/mes</div>
+                    </div>
+
+                    <!-- Información Detallada -->
+                    <div class="detail-section">
+                        <h5 class="detail-section-title">
+                            <i class="fas fa-info-circle me-2"></i>Información General
+                        </h5>
+
+                        <div class="detail-row">
+                            <span class="detail-label">ID de Subscripción:</span>
+                            <span class="detail-value" th:text="${subscripcion.id}">1</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Nombre:</span>
+                            <span class="detail-value" th:text="${subscripcion.nombre}">Nombre de la Subscripción</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Precio Mensual:</span>
+                            <span class="detail-value">
+                                    <span class="fw-bold text-primary" th:text="${'€' + subscripcion.precio}">€9.99</span>
+                                    <span class="text-muted ms-2" th:text="${'cada ' + subscripcion.duracionMeses + ' meses'}">/mes</span>
+                                </span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Precio Anual:</span>
+                            <span class="detail-value">
+                                    <span class="fw-bold" th:text="${'€' + (subscripcion.precio * 12)}">€119.88</span>
+                                    <span class="text-muted ms-2">(equivalente anual)</span>
+                                </span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Duración del Plan:</span>
+                            <span class="detail-value" th:text="${subscripcion.duracionMeses + ' meses'}">12 meses</span>
+                        </div>
+                    </div>
+
+                    <!-- Características -->
+                    <div class="detail-section">
+                        <h5 class="detail-section-title">
+                            <i class="fas fa-star me-2"></i>Características Incluidas
+                        </h5>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Almacenes Incluidos:</span>
+                            <span class="detail-value">
+                                    <span class="badge badge-feature" th:text="${subscripcion.numAlmacenes + ' almacenes'}">5 almacenes</span>
+                                </span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Soporte Prioritario:</span>
+                            <span class="detail-value">
+                                    <span th:if="${subscripcion.soportePrioritario}" class="badge badge-premium">
+                                        <i class="fas fa-check me-1"></i>Incluido
+                                    </span>
+                                    <span th:unless="${subscripcion.soportePrioritario}" class="badge bg-secondary">
+                                        <i class="fas fa-times me-1"></i>No incluido
+                                    </span>
+                                </span>
+                        </div>
+
+                        <!-- Lista de características adicionales -->
+                        <div class="mt-3">
+                            <ul class="feature-list">
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span th:text="${subscripcion.numAlmacenes + ' almacenes incluidos'}">5 almacenes incluidos</span>
+                                </li>
+                                <li th:if="${subscripcion.soportePrioritario}">
+                                    <i class="fas fa-check"></i>
+                                    Soporte técnico prioritario 24/7
+                                </li>
+                                <li th:unless="${subscripcion.soportePrioritario}">
+                                    <i class="fas fa-check"></i>
+                                    Soporte técnico estándar
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    Acceso completo a todas las funcionalidades
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    Actualizaciones automáticas del sistema
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    Copias de seguridad automáticas
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="action-buttons mt-4 pt-4 border-top">
+                        <a th:href="@{'/subscripciones/editar/' + ${subscripcion.id}}" class="btn btn-primary">
+                            <i class="fas fa-edit me-1"></i>Editar Subscripción
+                        </a>
+                        <a href="/subscripciones/nuevo" class="btn btn-outline-primary btn-center-content centered-button">
+                            <i class="fas fa-plus me-1"></i>Crear Nueva Subscripción
+                        </a>
+                        <form th:action="@{'/subscripciones/' + ${subscripcion.id}}" th:method="delete" class="d-inline"
+                              onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta subscripción?')">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>Eliminar Subscripción
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Lateral - Estadísticas e Información -->
+        <div class="col-lg-4">
+            <!-- Estadísticas de Uso -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="detail-section-title">
+                        <i class="fas fa-chart-bar me-2"></i>Estadísticas de Uso
+                    </h5>
+
+                    <div class="stats-grid">
+                        <div class="stats-card">
+                            <i class="fas fa-users fa-2x text-info"></i>
+                            <div class="stats-value" th:text="${usuariosActivos}">0</div>
+                            <div class="stats-label">Usuarios Activos</div>
+                        </div>
+                        <div class="stats-card">
+                            <i class="fas fa-box fa-2x text-success"></i>
+                            <div class="stats-value" th:text="${almacenesUtilizados}">0</div>
+                            <div class="stats-label">Almacenes Usados</div>
+                        </div>
+                        <div class="stats-card">
+                            <i class="fas fa-percentage fa-2x text-warning"></i>
+                            <div class="stats-value" th:text="${tasaRenovacion}">0%</div>
+                            <div class="stats-label">Tasa de Renovación</div>
+                        </div>
+                        <div class="stats-card">
+                            <i class="fas fa-calendar fa-2x text-primary"></i>
+                            <div class="stats-value" th:text="${antiguedadPromedio}">0</div>
+                            <div class="stats-label">Antigüedad Promedio (meses)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información Adicional -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="detail-section-title">
+                        <i class="fas fa-info-circle me-2"></i>Información Adicional
+                    </h5>
+
+                    <div class="detail-section">
+                        <div class="detail-row">
+                            <span class="detail-label">Estado:</span>
+                            <span class="detail-value">
+                                    <span class="badge bg-success">Activa</span>
+                                </span>
+                        </div>
+                    </div>
+
+                    <!-- Valor del Plan -->
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <h6 class="mb-2"><i class="fas fa-calculator me-2"></i>Valor del Plan</h6>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Precio mensual:</span>
+                            <strong th:text="${'€' + subscripcion.precio}">€9.99</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Por almacén:</span>
+                            <strong th:text="${'€' + T(java.lang.String).format('%.2f', subscripcion.precio / subscripcion.numAlmacenes)}">€1.99</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Por mes:</span>
+                            <strong th:text="${'€' + T(java.lang.String).format('%.2f', subscripcion.precio / subscripcion.duracionMeses)}">€1.99</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botón flotante para volver arriba -->
+<button class="btn btn-primary btn-lg floating-btn rounded-circle" id="backToTopBtn">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Botón para volver arriba
+        const backToTopBtn = document.getElementById('backToTopBtn');
+
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Animaciones al cargar la página
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+
+        // Confirmación para eliminar subscripción
+        const deleteForm = document.querySelector('form[method="delete"]');
+        if (deleteForm) {
+            deleteForm.addEventListener('submit', function(e) {
+                if (!confirm('¿Estás seguro de que quieres eliminar esta subscripción? Esta acción no se puede deshacer y afectará a todos los usuarios que la tengan asignada.')) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

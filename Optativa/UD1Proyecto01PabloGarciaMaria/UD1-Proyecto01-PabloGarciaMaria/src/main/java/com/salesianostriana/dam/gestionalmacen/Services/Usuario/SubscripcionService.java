@@ -48,7 +48,7 @@ public class SubscripcionService extends BaseServiceImpl<Subscripcion,Long, Subs
 
         List<Subscripcion> subscripciones = findAll();
         List<Subscripcion> subscripcionesFiltradas = aplicarFiltros(subscripciones, searchTerm, precioMin, precioMax, almacenesMin, soportePrioritario);
-        List<Subscripcion> subscripcionesPaginadas = subscripcionesFiltradas.stream()
+        List<Subscripcion> subscripcionesPaginadas = subscripcionesFiltradas.reversed().stream()
                 .skip((long) (paginaActual - 1) * limit)
                 .limit(limit)
                 .toList();
