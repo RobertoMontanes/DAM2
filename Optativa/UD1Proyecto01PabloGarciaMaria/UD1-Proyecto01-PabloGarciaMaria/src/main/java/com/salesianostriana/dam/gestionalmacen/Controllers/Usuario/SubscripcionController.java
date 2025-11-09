@@ -17,8 +17,15 @@ public class SubscripcionController {
     private final SubscripcionService service;
 
     @GetMapping
-    public String listar(Model model) {
-        return service.listar(model);
+    public String listar(Model model, @RequestParam(defaultValue = "10", required = false) int size,
+                         @RequestParam(required = false) String searchTerm,
+                         @RequestParam(required = false) Double precioMin,
+                         @RequestParam(required = false) Double precioMax,
+                         @RequestParam(required = false) Integer almacenesMin,
+                         @RequestParam(required = false) Boolean soportePrioritario,
+                         @RequestParam(required = false, defaultValue = "1") Integer page
+                         ) {
+        return service.listar(model, size, searchTerm, precioMin, precioMax, almacenesMin, soportePrioritario, page);
     }
 
     @GetMapping("/{id}")

@@ -1,45 +1,720 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Subscripciones - Sistema de Gestión</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .page-title {
+            color: #343a40;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 2px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            background: white;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .table-responsive {
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #495057;
+            position: sticky;
+            top: 0;
+        }
+
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            margin: 0 2px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.1);
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .action-cell {
+            white-space: nowrap;
+        }
+
+        .badge-subscription {
+            font-size: 0.75em;
+        }
+
+        .price-tag {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .feature-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-section:hover {
+            box-shadow: var(--hover-shadow);
+        }
+
+        .filter-toggle {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .filter-toggle:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .filter-content {
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .filter-content.collapsed {
+            max-height: 0;
+        }
+
+        .filter-content.expanded {
+            max-height: 500px;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .subscription-row {
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .subscription-row:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.01);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            display: none;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        .limit-reached {
+            text-align: center;
+            padding: 1rem;
+            color: #6c757d;
+            font-style: italic;
+            display: none;
+        }
+
+        .export-buttons {
+            margin-left: 10px;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .soporte-badge {
+            font-size: 0.7rem;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .pagination-info {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .pagination .page-link {
+            border-radius: 8px;
+            margin: 0 2px;
+            border: 1px solid #dee2e6;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: var(--primary-color);
+        }
+
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-size-selector select {
+            border-radius: 6px;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions .btn {
+                margin-top: 10px;
+            }
+
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .header-buttons .btn {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .floating-btn {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .pagination-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .page-size-selector {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
+<!-- Barra de navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-warehouse me-2"></i>
+            Sistema de Gestión de Almacenes
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/almacenes">Almacenes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/usuarios">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/subscripciones">Subscripciones</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<h1>Lista de Subscripciones</h1>
-<table  border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Precio</th>
-        <th> Numero Almacenes</th>
-        <th>Duración (meses)</th>
-        <th>Soporte Prioritario</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="subscripcion : ${subscripciones}">
-        <td th:text="${subscripcion.id}">1</td>
-        <td th:text="${subscripcion.nombre}">Nombre de la Subscripción</td>
-        <td th:text="${subscripcion.precio}">9.99</td>
-        <td th:text="${subscripcion.numAlmacenes}">5</td>
-        <td th:text="${subscripcion.duracionMeses}">12</td>
-        <td th:text="${subscripcion.soportePrioritario}">true</td>
-        <td>
-            <a th:href="@{'/subscripciones/' + ${subscripcion.id}}" >DETALLES</a>
-            <a th:href="@{'/subscripciones/editar/' + ${subscripcion.id}}">EDITAR</a>
-            <form th:action="@{'/subscripciones/' + ${subscripcion.id}}" th:method="delete">
-                <button style="margin: 0" type="submit">Eliminar</button>
+<!-- Contenido principal -->
+<div class="container my-4">
+    <!-- Mensajes de éxito -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Encabezado de página -->
+    <div class="header-actions">
+        <h1 class="page-title">
+            <i class="fas fa-receipt me-2"></i>Gestión de Subscripciones
+        </h1>
+        <div class="header-buttons">
+            <div class="btn-group export-buttons">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-download me-1"></i>Exportar
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" id="exportPdf"><i class="fas fa-file-pdf me-2"></i>PDF</a></li>
+                    <li><a class="dropdown-item" href="#" id="exportExcel"><i class="fas fa-file-excel me-2"></i>Excel</a></li>
+                    <li><a class="dropdown-item" href="#" id="exportCsv"><i class="fas fa-file-csv me-2"></i>CSV</a></li>
+                </ul>
+            </div>
+            <a href="/subscripciones/nuevo" class="btn btn-primary pulse">
+                <i class="fas fa-plus me-1"></i>Crear Subscripción
+            </a>
+        </div>
+    </div>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="fas fa-receipt fa-2x text-primary"></i>
+                <div class="stats-value" th:text="${totalSubscripciones}">0</div>
+                <div class="stats-label">Total Subscripciones</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="fas fa-users fa-2x text-info"></i>
+                <div class="stats-value" th:text="${usuariosConSubscripcion}">0</div>
+                <div class="stats-label">Usuarios Suscritos</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="fas fa-headset fa-2x text-warning"></i>
+                <div class="stats-value" th:text="${conSoportePrioritario}">0</div>
+                <div class="stats-label">Con Soporte Prioritario</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros de Búsqueda</h5>
+            <span class="filter-toggle" id="filterToggle">
+                    <i class="fas fa-sliders-h me-2"></i>Mostrar Filtros
+                </span>
+        </div>
+
+        <div class="filter-content collapsed" id="filterContent">
+            <form id="filterForm" th:action="@{/subscripciones}" method="get">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="searchTerm" class="form-label">Buscar</label>
+                        <input type="text" class="form-control" id="searchTerm" name="searchTerm"
+                               th:value="${param.searchTerm}" placeholder="Nombre de subscripción...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="precioMin" class="form-label">Precio Mínimo</label>
+                        <input type="number" class="form-control" id="precioMin" name="precioMin"
+                               th:value="${param.precioMin}" placeholder="0.00" step="0.01">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="precioMax" class="form-label">Precio Máximo</label>
+                        <input type="number" class="form-control" id="precioMax" name="precioMax"
+                               th:value="${param.precioMax}" placeholder="100.00" step="0.01">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="almacenesMin" class="form-label">Almacenes Mínimos</label>
+                        <input type="number" class="form-control" id="almacenesMin" name="almacenesMin"
+                               th:value="${param.almacenesMin}" placeholder="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="soportePrioritario" class="form-label">Soporte Prioritario</label>
+                        <select class="form-select" id="soportePrioritario" name="soportePrioritario">
+                            <option value="">Todos</option>
+                            <option value="true" th:selected="${param.soportePrioritario == 'true'}">Sí</option>
+                            <option value="false" th:selected="${param.soportePrioritario == 'false'}">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-1"></i>Aplicar Filtros
+                            </button>
+                            <a th:href="@{/subscripciones}" class="btn btn-outline-secondary">
+                                <i class="fas fa-undo me-1"></i>Limpiar Filtros
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        </div>
+    </div>
 
-<a href="/subscripciones/nuevo">Crear subscripcion</a>
-<a href="/">Volver al principal.</a>
+    <!-- Tarjeta con la tabla de subscripciones -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0">Lista de Subscripciones</h5>
+                <span class="badge bg-primary" th:text="${'Mostrando: ' + subscripciones.size() + ' de ' + totalElementos}">Mostrando: 0 de 0</span>
+            </div>
 
+            <div class="table-responsive" id="subscriptionsTableContainer">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Almacenes</th>
+                        <th>Duración</th>
+                        <th>Soporte</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="subscriptionsTableBody">
+                    <!-- Las subscripciones se cargan aquí -->
+                    <tr th:each="subscripcion : ${subscripciones}" class="subscription-row">
+                        <td th:text="${subscripcion.id}">1</td>
+                        <td>
+                            <div class="fw-semibold" th:text="${subscripcion.nombre}">Nombre de la Subscripción</div>
+                        </td>
+                        <td>
+                            <span class="price-tag" th:text="${'€' + subscripcion.precio}">€9.99</span>
+                            <div class="text-muted small" th:text="${subscripcion.duracionMeses + ' meses'}">/mes</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-info feature-badge" th:text="${subscripcion.numAlmacenes + ' almacenes'}">5 almacenes</span>
+                        </td>
+                        <td>
+                            <span class="text-muted" th:text="${subscripcion.duracionMeses + ' meses'}">12 meses</span>
+                        </td>
+                        <td>
+                                    <span th:if="${subscripcion.soportePrioritario}" class="badge bg-success soporte-badge">
+                                        <i class="fas fa-check me-1"></i>Sí
+                                    </span>
+                            <span th:unless="${subscripcion.soportePrioritario}" class="badge bg-secondary soporte-badge">
+                                        <i class="fas fa-times me-1"></i>No
+                                    </span>
+                        </td>
+                        <td class="action-cell">
+                            <a th:href="@{'/subscripciones/' + ${subscripcion.id}}" class="btn btn-sm btn-outline-info btn-action" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a th:href="@{'/subscripciones/editar/' + ${subscripcion.id}}" class="btn btn-sm btn-outline-primary btn-action" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form th:action="@{'/subscripciones/' + ${subscripcion.id}}" th:method="delete" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger btn-action" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta subscripción?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- Mensaje cuando no hay subscripciones -->
+                <div class="no-results" id="noResults">
+                    <i class="fas fa-receipt"></i>
+                    <h4>No se encontraron subscripciones</h4>
+                    <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+                    <a th:href="@{/subscripciones/nuevo}" class="btn btn-primary mt-2">
+                        <i class="fas fa-plus me-1"></i>Crear Primera Subscripción
+                    </a>
+                </div>
+            </div>
+
+            <!-- Paginación -->
+            <div th:if="${totalPaginas > 1}" class="pagination-container">
+                <div class="pagination-info">
+                    Mostrando <strong th:text="${(paginaActual - 1) * tamanoPagina + 1}">1</strong> -
+                    <strong th:text="${paginaActual * tamanoPagina}">10</strong> de
+                    <strong th:text="${totalElementos}">0</strong> subscripciones
+                </div>
+
+                <nav aria-label="Paginación de subscripciones">
+                    <ul class="pagination mb-0">
+                        <!-- Botón Anterior -->
+                        <li class="page-item" th:classappend="${paginaActual == 1} ? 'disabled' : ''">
+                            <a class="page-link"
+                               th:href="@{/subscripciones(
+                page=${paginaActual - 1},
+                size=${tamanoPagina},
+                searchTerm=${param.searchTerm},
+                precioMin=${param.precioMin},
+                precioMax=${param.precioMax},
+                almacenesMin=${param.almacenesMin},
+                soportePrioritario=${param.soportePrioritario}
+           )}"
+                               aria-label="Anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        <!-- Páginas -->
+                        <li th:each="i : ${#numbers.sequence(1, totalPaginas)}"
+                            class="page-item"
+                            th:classappend="${i == paginaActual} ? 'active' : ''">
+                            <a class="page-link"
+                               th:href="@{/subscripciones(
+                page=${i},
+                size=${tamanoPagina},
+                searchTerm=${param.searchTerm},
+                precioMin=${param.precioMin},
+                precioMax=${param.precioMax},
+                almacenesMin=${param.almacenesMin},
+                soportePrioritario=${param.soportePrioritario}
+           )}"
+                               th:text="${i}">1</a>
+                        </li>
+
+                        <!-- Botón Siguiente -->
+                        <li class="page-item" th:classappend="${paginaActual == totalPaginas} ? 'disabled' : ''">
+                            <a class="page-link"
+                               th:href="@{/subscripciones(
+                page=${paginaActual + 1},
+                size=${tamanoPagina},
+                searchTerm=${param.searchTerm},
+                precioMin=${param.precioMin},
+                precioMax=${param.precioMax},
+                almacenesMin=${param.almacenesMin},
+                soportePrioritario=${param.soportePrioritario}
+           )}"
+                               aria-label="Siguiente">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+                </nav>
+
+                <!-- Selector de tamaño de página -->
+                <div class="page-size-selector">
+                    <span>Mostrar:</span>
+                    <select id="pageSizeSelect" onchange="changePageSize(this.value)">
+                        <option value="10" th:selected="${tamanoPagina == 10}">10</option>
+                        <option value="25" th:selected="${tamanoPagina == 25}">25</option>
+                        <option value="50" th:selected="${tamanoPagina == 50}">50</option>
+                        <option value="100" th:selected="${tamanoPagina == 100}">100</option>
+                    </select>
+                    <span>por página</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enlace para volver al inicio -->
+    <div class="mt-4">
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Volver al inicio
+        </a>
+    </div>
+</div>
+
+<!-- Botón flotante para agregar subscripción -->
+<a href="/subscripciones/nuevo" class="btn btn-primary btn-lg floating-btn rounded-circle">
+    <i class="fas fa-plus"></i>
+</a>
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Control de filtros desplegables
+        const filterToggle = document.getElementById('filterToggle');
+        const filterContent = document.getElementById('filterContent');
+
+        filterToggle.addEventListener('click', function() {
+            if (filterContent.classList.contains('collapsed')) {
+                filterContent.classList.remove('collapsed');
+                filterContent.classList.add('expanded');
+                filterToggle.innerHTML = '<i class="fas fa-sliders-h me-2"></i>Ocultar Filtros';
+            } else {
+                filterContent.classList.remove('expanded');
+                filterContent.classList.add('collapsed');
+                filterToggle.innerHTML = '<i class="fas fa-sliders-h me-2"></i>Mostrar Filtros';
+            }
+        });
+
+        // Mostrar/ocultar mensaje de no resultados
+        const subscriptionsTableBody = document.getElementById('subscriptionsTableBody');
+        const noResults = document.getElementById('noResults');
+
+        if (subscriptionsTableBody.children.length === 0) {
+            noResults.style.display = 'block';
+        }
+
+        // Funcionalidad de exportación
+        document.getElementById('exportPdf').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de exportación PDF - En desarrollo');
+        });
+
+        document.getElementById('exportExcel').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de exportación Excel - En desarrollo');
+        });
+
+        document.getElementById('exportCsv').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de exportación CSV - En desarrollo');
+        });
+
+        // Animaciones al cargar la página
+        const cards = document.querySelectorAll('.card, .stats-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+    });
+
+    // Función para cambiar el tamaño de página
+    function changePageSize(pageSize) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('size', pageSize);
+        urlParams.set('page', '1'); // Volver a la primera página
+
+        window.location.href = '/subscripciones?' + urlParams.toString();
+    }
+</script>
 </body>
 </html>

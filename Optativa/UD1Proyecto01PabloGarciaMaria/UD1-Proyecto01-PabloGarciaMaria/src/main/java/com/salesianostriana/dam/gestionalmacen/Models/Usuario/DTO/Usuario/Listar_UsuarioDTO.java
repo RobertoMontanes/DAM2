@@ -26,6 +26,10 @@ public class Listar_UsuarioDTO {
     private ListarMembresia_UsuarioDTO membresia;
 
     public static Listar_UsuarioDTO toDTO(Usuario usuario) {
+
+        Membresia membresiaActiva = usuario.getMembresiaActiva();
+
+
         return Listar_UsuarioDTO.builder()
                 .id(usuario.getId())
                 .nombre(usuario.getNombre())
@@ -34,7 +38,7 @@ public class Listar_UsuarioDTO {
                 .email(usuario.getEmail())
                 .activo(usuario.isActivo())
                 .fechaCreacion(usuario.getFechaCreacion())
-                .membresia(usuario.getHistorialSubscripciones() != null && !usuario.getHistorialSubscripciones().isEmpty() ? ListarMembresia_UsuarioDTO.toDTO(usuario.getHistorialSubscripciones().stream().filter(Membresia::isActiva).toList().getFirst()) : null)
+                .membresia(membresiaActiva != null ? ListarMembresia_UsuarioDTO.toDTO(membresiaActiva) : null)
                 .build();
     }
 
