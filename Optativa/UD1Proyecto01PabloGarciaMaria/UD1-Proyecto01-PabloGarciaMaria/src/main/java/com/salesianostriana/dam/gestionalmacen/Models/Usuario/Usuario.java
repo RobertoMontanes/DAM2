@@ -9,6 +9,8 @@ import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,11 @@ public class Usuario {
     @Builder.Default
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaCreacion = LocalDate.now();
+
+    @Builder.Default
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime ultimaConexion = LocalDateTime.of(LocalDate.now(), LocalTime.now());
+
     private boolean activo;
 
     @OneToMany(mappedBy = "usuario")
@@ -72,6 +79,7 @@ public class Usuario {
                 .activo(usuario.isActivo())
                 .almacenesAsignados(usuario.getAlmacenesAsignados())
                 .historialSubscripciones(usuario.getHistorialSubscripciones())
+                .ultimaConexion(usuario.getUltimaConexion())
                 .build();
     }
 

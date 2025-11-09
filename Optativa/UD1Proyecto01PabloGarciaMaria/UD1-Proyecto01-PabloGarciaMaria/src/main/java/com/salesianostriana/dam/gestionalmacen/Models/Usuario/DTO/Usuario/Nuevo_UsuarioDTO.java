@@ -9,6 +9,7 @@ import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor @NoArgsConstructor @Data @Builder
@@ -27,6 +28,7 @@ public class Nuevo_UsuarioDTO {
 
     @Builder.Default
     private String fechaCreacion = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
     @Builder.Default
     private boolean activo = true;
 

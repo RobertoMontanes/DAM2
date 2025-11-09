@@ -2,10 +2,12 @@ package com.salesianostriana.dam.gestionalmacen.Services.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Almacen.Almacen;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.Listar_SubscripcionDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.Extras.ListarMembresia_UsuarioDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Usuario.Nuevo_UsuarioDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Membresia;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
+import com.salesianostriana.dam.gestionalmacen.Repositories.Almacen.AlmacenRepository;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.MembresiaRepository;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.SubscripcionRepository;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.UsuarioRepository;
@@ -17,6 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +29,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
 
-    private final AlmacenService almacenService;
+    private final AlmacenRepository almacenRepository;
     private final MembresiaRepository membresiaRepository;
     private final SubscripcionRepository subscripcionRepository;
 
@@ -70,7 +75,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         model.addAttribute("totalUsuarios", allUsers.size());
         model.addAttribute("usuariosActivos", allUsers.stream().filter(Usuario::isActivo).toList().size());
         model.addAttribute("usuariosConMembresia", allUsers.stream().map(Usuario::getMembresiaActiva).filter(Membresia::nonNull).toList().size());
-        model.addAttribute("nuevosEsteMes",allUsers.stream().filter(u -> u.getFechaCreacion().isAfter(LocalDate.now().minusMonths(1))).toList().size());
+        model.addAttribute("nuevosEsteMes",allUsers.stream().filter(u -> u.getFechaCreacion().isAfter(LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonth(),1))).toList().size());
         model.addAttribute("usuariosTotal",allUsers.size());
         model.addAttribute("subscripciones", subscripcionRepository.findAll().stream().map(Listar_SubscripcionDTO::toDTO).toList());
 
@@ -155,7 +160,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         }
         for (Almacen almacen : u.getAlmacenesAsignados()) {
             almacen.setUsuario(null);
-            almacenService.save(almacen);
+            almacenRepository.save(almacen);
         }
 
         for (var m : membresiaRepository.findByUsuario(u)) {
@@ -182,7 +187,11 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
             redirectAttributes.addFlashAttribute("error","Usuario no encontrado");
             return "redirect:/usuarios";
         }
+        model.addAttribute("suscripciones", Optional.ofNullable(u.getHistorialSubscripciones()).orElse(Collections.emptyList()).stream().map(ListarMembresia_UsuarioDTO::toDTO).toList());
         model.addAttribute("usuario", Listar_UsuarioDTO.toDTO(u));
+        model.addAttribute("diasRegistrado", LocalDate.now().toEpochDay() - u.getFechaCreacion().toEpochDay());
+        model.addAttribute("almacenesAsignados" , Optional.ofNullable(u.getAlmacenesAsignados()).orElse(Collections.emptyList()).stream().map(Almacen::getNombre).toList().size());
+        model.addAttribute("suscripcionesActivas", Optional.ofNullable(u.getHistorialSubscripciones()).orElse(Collections.emptyList()).stream().map(ListarMembresia_UsuarioDTO::toDTO).toList().size());
         return "Usuario/Detalles";
     }
 }

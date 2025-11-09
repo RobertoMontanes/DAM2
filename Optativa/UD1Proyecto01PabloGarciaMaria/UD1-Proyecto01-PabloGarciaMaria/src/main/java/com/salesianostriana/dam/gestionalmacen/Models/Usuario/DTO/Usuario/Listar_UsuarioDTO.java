@@ -26,7 +26,6 @@ public class Listar_UsuarioDTO {
     private ListarMembresia_UsuarioDTO membresia;
 
     public static Listar_UsuarioDTO toDTO(Usuario usuario) {
-        System.out.println(usuario.getHistorialSubscripciones());
         return Listar_UsuarioDTO.builder()
                 .id(usuario.getId())
                 .nombre(usuario.getNombre())
