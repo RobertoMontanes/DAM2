@@ -1,60 +1,73 @@
-<!-- Se pide diseñar un formulario de registro, en el que la persona debe proporcionar la siguiente información:
-Nombre
-Apellidos
-NIF
-Email
-Teléfono
-Sexo
-Seleccionar cómo conoció la página: 
-buscando en Google, 
-a través de un amigo, 
-por mi profesor
-Contraseña
-Confirmar contraseña
-Además el usuario debe aceptar los términos y condiciones del registro.
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Registro</h2>
+                    
+                    <form [formGroup]="registerFormGroup">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" formControlName="nombreFormControl" placeholder="Nombre" />
+                        </div>
 
-Al pulsar en el botón de Registro, deberá aparecer la información que se ha introducido en el formulario por consola (recordad el uso de console.log()). Para ello, deben vincularse los elementos de formulario con formControlName según hemos visto en clase.
+                        <div class="mb-3">
+                            <label for="apellidos" class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" formControlName="apellidosFormControl" placeholder="Apellidos" />
+                        </div>
 
-Para el diseño de este formulario crear un componente RegisterFormPage.
+                        <div class="mb-3">
+                            <label for="nif" class="form-label">NIF</label>
+                            <input type="text" class="form-control" id="nif" formControlName="nifFormControl" placeholder="NIF" />
+                        </div>
 
-Se debe entregar la URL directa al proyecto que da solución a este ejercicio en el repositorio de Github del alumno. -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" formControlName="emailFormControl" placeholder="Email" />
+                        </div>
 
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefono" formControlName="telefonoFormControl" placeholder="Teléfono" />
+                        </div>
 
-<form>
-    <label for="nombre"></label>
-    <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre" />
+                        <div class="mb-3">
+                            <label for="sexo" class="form-label">Sexo</label>
+                            <select class="form-select" id="sexo" formControlName="sexoFormControl">
+                                <option value="" disabled selected>Selecciona tu sexo</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
 
-    <label for="apellidos"></label>
-    <input type="text" id="apellidos" formControlName="apellidos" placeholder="Apellidos" />
+                        <div class="mb-3">
+                            <label for="origen" class="form-label">¿Cómo conociste la página?</label>
+                            <select class="form-select" id="origen" formControlName="origenFormControl">
+                                <option value="" disabled selected>Selecciona una opción</option>
+                                <option value="google">Buscando en Google</option>
+                                <option value="amigo">A través de un amigo</option>
+                                <option value="profesor">Por mi profesor</option>
+                            </select>
+                        </div>
 
-    <label for="nif"></label>
-    <input type="text" id="nif" formControlName="nif" placeholder="NIF" />
+                        <div class="mb-3">
+                            <label for="contraseña" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="contraseña" formControlName="passwordFormControl" placeholder="Contraseña" />
+                        </div>
 
-    <label for="email"></label>
-    <input type="email" id="email" formControlName="email" placeholder="Email" />
+                        <div class="mb-3">
+                            <label for="confirmarContraseña" class="form-label">Confirmar contraseña</label>
+                            <input type="password" class="form-control" id="confirmarContraseña" formControlName="confirmarPasswordFormControl" placeholder="Confirmar contraseña" />
+                        </div>
 
-    <label for="telefono"></label>
-    <input type="tel" id="telefono" formControlName="telefono" placeholder="Teléfono" />
-
-    <label for="sexo"></label>
-    <select id="sexo" formControlName="sexo">
-        <option value="" disabled selected>Sexo</option>
-        <option value="masculino">Masculino</option>
-        <option value="femenino">Femenino</option>
-        <option value="otro">Otro</option>
-    </select>
-
-    <label for="origen"></label>
-    <select name="origen" id="origen" formControlName="origen">
-        <option value="" disabled selected>¿Cómo conoció la página?</option>
-        <option value="google">Buscando en Google</option>
-        <option value="amigo">A través de un amigo</option>
-        <option value="profesor">Por mi profesor</option>
-    </select>
-
-    <label for="contraseña"></label>
-    <input type="password" id="contraseña" formControlName="contraseña" placeholder="Contraseña" />
-
-    <label for="confirmarContraseña"></label>
-    <input type="password" id="confirmarContraseña" formControlName="confirmarContraseña" placeholder="Confirmar contraseña" /> 
-</form>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-secondary" (click)="clearForm()">Limpiar</button>
+                            <button type="button" class="btn btn-primary" (click)="onSubmit()">Registro</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
