@@ -454,8 +454,7 @@
                         <div class="detail-row" th:if="${usuario.membresia}">
                             <span class="detail-label">Membresía Actual:</span>
                             <span class="detail-value">
-                                <span class="badge-status membership-badge bg-info text-white"
-                                      th:text="${usuario.membresia.nombre}">
+                                <span class="badge-status membership-badge bg-info text-white" th:text="${usuario.membresia.nombre}">
                                     Premium
                                 </span>
                             </span>
@@ -504,11 +503,11 @@
                         <div class="stats-card">
                             <i class="fas fa-history fa-2x text-success"></i>
                             <div class="stats-value" th:text="${suscripcionesActivas}">1</div>
-                            <div class="stats-label">Suscripciones Activas</div>
+                            <div class="stats-label">Suscripciones Registradas</div>
                         </div>
                         <div class="stats-card">
                             <i class="fas fa-crown fa-2x text-primary"></i>
-                            <div class="stats-value" th:text="${usuario.membresia != null } ? usuario.membresia.nombre : 'Ninguna'">Premium</div>
+                            <div class="stats-value" th:text="${usuario.membresia != null } ? ${usuario.membresia.nombre} : 'Ninguna'">Premium</div>
                             <div class="stats-label">Membresía Actual</div>
                         </div>
                     </div>

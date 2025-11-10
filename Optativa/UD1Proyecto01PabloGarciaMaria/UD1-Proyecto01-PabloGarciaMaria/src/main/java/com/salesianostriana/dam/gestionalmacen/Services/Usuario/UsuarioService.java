@@ -87,9 +87,26 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         List<Usuario> allUsers = findAll();
 
         model = prepararListar(model);
+        comprobarSubscripciones(allUsers);
+
         model.addAttribute("usuarios", obtenerUsuarios(limit, page, searchTerm, membresia, fechaDesde, fechaHasta,estado, allUsers));
         model.addAttribute("usuariosTotal",aplicarFiltros(allUsers,searchTerm,membresia,fechaDesde,fechaHasta,estado).size());
         return "Usuario/Listar";
+    }
+
+    private void comprobarSubscripciones(List<Usuario> allUsers) {
+
+        for (Usuario u : allUsers) {
+            if (u.getMembresiaActiva() != null) {
+                Membresia m = u.getMembresiaActiva();
+                m.setFechaFin(m.getFechaInicio().plusMonths(m.getSubscripcion().getDuracionMeses()));
+                if (m.getFechaFin().isBefore(LocalDate.now())) {
+                    m.setActiva(false);
+                    membresiaRepository.save(m);
+                }
+            }
+        }
+
     }
 
     public int getTotalPages(Long limit, String searchTerm, String membresia, String fechaDesde, String fechaHasta, String estado) {

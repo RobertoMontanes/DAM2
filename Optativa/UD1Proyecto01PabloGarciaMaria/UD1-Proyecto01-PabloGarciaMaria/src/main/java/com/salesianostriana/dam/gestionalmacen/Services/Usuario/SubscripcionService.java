@@ -2,6 +2,7 @@ package com.salesianostriana.dam.gestionalmacen.Services.Usuario;
 
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.Listar_SubscripcionDTO;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.DTO.Subscripcion.Nuevo_SubscripcionDTO;
+import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Membresia;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Subscripcion;
 import com.salesianostriana.dam.gestionalmacen.Models.Usuario.Usuario;
 import com.salesianostriana.dam.gestionalmacen.Repositories.Usuario.MembresiaRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -71,12 +73,60 @@ public class SubscripcionService extends BaseServiceImpl<Subscripcion,Long, Subs
     }
 
     public String ver(Model model, Long id, RedirectAttributes redirectAttributes) {
-        Listar_SubscripcionDTO subscripcion = findById(id).map(Listar_SubscripcionDTO::toDTO).orElse(null);
+        Listar_SubscripcionDTO subscripcionDTO;
+        Subscripcion subscripcion = findById(id).orElse(null);
+        double tasaRenovacion = 0.0;
+        List<Long> idUsuarios = new ArrayList<>();
+        double  baseRenovacion = 0.0, renovaciones = 0.0;
+
         if (subscripcion == null) {
             redirectAttributes.addFlashAttribute("error", "La subscripción con ID " + id + " no existe.");
             return "redirect:/subscripciones";
         }
-        model.addAttribute("subscripcion", subscripcion);
+
+        subscripcionDTO = Listar_SubscripcionDTO.toDTO(subscripcion);
+
+        model.addAttribute("subscripcion", subscripcionDTO);
+
+        model.addAttribute("usuariosActivos", usuarioRepository.findAll()
+                .stream()
+                .filter(u ->
+                        u.getMembresiaActiva() != null
+                                && u.getMembresiaActiva().getSubscripcion().getId() == subscripcion.getId()
+                )
+                .count());
+        model.addAttribute("almacenesUtilizados", subscripcion.getHistorialUsuarios()
+                .stream()
+                .filter(Membresia::isActiva)
+                .map(Membresia::getUsuario)
+                .map(Usuario::getAlmacenesAsignados)
+                .count()
+        );
+
+        for (Membresia m : subscripcion.getHistorialUsuarios().stream().filter(Membresia::isActiva).toList()) {
+            Membresia anteriorSubscripcion = null;
+            Long idUsuario = m.getUsuario().getId();
+            if (!idUsuarios.contains(idUsuario)) {
+                idUsuarios.add(idUsuario);
+                if (m.getUsuario().getHistorialSubscripciones().size() > 2){
+                    System.out.println(idUsuario);
+                    anteriorSubscripcion = m.getUsuario().getHistorialSubscripciones().reversed()
+                            .stream()
+                            .limit(2)
+                            .skip(1)
+                            .toList()
+                            .getFirst();
+                    baseRenovacion++;
+                    if (anteriorSubscripcion.getSubscripcion().getId() == m.getSubscripcion().getId()) {
+                        renovaciones++;
+                    }
+                }
+            }
+        }
+
+        tasaRenovacion = (renovaciones * 100 / (baseRenovacion == 0 ? 1 : baseRenovacion));
+
+        model.addAttribute("tasaRenovacion",tasaRenovacion);
 
         return "Subscripcion/Detalles";
     }

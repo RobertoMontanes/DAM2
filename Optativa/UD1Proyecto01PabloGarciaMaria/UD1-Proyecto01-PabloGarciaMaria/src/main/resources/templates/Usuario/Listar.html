@@ -437,7 +437,7 @@
                             <option value="con-subscripcion">Con subscripcion</option>
                             <option th:each="subscripcion : ${subscripciones}"
                                     th:value="${subscripcion.id}"
-                                    th:text="${subscripcion.nombre}">Membresía</option>
+                                    th:text="${subscripcion.nombre + ' (' + subscripcion.duracionMeses + ' Meses)'}">Membresía</option>
                         </select>
                     </div>
                     <div class="col-md-4">
