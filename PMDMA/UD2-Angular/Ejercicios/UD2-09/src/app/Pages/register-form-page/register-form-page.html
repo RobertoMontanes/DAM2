@@ -9,26 +9,56 @@
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" formControlName="nombreFormControl" placeholder="Nombre" />
+                            @if (registerFormGroup.get('nombreFormControl')?.hasError('required') && registerFormGroup.get('nombreFormControl')?.touched) {
+                                <small class="text-danger">El nombre es requerido</small>
+                            }
+                            @if (registerFormGroup.get('nombreFormControl')?.hasError('minlength') && registerFormGroup.get('nombreFormControl')?.touched) {
+                                <small class="text-danger">Mínimo 3 caracteres</small>
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="apellidos" class="form-label">Apellidos</label>
                             <input type="text" class="form-control" id="apellidos" formControlName="apellidosFormControl" placeholder="Apellidos" />
+                            @if (registerFormGroup.get('apellidosFormControl')?.hasError('required') && registerFormGroup.get('apellidosFormControl')?.touched) {
+                                <small class="text-danger">Los apellidos son requeridos</small>
+                            }
+                            @if (registerFormGroup.get('apellidosFormControl')?.hasError('minlength') && registerFormGroup.get('apellidosFormControl')?.touched) {
+                                <small class="text-danger">Mínimo 3 caracteres</small>
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="nif" class="form-label">NIF</label>
                             <input type="text" class="form-control" id="nif" formControlName="nifFormControl" placeholder="NIF" />
+                            @if (registerFormGroup.get('nifFormControl')?.hasError('required') && registerFormGroup.get('nifFormControl')?.touched) {
+                                <small class="text-danger">El NIF es requerido</small>
+                            }
+                            @if (registerFormGroup.get('nifFormControl')?.hasError('pattern') && registerFormGroup.get('nifFormControl')?.touched) {
+                                <small class="text-danger">Formato: 8 dígitos + 1 letra (ej: 12345678A)</small>
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" formControlName="emailFormControl" placeholder="Email" />
+                            @if (registerFormGroup.get('emailFormControl')?.hasError('required') && registerFormGroup.get('emailFormControl')?.touched) {
+                                <small class="text-danger">El email es requerido</small>
+                            }
+                            @if (registerFormGroup.get('emailFormControl')?.hasError('email') && registerFormGroup.get('emailFormControl')?.touched) {
+                                <small class="text-danger">Email inválido</small>
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="telefono" class="form-label">Teléfono</label>
                             <input type="tel" class="form-control" id="telefono" formControlName="telefonoFormControl" placeholder="Teléfono" />
+                            @if (registerFormGroup.get('telefonoFormControl')?.hasError('required') && registerFormGroup.get('telefonoFormControl')?.touched) {
+                                <small class="text-danger">El teléfono es requerido</small>
+                            }
+                            @if (registerFormGroup.get('telefonoFormControl')?.hasError('pattern') && registerFormGroup.get('telefonoFormControl')?.touched) {
+                                <small class="text-danger">Debe tener 9 dígitos</small>
+                            }
                         </div>
 
                         <div class="mb-3">
@@ -39,6 +69,9 @@
                                 <option value="femenino">Femenino</option>
                                 <option value="otro">Otro</option>
                             </select>
+                            @if (registerFormGroup.get('sexoFormControl')?.hasError('required') && registerFormGroup.get('sexoFormControl')?.touched) {
+                                <small class="text-danger">El sexo es requerido</small>
+                            }
                         </div>
 
                         <div class="mb-3">
@@ -49,21 +82,33 @@
                                 <option value="amigo">A través de un amigo</option>
                                 <option value="profesor">Por mi profesor</option>
                             </select>
+                            @if (registerFormGroup.get('origenFormControl')?.hasError('required') && registerFormGroup.get('origenFormControl')?.touched) {
+                                <small class="text-danger">Este campo es requerido</small>
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="contraseña" class="form-label">Contraseña</label>
                             <input type="password" class="form-control" id="contraseña" formControlName="passwordFormControl" placeholder="Contraseña" />
+                            @if (registerFormGroup.get('passwordFormControl')?.hasError('required') && registerFormGroup.get('passwordFormControl')?.touched) {
+                                <small class="text-danger">La contraseña es requerida</small>
+                            }
+                            @if (registerFormGroup.get('passwordFormControl')?.hasError('minlength') && registerFormGroup.get('passwordFormControl')?.touched) {
+                                <small class="text-danger">Mínimo 6 caracteres</small>
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="confirmarContraseña" class="form-label">Confirmar contraseña</label>
                             <input type="password" class="form-control" id="confirmarContraseña" formControlName="confirmarPasswordFormControl" placeholder="Confirmar contraseña" />
+                            @if (registerFormGroup.get('confirmarPasswordFormControl')?.hasError('required') && registerFormGroup.get('confirmarPasswordFormControl')?.touched) {
+                                <small class="text-danger">Debe confirmar la contraseña</small>
+                            }
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-secondary" (click)="clearForm()">Limpiar</button>
-                            <button type="button" class="btn btn-primary" (click)="onSubmit()">Registro</button>
+                            <button type="button" class="btn btn-primary" [disabled]="registerFormGroup.invalid" (click)="onSubmit()">Registro</button>
                         </div>
                     </form>
                 </div>
