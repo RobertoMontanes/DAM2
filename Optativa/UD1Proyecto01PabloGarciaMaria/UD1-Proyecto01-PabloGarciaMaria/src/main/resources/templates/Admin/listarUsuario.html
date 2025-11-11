@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Lista de Usuarios</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="usuario : ${usuarios}">
+        <td th:text="${usuario.id}">1</td>
+        <td th:text="${usuario.nombre} ${usuario.apellidos}}">Nombre Apellidos</td>
+        <td th:text="${usuario.email}">email@ejemplo.com</td>
+        <td th:text="${usuario.username}">Username</td>
+        <td th:text="${usuario.fechaCreacion}">11/11/2025</td>
+        <td th:text="${usuario.ultimaConexion}">11/11/2025 08:51</td>
+        <td th:text="${usuario.activo}">true</td>
+
+        <td>
+            <a th:href="@{usuarios/${usuario.id}|}">Ver</a>
+            <a th:href="@{usuarios/editar/${usuario.id}|}">Editar</a>
+            <a th:href="@{usuarios/${usuario.id}|}">Eliminar</a>
+        </td>
+
+</body>
+</html>
