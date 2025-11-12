@@ -1,57 +1,55 @@
 package com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.DTO.Usuario;
 
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Estado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@AllArgsConstructor @NoArgsConstructor @Data @Builder
-public class Nuevo_UsuarioDTO {
+@Data @AllArgsConstructor
+@NoArgsConstructor @Builder
+public class Formulario_UsuarioDTO {
 
     private Long id;
+
     private String nombre;
     private String apellidos;
     private String email;
-    private String username;
     private String password;
-
-    private String telefono;
-    private String direccion;
-    private String observaciones;
 
     @Builder.Default
     private String fechaCreacion = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private Boolean estado;
 
-    @Builder.Default
-    private boolean activo = true;
-
-
-    public static Nuevo_UsuarioDTO toDTO(Usuario u) {
-        return Nuevo_UsuarioDTO.builder()
-                .id(u.getId())
-                .nombre(u.getNombre())
-                .apellidos(u.getApellidos())
-                .email(u.getEmail())
-                .username(u.getUsername())
-                .password(u.getPassword())
-                .fechaCreacion(u.getFechaCreacion().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .activo(u.isActivo())
+    public static Formulario_UsuarioDTO toDTO(Usuario usuario) {
+        return Formulario_UsuarioDTO.builder()
+                .id(usuario.getId())
+                .nombre(usuario.getNombre())
+                .apellidos(usuario.getApellidos())
+                .email(usuario.getEmail())
+                .password(usuario.getPassword())
+                .fechaCreacion(usuario.getFechaCreacion().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .estado(usuario.getEstado() == Estado.ACTIVO)
                 .build();
     }
 
+
     public Usuario fromDTO() {
         return Usuario.builder()
+                .id(this.id)
                 .nombre(this.nombre)
                 .apellidos(this.apellidos)
                 .email(this.email)
-                .username(this.username)
                 .password(this.password)
                 .fechaCreacion(LocalDate.parse(this.fechaCreacion, DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .activo(this.activo)
+                .estado(this.estado ? Estado.ACTIVO : Estado.INACTIVO)
+                .ultimaConexion(null)
                 .build();
     }
 }
