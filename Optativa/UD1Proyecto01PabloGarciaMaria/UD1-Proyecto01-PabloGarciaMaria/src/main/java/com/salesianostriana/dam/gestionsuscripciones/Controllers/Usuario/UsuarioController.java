@@ -12,14 +12,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/usuarios")
 @RequiredArgsConstructor
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
     @GetMapping
     public String listarUsuarios(Model model) {
+        System.out.println("Entrando en listarUsuarios del UsuarioController");
         return usuarioService.listar(model);
     }
 

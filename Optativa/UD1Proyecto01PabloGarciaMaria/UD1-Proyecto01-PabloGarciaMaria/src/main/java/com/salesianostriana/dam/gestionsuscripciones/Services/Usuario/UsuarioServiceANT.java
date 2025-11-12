@@ -14,8 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
 public class UsuarioServiceANT extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
 
     public List<Usuario> aplicarFiltros(List<Usuario> usuarios, String searchTerm, String membresia, String fechaDesde, String fechaHasta, String estado) {

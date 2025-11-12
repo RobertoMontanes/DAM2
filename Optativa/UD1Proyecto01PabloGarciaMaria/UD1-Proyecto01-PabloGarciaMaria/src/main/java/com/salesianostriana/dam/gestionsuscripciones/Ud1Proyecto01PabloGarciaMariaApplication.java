@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen;
+package com.salesianostriana.dam.gestionsuscripciones;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

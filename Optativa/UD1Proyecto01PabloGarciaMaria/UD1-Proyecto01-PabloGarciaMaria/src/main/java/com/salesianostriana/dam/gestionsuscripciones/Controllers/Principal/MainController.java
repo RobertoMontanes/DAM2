@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen.Controllers.Principal;
+package com.salesianostriana.dam.gestionsuscripciones.Controllers.Principal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

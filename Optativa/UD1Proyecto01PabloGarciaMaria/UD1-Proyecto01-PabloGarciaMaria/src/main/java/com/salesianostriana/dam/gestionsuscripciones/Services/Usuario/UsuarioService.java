@@ -20,17 +20,16 @@ import java.util.Optional;
 public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
 
         public String listar(Model model) {
-
             model.addAttribute("usuarios", findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
 
-            return "Admin/listarUsuario";
+            return "admin/listarUsuario";
         }
 
     public String ver(Model model, Long id, RedirectAttributes redirectAttributes) {
         Optional<Usuario> usuario = findById(id);
         if (usuario.isPresent()) {
             model.addAttribute("usuario", Listar_UsuarioDTO.toDTO(usuario.get()));
-            return "Usuario/dashboard";
+            return "usuario/dashboard";
         } else {
             redirectAttributes.addFlashAttribute("error", "El usuario con ID " + id + " no existe.");
             return "redirect:/usuarios";
