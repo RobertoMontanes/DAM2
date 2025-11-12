@@ -1,10 +1,12 @@
-package com.salesianostriana.dam.gestionsuscripciones.Services.Usuario;
+package com.salesianostriana.dam.gestionsuscripciones.Services;
 
-import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.DTO.Usuario.Listar_UsuarioDTO;
-import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.DTO.Usuario.Formulario_UsuarioDTO;
-import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.Usuario;
-import com.salesianostriana.dam.gestionsuscripciones.Repositories.Usuario.UsuarioRepository;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Extras.ListarPlataformas_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Listar_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Formulario_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
+import com.salesianostriana.dam.gestionsuscripciones.Repositories.UsuarioRepository;
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -16,8 +18,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
 
-    public String listar(Model model) {
+    public String listar(Model model,HttpSession httpSession) {
         model.addAttribute("usuarios", findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
+        httpSession.setAttribute("id",null);
 
         return "admin/usuario/listar";
     }
@@ -91,8 +94,15 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         return "redirect:/usuarios";
     }
 
-    public String verDetalle(Long id, Model model, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("info","Funcionalidad en desarrollo.");
-        return "redirect:/usuarios";
+    public String verDetalle(Long id, Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        Optional<Usuario> uOpt = findById(id);
+        if (uOpt.isEmpty()){
+            redirectAttributes.addFlashAttribute("error","Usuario no encontrado");
+            return "redirect:/usuarios";
+        }
+        Usuario u = uOpt.get();
+        httpSession.setAttribute("id", id);
+        model.addAttribute("plataformas", u.getPlataformas().stream().map(ListarPlataformas_UsuarioDTO::toDTO).toList());
+        return "usuario/dashboard";
     }
 }

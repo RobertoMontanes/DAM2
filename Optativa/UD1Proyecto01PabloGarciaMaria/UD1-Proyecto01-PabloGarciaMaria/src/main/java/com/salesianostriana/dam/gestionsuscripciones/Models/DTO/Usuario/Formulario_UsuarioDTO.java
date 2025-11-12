@@ -1,15 +1,13 @@
-package com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.DTO.Usuario;
+package com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Estado;
-import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.Usuario;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data @AllArgsConstructor

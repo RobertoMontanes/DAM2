@@ -1,6 +1,6 @@
-package com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.DTO.Usuario;
+package com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario;
 
-import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.Usuario;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

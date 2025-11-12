@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Plataforma Formulario</h1>
+
+<form action="/plataformas" th:method="${crear} ? 'POST' : 'PUT' " th:object="${plataforma}">
+
+    <input type="hidden" th:if="${!crear}" th:field="*{id}" />
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" th:field="*{nombre}" required/><br/>
+
+    <button type="submit">Guardar</button>
+</form>
+</body>
+</html>

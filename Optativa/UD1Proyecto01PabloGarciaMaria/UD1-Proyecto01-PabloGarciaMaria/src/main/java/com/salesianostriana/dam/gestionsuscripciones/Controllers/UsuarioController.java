@@ -1,7 +1,8 @@
-package com.salesianostriana.dam.gestionsuscripciones.Controllers.Usuario;
+package com.salesianostriana.dam.gestionsuscripciones.Controllers;
 
-import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario.DTO.Usuario.Formulario_UsuarioDTO;
-import com.salesianostriana.dam.gestionsuscripciones.Services.Usuario.UsuarioService;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Formulario_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Services.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +17,8 @@ public class UsuarioController {
     private final UsuarioService service;
 
     @GetMapping
-    public String listar(Model model) {
-        return service.listar(model);
+    public String listar(Model model, HttpSession httpSession) {
+        return service.listar(model,httpSession);
     }
 
     @GetMapping("/nuevo")
@@ -46,8 +47,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public String verDetalle(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
-        return service.verDetalle(id, model, redirectAttributes);
+    public String verDetalle(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        return service.verDetalle(id, model, redirectAttributes,httpSession);
     }
 
 }

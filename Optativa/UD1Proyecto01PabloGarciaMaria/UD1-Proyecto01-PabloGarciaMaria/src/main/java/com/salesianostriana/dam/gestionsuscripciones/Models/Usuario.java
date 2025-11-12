@@ -1,16 +1,12 @@
-package com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
+package com.salesianostriana.dam.gestionsuscripciones.Models;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Estado;
-import com.salesianostriana.dam.gestionsuscripciones.Services.Usuario.UsuarioService;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
-import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -37,6 +33,9 @@ public class Usuario {
     private LocalDate fechaCreacion;
     private LocalDateTime ultimaConexion;
 
+    @OneToMany
+    private List<Plataforma> plataformas;
+
     public Usuario modify(Usuario usuario) {
         this.nombre = usuario.getNombre();
         this.apellidos = usuario.getApellidos();
@@ -47,5 +46,18 @@ public class Usuario {
 
     public void cambiarEstado() {
         this.estado = this.estado == Estado.ACTIVO ? Estado.INACTIVO : Estado.ACTIVO;
+    }
+
+    public void addPlataforma(Plataforma p) {
+        this.plataformas.add(p);
+    }
+
+    public boolean findPlataformaById(Long id) {
+        for (Plataforma p : plataformas) {
+            if (p.getId().equals(id)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
