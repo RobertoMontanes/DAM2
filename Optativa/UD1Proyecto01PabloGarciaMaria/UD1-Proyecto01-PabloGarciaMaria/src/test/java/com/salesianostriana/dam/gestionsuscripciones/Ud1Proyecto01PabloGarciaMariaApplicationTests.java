@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.gestionalmacen;
+package com.salesianostriana.dam.gestionsuscripciones;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
