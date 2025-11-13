@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:method="POST" action="/planes" th:object="${plan}">
+    <label for="planNombre">Nombre del Plan:</label>
+    <input type="text" id="planNombre" name="planNombre" th:field="*{nombre}" />
+
+    <label for="planPrecio">Precio del Plan:</label>
+    <input type="number" id="planPrecio" name="planPrecio" th:field="*{precio}" step="0.01" required/>
+
+    <h3> Frecuencia de actualizacion </h3>
+    <label for="dias">Días</label>
+    <input type="number" th:field="*{frecuencia_dias}" id="dias" min="0"/>
+    <label for="meses">Meses</label>
+    <input type="number" th:field="*{frecuencia_meses}" id="meses" min="0"/>
+    <label for="anios">Años</label>
+    <input type="number" th:field="*{frecuencia_anios}" id="anios" min="0"/>
+
+    <button type="submit">GUARDAR</button>
+
+</form>
+
+</body>
+</html>

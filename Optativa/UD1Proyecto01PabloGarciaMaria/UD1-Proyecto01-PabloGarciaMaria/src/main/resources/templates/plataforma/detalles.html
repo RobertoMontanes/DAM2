@@ -15,6 +15,7 @@
         <th>Nombre del Plan</th>
         <th>Precio</th>
         <th>Frecuencia de Actualización</th>
+        <th>Acciones</th>
     </tr>
     <tr th:each="plan : ${plataforma.planes}">
         <td th:text="${plan.nombre}">Nombre del Plan</td>
@@ -23,6 +24,10 @@
             <span th:text="${plan.frecuencia_dias} + ' días, ' + ${plan.frecuencia_meses} + ' meses, ' + ${plan.frecuencia_anios} + ' años'">
                 Frecuencia de Actualización
             </span>
+        </td>
+        <td>
+            <a>Editar</a>
+            <a>Eliminar</a>
         </td>
     </tr>
 

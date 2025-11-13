@@ -14,6 +14,8 @@ import com.salesianostriana.dam.gestionsuscripciones.Repositories.PlataformaRepo
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,12 +24,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class PlataformaService extends BaseServiceImpl<Plataforma, Long, PlataformaRepository> {
 
-    private final UsuarioService usuarioService;
-    private final PlanService planService;
-    private final ExtraMethods extraMethods;
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Lazy
+    @Autowired
+    private PlanService planService;
 
     // CRUD PLATAFORMA
 
@@ -167,7 +171,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
             return resultado.getRedirect();
         }
 
-        redirectAttributes.addFlashAttribute("idPlataforma", id);
+        session.setAttribute("idPlataforma", id);
         return "redirect:/planes/nuevo";
     }
 
@@ -178,8 +182,6 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
                 .map(ListarPlanes_PlataformaDTO::toDTO)
                 .toList();
 
-        //System.out.println(p);
-
         return Detalles_PlataformaDTO.builder()
                 .id(p.getId())
                 .nombre(p.getNombre())
@@ -188,7 +190,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
     }
 
     private ValidacionResultado comprobarSesion(HttpSession session, Long idPlataforma, Objetivo objetivo) {
-        ValidacionResultado resultado = extraMethods.comprobarSesion(session);
+        ValidacionResultado resultado = ExtraMethods.comprobarSesion(session, usuarioService);
         Usuario u;
 
         if (!resultado.isExito()) {
@@ -203,7 +205,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         }
 
         if (objetivo == Objetivo.ACTUALIZAR || objetivo == Objetivo.ELIMINAR || objetivo == Objetivo.Detalles) {
-            resultado = extraMethods.comprobarPlataforma(session,idPlataforma);
+            resultado = ExtraMethods.comprobarPlataforma(session,idPlataforma, usuarioService, this);
 
             if (!resultado.isExito()) {
                 return resultado;
