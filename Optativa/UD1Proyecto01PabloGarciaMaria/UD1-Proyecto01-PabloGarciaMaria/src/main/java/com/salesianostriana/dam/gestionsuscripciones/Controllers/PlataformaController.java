@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.gestionsuscripciones.Controllers;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Formulario_PlataformaDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Nuevo_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Services.PlataformaService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class PlataformaController {
     }
 
     @PostMapping()
-    public String crear(@ModelAttribute(name = "formulario") Formulario_PlataformaDTO formularioDTO, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String crear(@ModelAttribute(name = "formulario") Nuevo_PlataformaDTO formularioDTO, HttpSession session, RedirectAttributes redirectAttributes) {
         return service.crear(formularioDTO,session,redirectAttributes);
     }
 
