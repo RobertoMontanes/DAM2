@@ -1,9 +1,13 @@
 package com.salesianostriana.dam.gestionsuscripciones.Services;
 
+import com.salesianostriana.dam.gestionsuscripciones.Extras.ExtraMethods;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Detalles_PlataformaDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Extras.ListarPlanes_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Formulario_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Nuevo_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Objetivo;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import com.salesianostriana.dam.gestionsuscripciones.Repositories.PlataformaRepository;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,18 +27,19 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
     private final UsuarioService usuarioService;
     private final PlanService planService;
+    private final ExtraMethods extraMethods;
 
     // CRUD PLATAFORMA
 
     public String nuevo(Model model, HttpSession session, RedirectAttributes redirectAttributes, Nuevo_PlataformaDTO formularioDTO) {
-        ValidacionResultado resultado = comprobarSesion(session,null,Objetivo.CREAR);;
+        ValidacionResultado resultado = comprobarSesion(session, null, Objetivo.CREAR);
 
         if (!resultado.isExito()) {
             redirectAttributes.addFlashAttribute("error", resultado.getError());
             return resultado.getRedirect();
         }
 
-        if ( formularioDTO == null) {
+        if (formularioDTO == null) {
             formularioDTO = new Nuevo_PlataformaDTO();
         }
 
@@ -43,8 +49,9 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
     }
 
     public String crear(Nuevo_PlataformaDTO plataformaDTO, HttpSession session, RedirectAttributes redirectAttributes) {
-        ValidacionResultado resultado = comprobarSesion(session,null,Objetivo.CREAR);;
-        Long id = (Long) session.getAttribute("id");
+        ValidacionResultado resultado = comprobarSesion(session, null, Objetivo.CREAR);
+        Plataforma p;
+        Plan p2;
         Usuario u;
 
 
@@ -55,32 +62,45 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         u = (Usuario) resultado.getObjeto();
 
+
         if (plataformaDTO == null) {
             redirectAttributes.addFlashAttribute("error", "Algo ha fallado durante el envío del formulario.");
             return "redirect:/plataformas/nuevo";
         }
 
-        Plataforma p = plataformaDTO.fromDTO();
+        p = plataformaDTO.fromDTO();
         p.setUsuario(u);
         save(p);
+
+        p2 = plataformaDTO.getPlan().fromDTO();
+        p2.setPlataforma(p);
+        planService.save(p2);
+
+        p.getPlanes().add(p2);
 
         u.addPlataforma(p);
         usuarioService.save(u);
 
-        return "redirect:/usuarios/" + id;
+        return "redirect:/usuarios";
     }
 
-    public String editar(Model model, HttpSession session, RedirectAttributes redirectAttributes, Formulario_PlataformaDTO o, Long id) {
+    public String editar(Model model, HttpSession session, RedirectAttributes redirectAttributes, Formulario_PlataformaDTO plataformaDTO, Long id) {
         Plataforma p;
-        ValidacionResultado resultado = comprobarSesion(session, id,Objetivo.ACTUALIZAR);
+        ValidacionResultado resultado = comprobarSesion(session, id, Objetivo.ACTUALIZAR);
 
         if (!resultado.isExito()) {
             redirectAttributes.addFlashAttribute("error", resultado.getError());
             return resultado.getRedirect();
         }
 
-        p = (Plataforma) resultado.getObjeto();
-        model.addAttribute("plataforma", p);
+        if (plataformaDTO == null) {
+            p = (Plataforma) resultado.getObjeto();
+            model.addAttribute("plataforma", p);
+        } else {
+            model.addAttribute("plataforma", plataformaDTO);
+        }
+
+
         model.addAttribute("crear", false);
         return "plataforma/formulario";
 
@@ -99,52 +119,99 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         p.modify(formularioDTO.fromDTO());
         save(p);
-        return "redirect:/usuarios/" + session.getAttribute("id");
+        return "redirect:/usuarios";
+    }
+
+    public String eliminar(Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        ValidacionResultado resultado = comprobarSesion(session, id, Objetivo.ELIMINAR);
+        Plataforma p;
+
+        if (!resultado.isExito()) {
+            redirectAttributes.addFlashAttribute("error", resultado.getError());
+            return resultado.getRedirect();
+        }
+
+        p = (Plataforma) resultado.getObjeto();
+
+        if (!p.isEstado()) {
+            redirectAttributes.addFlashAttribute("error", "No se puede eliminar una plataforma que ya está desactivada.");
+            return "redirect:/usuarios";
+        }
+
+        p.setEstado(false);
+        save(p);
+        redirectAttributes.addAttribute("success", "Plataforma desactivada correctamente.");
+        return "redirect:/usuarios";
+    }
+
+    public String verDetalle(Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        ValidacionResultado resultado = comprobarSesion(session, id, Objetivo.Detalles);
+        Plataforma p;
+
+        if (!resultado.isExito()) {
+            redirectAttributes.addFlashAttribute("error", resultado.getError());
+            return resultado.getRedirect();
+        }
+
+        p = (Plataforma) resultado.getObjeto();
+
+        model.addAttribute("plataforma", toDTO(p));
+
+        return "plataforma/detalles";
+    }
+
+    public String nuevoPlan(Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        ValidacionResultado resultado = comprobarSesion(session, id, Objetivo.Detalles);
+        if (!resultado.isExito()) {
+            redirectAttributes.addFlashAttribute("error", resultado.getError());
+            return resultado.getRedirect();
+        }
+
+        redirectAttributes.addFlashAttribute("idPlataforma", id);
+        return "redirect:/planes/nuevo";
     }
 
     // EXTRAS:
 
+    private Detalles_PlataformaDTO toDTO(Plataforma p) {
+        List<ListarPlanes_PlataformaDTO> planes = p.getPlanes().stream()
+                .map(ListarPlanes_PlataformaDTO::toDTO)
+                .toList();
+
+        //System.out.println(p);
+
+        return Detalles_PlataformaDTO.builder()
+                .id(p.getId())
+                .nombre(p.getNombre())
+                .planes(planes)
+                .build();
+    }
+
     private ValidacionResultado comprobarSesion(HttpSession session, Long idPlataforma, Objetivo objetivo) {
-        ValidacionResultado resultado = new ValidacionResultado();
-        Long idUsuario = (Long) session.getAttribute("id");
-        Optional<Usuario> uOpt;
+        ValidacionResultado resultado = extraMethods.comprobarSesion(session);
+        Usuario u;
 
-        if (idUsuario == null) {
-            resultado.setError("No puedes trabajar con plataformas sin antes haber iniciado sesion.");
-            resultado.setRedirect("redirect:/usuarios");
+        if (!resultado.isExito()) {
             return resultado;
         }
+        resultado.setExito(false);
+        u = (Usuario) resultado.getObjeto();
 
-        uOpt = usuarioService.findById(idUsuario);
-        if (uOpt.isEmpty()) {
-            resultado.setError("Estas intentando trabajar con un usuario inexistente.");
-            resultado.setRedirect("redirect:/usuarios");
-            return resultado;
-        }
 
         if (objetivo == Objetivo.CREAR) {
-            resultado.setObjeto(uOpt.get());
+            resultado.setObjeto(u);
         }
 
-        if (objetivo == Objetivo.ACTUALIZAR) {
-            if (uOpt.get().findPlataformaById(idPlataforma)) {
-                resultado.setError("No puedes editar una plataforma que no te pertenece.");
-                resultado.setRedirect("redirect:/usuarios/" + idPlataforma);
+        if (objetivo == Objetivo.ACTUALIZAR || objetivo == Objetivo.ELIMINAR || objetivo == Objetivo.Detalles) {
+            resultado = extraMethods.comprobarPlataforma(session,idPlataforma);
+
+            if (!resultado.isExito()) {
                 return resultado;
             }
 
-            Optional<Plataforma> pOpt = findById(idPlataforma);
-            if (pOpt.isEmpty()) {
-                resultado.setError("No se ha encontrado la plataforma solicitada.");
-                resultado.setRedirect("redirect:/usuarios/" + idPlataforma);
-                return resultado;
-            }
-
-            resultado.setObjeto(pOpt.get());
         }
 
         resultado.setExito(true);
         return resultado;
     }
-
 }

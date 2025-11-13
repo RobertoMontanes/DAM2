@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,7 +8,13 @@
 
 <h1>Usuario Dashboard</h1>
 
+<span th:text="${error}"  th:if="${error}"></span>
+<span th:text="${message}"  th:if="${message}"></span>
+<span th:text="${success}"  th:if="${success}"></span>
+
 <p>Welcome to your dashboard!</p>
+
+<h2> Avisos / Notificaciones </h2>
 
 <h2> Suscripciones </h2>
 <!--<table id="suscripciones">-->
@@ -36,6 +42,7 @@
     <tr th:each="plataforma : ${plataformas}">
         <td th:text="${plataforma.nombre}">Nombre de la Plataforma</td>
         <td>
+            <a th:href="@{|/plataformas/${plataforma.id}|}">Detalles</a>
             <a th:href="@{|/plataformas/editar/${plataforma.id}|}">Editar</a> |
             <a th:href="@{|/plataformas/eliminar/${plataforma.id}|}" onclick="return confirm('¿Estás seguro de que deseas eliminar esta plataforma?');">Eliminar</a>
         </td>

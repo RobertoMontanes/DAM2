@@ -4,9 +4,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Formu
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Nuevo_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Services.PlataformaService;
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.parser.TE;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class PlataformaController {
 
-//    HAY QUE METERLE:
-//1. CREAR EL PLAN POR DEFECTO JUNTO CON LA PLATAFORMA
-//    2. ELIMINAR (DESACTIVAR) PLATAFORMAS
-//    3. YA DESPUES DE ESO TE PONES A TRABAJAR CON LOS PLANES
     private final PlataformaService service;
 
     @GetMapping("/nuevo")
@@ -41,6 +35,21 @@ public class PlataformaController {
     @PutMapping()
     public String actualizar(@ModelAttribute(name = "formulario") Formulario_PlataformaDTO formularioDTO, HttpSession session, RedirectAttributes redirectAttributes) {
         return service.actualizar(formularioDTO,session,redirectAttributes);
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        return service.eliminar(id,session,redirectAttributes);
+    }
+
+    @GetMapping("/{id}")
+    public String verDetalle(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        return service.verDetalle(id,model,session,redirectAttributes);
+    }
+
+    @GetMapping("/{id}/planes/nuevo")
+    public String nuevoPlan(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        return service.nuevoPlan(id,model,session,redirectAttributes);
     }
 
 }

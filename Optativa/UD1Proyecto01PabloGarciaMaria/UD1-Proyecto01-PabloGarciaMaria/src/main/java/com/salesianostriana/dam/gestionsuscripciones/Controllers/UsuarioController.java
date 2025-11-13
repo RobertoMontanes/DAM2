@@ -16,10 +16,10 @@ public class UsuarioController {
 
     private final UsuarioService service;
 
-    @GetMapping
-    public String listar(Model model, HttpSession httpSession) {
-        return service.listar(model,httpSession);
-    }
+//    @GetMapping
+//    public String listar(Model model, HttpSession httpSession) {
+//        return service.listar(model,httpSession);
+//    }
 
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
@@ -46,9 +46,10 @@ public class UsuarioController {
         return service.cambiarEstado(id, redirectAttributes);
     }
 
-    @GetMapping("/{id}")
-    public String verDetalle(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
-        return service.verDetalle(id, model, redirectAttributes,httpSession);
+//    @GetMapping("/{id}")
+    @GetMapping()
+    public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        return service.verDetalle(model, redirectAttributes,httpSession);
     }
 
 }

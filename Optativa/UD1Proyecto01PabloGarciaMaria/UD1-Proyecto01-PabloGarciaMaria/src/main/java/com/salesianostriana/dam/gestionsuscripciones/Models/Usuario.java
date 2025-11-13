@@ -34,6 +34,7 @@ public class Usuario {
     private LocalDateTime ultimaConexion;
 
     @OneToMany
+    @ToString.Exclude
     private List<Plataforma> plataformas;
 
     public Usuario modify(Usuario usuario) {
@@ -59,5 +60,9 @@ public class Usuario {
             }
         }
         return true;
+    }
+
+    public boolean isActivo() {
+        return this.estado == Estado.ACTIVO;
     }
 }

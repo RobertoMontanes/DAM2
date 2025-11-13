@@ -3,6 +3,7 @@ package com.salesianostriana.dam.gestionsuscripciones.Services;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Extras.ListarPlataformas_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Formulario_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import com.salesianostriana.dam.gestionsuscripciones.Repositories.UsuarioRepository;
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
@@ -94,15 +95,22 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         return "redirect:/usuarios";
     }
 
-    public String verDetalle(Long id, Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+    public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        Long id = (Long) httpSession.getAttribute("id");
+
+        if (id == null) {
+            redirectAttributes.addFlashAttribute("error","Debes iniciar sesión para acceder al dashboard");
+            return "redirect:/login";
+        }
+
         Optional<Usuario> uOpt = findById(id);
+        Usuario u;
         if (uOpt.isEmpty()){
             redirectAttributes.addFlashAttribute("error","Usuario no encontrado");
-            return "redirect:/usuarios";
+            return "redirect:/login";
         }
-        Usuario u = uOpt.get();
-        httpSession.setAttribute("id", id);
-        model.addAttribute("plataformas", u.getPlataformas().stream().map(ListarPlataformas_UsuarioDTO::toDTO).toList());
+        u = uOpt.get();
+        model.addAttribute("plataformas", u.getPlataformas().stream().filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList());
         return "usuario/dashboard";
     }
 }

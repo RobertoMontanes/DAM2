@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Detalles de la Plataforma</h1>
+<p><strong>Nombre:</strong> <span th:text="${plataforma.nombre}">Nombre de la Plataforma</span></p>
+<h2>Planes Asociados</h2>
+
+<table border="1" id="planes">
+    <tr>
+        <th>Nombre del Plan</th>
+        <th>Precio</th>
+        <th>Frecuencia de Actualización</th>
+    </tr>
+    <tr th:each="plan : ${plataforma.planes}">
+        <td th:text="${plan.nombre}">Nombre del Plan</td>
+        <td th:text="${plan.precio}">Precio del Plan</td>
+        <td>
+            <span th:text="${plan.frecuencia_dias} + ' días, ' + ${plan.frecuencia_meses} + ' meses, ' + ${plan.frecuencia_anios} + ' años'">
+                Frecuencia de Actualización
+            </span>
+        </td>
+    </tr>
+
+</table>
+<a th:href="@{/usuarios}">Volver al Dashboard</a>
+<a th:href="@{/plataformas/{id}/planes/nuevo(id=${plataforma.id})}"> Crear un nuevo Plan.</a>
+<a th:href="@{/plataformas/editar/{id}(id=${plataforma.id})}">Editar Plataforma</a>
+<a th:href="@{/plataformas/eliminar/{id}(id=${plataforma.id})}" onclick="return confirm('¿Estás seguro de que deseas eliminar esta plataforma?');">Eliminar Plataforma</a>
+
+
+</body>
+</html>

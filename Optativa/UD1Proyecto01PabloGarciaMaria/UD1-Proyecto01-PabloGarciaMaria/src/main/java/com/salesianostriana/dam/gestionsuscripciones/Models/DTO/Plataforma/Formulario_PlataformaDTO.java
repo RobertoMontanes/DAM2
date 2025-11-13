@@ -17,7 +17,7 @@ public class Formulario_PlataformaDTO {
         return Plataforma.builder()
                 .id(this.getId())
                 .nombre(this.getNombre())
-                .estado(Estado.ACTIVO)
+                .estado(true)
                 .build();
     }
 }

@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,7 +23,7 @@ public class Nuevo_PlataformaDTO {
         return Plataforma.builder()
                 .id(null)
                 .nombre(this.getNombre())
-                .estado(Estado.ACTIVO)
+                .estado(true)
                 .build();
     }
 }
