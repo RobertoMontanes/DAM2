@@ -1,0 +1,102 @@
+<form [formGroup]="nuevoAlumnoFormGroup">
+
+
+    <div class="mb-3">
+        @if (nuevoAlumnoFormGroup.get("nAlumFormControl")?.invalid && nuevoAlumnoFormGroup.get("nAlumFormControl")?.touched) {
+            @if (nuevoAlumnoFormGroup.get("nAlumFormControl")?.hasError('required') && nuevoAlumnoFormGroup.get("nAlumFormControl")?.touched) {
+                <span>Necesita escribir el numero de alumno.</span>
+            } @else {
+                <span>El numero de alumno debe ser almenos {{minLengthNAlum}}</span>
+            }
+            <br>
+        }
+        <label for="nAlum" class="form-label">Numero alumno:</label>
+        <input
+        type="number"
+        class="form-control"
+        id="nAlum"
+        min="0"
+        formControlName="nAlumFormControl"
+        required
+        />
+    </div>
+
+    
+    <div class="mb-3">
+        @if (nuevoAlumnoFormGroup.get("nombreFormControl")?.invalid && nuevoAlumnoFormGroup.get("nombreFormControl")?.touched) {
+            @if (nuevoAlumnoFormGroup.get("nombreFormControl")?.hasError('required') && nuevoAlumnoFormGroup.get("nombreFormControl")?.touched) {
+                <span>Necesita escribir el nombre del alumno.</span>
+            } @else {
+                <span>El nombre del alumno debe tener al menos 1 caracter</span>
+            }
+            <br>
+        }
+        <label for="nombre" class="form-label">Nombre:</label>
+        <input
+        type="text"
+        class="form-control"
+        id="nombre"
+        formControlName="nombreFormControl"
+        required
+        />
+    </div>
+
+    <div class="mb-3">
+        @if (nuevoAlumnoFormGroup.get("apellidosFormControl")?.invalid && nuevoAlumnoFormGroup.get("apellidosFormControl")?.touched) {
+            @if (nuevoAlumnoFormGroup.get("apellidosFormControl")?.hasError('required') && nuevoAlumnoFormGroup.get("apellidosFormControl")?.touched) {
+                <span>Necesita escribir los apellidos del alumno.</span>
+            } @else {
+                <span>El apellido de alumno debe tener al menos 1 caracter</span>
+            }
+            <br>
+        }
+        <label for="apellidos" class="form-label">Apellidos:</label>
+        <input
+        type="text"
+        class="form-control"
+        id="apellidos"
+        formControlName="apellidosFormControl"
+        required
+        />
+    </div>
+
+    <div class="mb-3">
+        @if (nuevoAlumnoFormGroup.get("nifFormControl")?.invalid && nuevoAlumnoFormGroup.get("nifFormControl")?.touched) {
+            @if (nuevoAlumnoFormGroup.get("nifFormControl")?.hasError('required') && nuevoAlumnoFormGroup.get("nifFormControl")?.touched) {
+                <span>Necesita escribir el NIF del alumno.</span>
+            } @else {
+                <span>El NIF deL alumno debe tener 8 caracteres.</span>
+            }
+            <br>
+        }
+        <label for="nif" class="form-label">Nif:</label>
+        <input
+        type="text"
+        class="form-control"
+        id="nif"
+        formControlName="nifFormControl"
+        required
+        />
+    </div>
+
+    <div class="mb-3">
+        @if (nuevoAlumnoFormGroup.get("cursoFormControl")?.invalid && nuevoAlumnoFormGroup.get("cursoFormControl")?.touched) {
+            @if (nuevoAlumnoFormGroup.get("cursoFormControl")?.hasError('required') && nuevoAlumnoFormGroup.get("cursoFormControl")?.touched) {
+                <span>Necesita escribir el Curso del alumno.</span>
+            } @else {
+                <span>El curso deL alumno debe tener al menos 1 caracter.</span>
+            }
+            <br>
+        }
+        <label for="curso" class="form-label">Curso:</label>
+        <input
+        type="text"
+        class="form-control"
+        id="curso"
+        formControlName="cursoFormControl"
+        required
+        />
+    </div>
+
+    <button type="button" class="btn btn-success" [disabled]="nuevoAlumnoFormGroup.invalid" (click)="onSubmit()">Crear</button>
+</form>
