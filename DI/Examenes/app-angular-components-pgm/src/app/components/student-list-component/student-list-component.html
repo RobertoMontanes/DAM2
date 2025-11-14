@@ -1,0 +1,14 @@
+<div class="card" style="width: 18rem;">
+  <div class="card-img-top" style="background-color: red; height: 20px">
+
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">#{{alumno()?.nAlum}}, {{alumno()?.nombre}} {{alumno()?.apellidos}}</h5>
+    <p class="card-text">
+      NIF: <span>{{alumno()?.nif}}</span> <br>
+      EDAD: <span>{{alumno()?.edad}}</span> <br>
+      CURSO: <span>{{alumno()?.cursoMatriculado}}</span> <br>
+    </p>
+    <button class="btn btn-primary" (click)="mostrarDetalles()">Ver detalle</button>
+  </div>
+</div>
