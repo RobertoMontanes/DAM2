@@ -21,6 +21,17 @@ public class Editar_PlanDTO {
     private int frecuencia_meses;
     private int frecuencia_anios;
 
+    public static Editar_PlanDTO toDTO(Plan plan) {
+        return Editar_PlanDTO.builder()
+                .id(plan.getId())
+                .nombre(plan.getNombre())
+                .precio(plan.getPrecio())
+                .frecuencia_dias(plan.getFrecuencia().getDays())
+                .frecuencia_meses(plan.getFrecuencia().getMonths())
+                .frecuencia_anios(plan.getFrecuencia().getYears())
+                .build();
+    }
+
     public Plan fromDTO() {
         return Plan.builder()
                 .id(this.getId())

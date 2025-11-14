@@ -50,11 +50,16 @@ public class Usuario {
     }
 
     public void addPlataforma(Plataforma p) {
+        if (this.plataformas == null) {
+            this.plataformas = new java.util.ArrayList<>();
+        }
         this.plataformas.add(p);
     }
 
     public boolean findPlataformaById(Long id) {
+        System.out.println("AQUI");
         for (Plataforma p : plataformas) {
+            System.out.println(p);
             if (p.getId().equals(id)) {
                 return false;
             }

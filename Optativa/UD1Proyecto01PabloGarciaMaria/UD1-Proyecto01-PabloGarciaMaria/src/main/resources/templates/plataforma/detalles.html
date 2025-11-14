@@ -26,8 +26,8 @@
             </span>
         </td>
         <td>
-            <a th:href="@{/planes/editar/{plan.id}}">Editar</a>
-            <form thmethod="DELETE" th:action="@{/planes/eliminar/{plan.id}(plan.id=${plan.id})}" style="display:inline;">
+            <a th:href="@{/planes/editar/{id}(id=${plan.id})}">Editar</a>
+            <form thmethod="DELETE" th:action="@{/planes/eliminar/{id}(id=${plan.id})}" style="display:inline;">
                 <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este plan?');">Eliminar</button>
             </form>
         </td>

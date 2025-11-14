@@ -1,0 +1,14 @@
+<div class="student-list-container">
+    <h1 class="text-center mb-5 fw-bold text-primary">Listado de alumnos</h1>
+    <h2 class="text-center mb-5 fw-bold text-primary">Num Alumnos: <span class="count">{{numAlumnos}}</span></h2>
+    
+    <div class="container">
+        <div class="row row-cols-4 g-4">
+            @for (alumno of alumnos; track alumno.nAlum) {
+                <app-student-list-component [alumno]="alumno"></app-student-list-component>
+        }
+        </div>
+        <a routerLink="/alumnos/nuevo" class="btn btn-success mt-3">Crear nuevo alumno</a>
+    </div>
+
+</div>

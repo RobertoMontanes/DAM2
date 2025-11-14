@@ -160,6 +160,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         p = (Plataforma) resultado.getObjeto();
 
         model.addAttribute("plataforma", toDTO(p));
+        session.setAttribute("idPlataforma", p.getId());
 
         return "plataforma/detalles";
     }

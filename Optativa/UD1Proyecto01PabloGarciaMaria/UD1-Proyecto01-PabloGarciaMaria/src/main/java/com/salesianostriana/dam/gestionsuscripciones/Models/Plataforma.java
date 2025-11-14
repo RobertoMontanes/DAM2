@@ -2,16 +2,13 @@ package com.salesianostriana.dam.gestionsuscripciones.Models;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Estado;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor @NoArgsConstructor @Builder @Data
+@AllArgsConstructor @NoArgsConstructor @Builder @Getter @Setter @ToString
 public class Plataforma {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +22,7 @@ public class Plataforma {
 
     @OneToMany
     @Builder.Default
+    @ToString.Exclude
     private List<Plan> planes = new ArrayList<>();
 
     public void modify(Plataforma plataforma) {

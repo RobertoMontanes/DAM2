@@ -65,9 +65,10 @@ public class PlanService extends BaseServiceImpl<Plan,Long, PlanRepository> {
         return "redirect:/plataformas/" + idPlataforma;
     }
 
-    public String editar(Model model, HttpSession session, RedirectAttributes redirectAttributes, Editar_PlanDTO o, Long id) {
+    public String editar(Model model, HttpSession session, RedirectAttributes redirectAttributes, Editar_PlanDTO planDTO, Long id) {
         Long idPlataforma = (Long) session.getAttribute("idPlataforma");
-        ValidacionResultado resultado = ExtraMethods.comprobarPlataforma(session, idPlataforma, usuarioService, plataformaService);
+        System.out.println(idPlataforma);
+        ValidacionResultado resultado = ExtraMethods.comprobarPlan(session, idPlataforma, usuarioService, plataformaService, id, this);
         Plan plan;
 
         if (!resultado.isExito()) {
@@ -77,15 +78,24 @@ public class PlanService extends BaseServiceImpl<Plan,Long, PlanRepository> {
 
         plan = (Plan) resultado.getObjeto();
 
+        if (planDTO == null) {
+            planDTO = Editar_PlanDTO.toDTO(plan);
+        }
 
+        model.addAttribute("crear", false);
+        model.addAttribute("plan", planDTO);
 
+        return "planes/formulario";
     }
 
     public String actualizar(Editar_PlanDTO planDTO, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+        return "HAZME VAGO";
     }
 
     public String eliminar(Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        return "HAZME VAGO";
     }
+
 
     // EXTRAS
 }
