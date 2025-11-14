@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -14,8 +14,9 @@
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required/><br/>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required/><br/>
+<label for="password">Contraseña:</label>
+<input type="password" id="password" name="password" required/>
+<button type="button" id="togglePassword" onclick="(function(btn, pwd){ pwd.type = pwd.type === 'password' ? 'text' : 'password'; btn.textContent = pwd.type === 'password' ? 'Mostrar' : 'Ocultar'; })(this, document.getElementById('password'))">Mostrar</button><br/>
 
     <button type="submit">Login</button>
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data @Builder @AllArgsConstructor @NoArgsConstructor
 public class ListarPlanes_PlataformaDTO {
 
+    private Long id;
     private String nombre;
     private double precio;
     private int frecuencia_dias;
@@ -17,6 +18,7 @@ public class ListarPlanes_PlataformaDTO {
 
     public static ListarPlanes_PlataformaDTO toDTO(Plan plan) {
         return ListarPlanes_PlataformaDTO.builder()
+                .id(plan.getId())
                 .nombre(plan.getNombre())
                 .precio(plan.getPrecio())
                 .frecuencia_dias(plan.getFrecuencia().getDays())
