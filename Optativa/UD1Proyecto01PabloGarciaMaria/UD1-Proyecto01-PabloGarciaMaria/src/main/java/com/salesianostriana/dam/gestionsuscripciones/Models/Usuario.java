@@ -37,6 +37,10 @@ public class Usuario {
     @ToString.Exclude
     private List<Plataforma> plataformas;
 
+    @OneToMany
+    @ToString.Exclude
+    private List<Suscripcion> suscripciones;
+
     public Usuario modify(Usuario usuario) {
         this.nombre = usuario.getNombre();
         this.apellidos = usuario.getApellidos();

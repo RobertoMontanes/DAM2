@@ -1,12 +1,10 @@
 package com.salesianostriana.dam.gestionsuscripciones.Models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Period;
+import java.util.List;
 
 @Entity
 @Builder @Data @NoArgsConstructor
@@ -24,6 +22,10 @@ public class Plan {
 
     @ManyToOne
     private Plataforma plataforma;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Suscripcion> suscripciones;
 
     public void modify(Plan plan) {
         this.nombre = plan.getNombre();
