@@ -11,6 +11,7 @@ import java.time.Period;
 @Entity
 @Builder @Data @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "planes")
 public class Plan {
 
     @Id
@@ -24,5 +25,17 @@ public class Plan {
     @ManyToOne
     private Plataforma plataforma;
 
+    public void modify(Plan plan) {
+        this.nombre = plan.getNombre();
+        this.precio = plan.getPrecio();
+        this.frecuencia = plan.getFrecuencia();
+    }
+
+    public Plataforma borrarPlataforma() {
+        Plataforma plataformaOriginal = this.plataforma;
+        this.plataforma.getPlanes().remove(this);
+        this.plataforma = null;
+        return plataformaOriginal;
+    }
 }
 

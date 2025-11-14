@@ -8,6 +8,10 @@
 
 <h1>Usuario Dashboard</h1>
 
+<!--Esto a un header o algo asi, que quede bonito.-->
+<li><a th:href="@{/logout}">Cerrar Sesión</a></li>
+
+
 <span th:text="${error}"  th:if="${error}"></span>
 <span th:text="${message}"  th:if="${message}"></span>
 <span th:text="${success}"  th:if="${success}"></span>
@@ -15,6 +19,9 @@
 <p>Welcome to your dashboard!</p>
 
 <h2> Avisos / Notificaciones </h2>
+<ul>
+    <li th:each="aviso : ${avisos}" th:text="${aviso}">Aviso de ejemplo</li>
+</ul>
 
 <h2> Suscripciones </h2>
 <!--<table id="suscripciones">-->
@@ -53,8 +60,11 @@
 <ul>
 <!--    <li><a th:href="@{/suscripciones/nueva}">Crear Nueva Suscripción</a></li>-->
     <li><a th:href="@{/plataformas/nuevo}">Agregar Nueva Plataforma</a></li>
-    <li><a th:href="@{/logout}">Cerrar Sesión</a></li>
 </ul>
+
+<h2> Estadisticas </h2>
+<!--Nose, cosas como gasto total, gasto mensual, plataformas suscrito, etc...-->
+
 
 </body>
 </html>

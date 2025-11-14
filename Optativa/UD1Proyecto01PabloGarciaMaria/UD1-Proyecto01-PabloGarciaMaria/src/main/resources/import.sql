@@ -1,4 +1,4 @@
+INSERT INTO usuarios (nombre, apellidos, email, password, fecha_creacion, estado) VALUES ('Usuario', 'pruebas', 'pruebas@gmail.com','1234','2025-11-13',0);
 INSERT INTO usuarios (nombre, apellidos, email, password, fecha_creacion, estado) VALUES ('Juan', 'Pérez', 'pe.rezjuan@gmail.com', 'password123', '2023-01-15', 0);
 INSERT INTO usuarios (nombre, apellidos, email, password, fecha_creacion, estado) VALUES ('María', 'Gómez', 'go.mezmaria@gmail.com', 'securepass456', '2023-02-20', 0);
 INSERT INTO usuarios (nombre, apellidos, email, password, fecha_creacion, estado) VALUES ('Carlos', 'López', 'lo.pezcarlos@gmail.com', 'mypassword789', '2023-03-10', 1);
-INSERT INTO usuarios (nombre, apellidos, email, password, fecha_creacion, estado) VALUES ('Usuario', 'pruebas', 'pruebas@gmail.com','1234','2025-11-13',0);

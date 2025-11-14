@@ -6,7 +6,10 @@
 </head>
 <body>
 
-<form th:method="POST" action="/planes" th:object="${plan}">
+<form th:method="${crear} ? POST : PUT" action="/planes" th:object="${plan}">
+
+    <input type="hidden" th:if="${!crear}" th:field="*{id}" />
+
     <label for="planNombre">Nombre del Plan:</label>
     <input type="text" id="planNombre" name="planNombre" th:field="*{nombre}" />
 

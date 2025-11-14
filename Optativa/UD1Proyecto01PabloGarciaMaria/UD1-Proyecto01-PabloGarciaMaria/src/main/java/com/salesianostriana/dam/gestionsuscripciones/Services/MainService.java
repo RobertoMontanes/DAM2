@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,6 +19,10 @@ public class MainService {
 
     public String logOut(HttpSession session, RedirectAttributes redirectAttributes) {
         if (session.getId() != null && session.getAttribute("id") != null) {
+            usuarioService.findById((Long) session.getAttribute("id")).ifPresent(usuario -> {
+                usuario.setUltimaConexion(LocalDateTime.now());
+                usuarioService.save(usuario);
+            });
             session.setAttribute("id", null);
             redirectAttributes.addFlashAttribute("message", "Has cerrado sesión correctamente.");
         }
@@ -54,6 +59,8 @@ public class MainService {
             if (u.getPassword().equals(logIn_usuarioDTO.getPassword())) {
                 if (u.isActivo()) {
                     session.setAttribute("id", u.getId());
+                    u.setUltimaConexion(LocalDateTime.now());
+                    usuarioService.save(u);
                     return "redirect:/usuarios";
                 } else {
                     model.addAttribute("error", "El usuario no está activo. Contacte con el administrador.");

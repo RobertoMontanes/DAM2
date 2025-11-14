@@ -14,8 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    // Para mañana hay que empezar a trabajar con las suscripciones pero antes tenemos que terminar los planes
-    // Falta editar y eliminar planes
     // Despues de eso nos quedaria hacer las suscripciones
     // Acuerdate que cuando creas una plataforma te pregunta si tienes una suscripcion activa y desde cuando.
         // SI el plazo es mayor a la frecuencia se creara una suscripcion por cada completo del periodo.

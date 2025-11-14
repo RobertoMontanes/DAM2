@@ -39,8 +39,8 @@ public class PlanController {
         return service.actualizar(planDTO,session,redirectAttributes, model);
     }
 
-    @DeleteMapping
-    public String eliminar(@RequestParam Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/{id}")
+    public String eliminar(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         return service.eliminar(id,session,redirectAttributes);
     }
 
