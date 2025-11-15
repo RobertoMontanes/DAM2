@@ -14,9 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    // Despues de eso nos quedaria hacer las suscripciones
-    // Acuerdate que cuando creas una plataforma te pregunta si tienes una suscripcion activa y desde cuando.
-        // SI el plazo es mayor a la frecuencia se creara una suscripcion por cada completo del periodo.
     // Los HTMLs despues de las suscripciones
     // Y por ultimo tocaria empezar a hacer cosas como mensajes y otras cosillas para actualizar al usuario sobre el estado de sus suscripciones.
 

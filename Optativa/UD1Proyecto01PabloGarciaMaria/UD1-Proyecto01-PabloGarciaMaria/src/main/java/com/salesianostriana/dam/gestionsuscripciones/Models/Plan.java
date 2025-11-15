@@ -39,5 +39,12 @@ public class Plan {
         this.plataforma = null;
         return plataformaOriginal;
     }
+
+    public void addSuscripcion(Suscripcion s) {
+        if (this.suscripciones == null) {
+            this.suscripciones = new java.util.ArrayList<>();
+        }
+        this.suscripciones.add(s);
+    }
 }
 

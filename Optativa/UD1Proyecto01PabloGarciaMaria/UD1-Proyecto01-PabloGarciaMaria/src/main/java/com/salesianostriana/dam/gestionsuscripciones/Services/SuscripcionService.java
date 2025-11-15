@@ -8,4 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, SuscripcionRepository> {
+
+
+
 }

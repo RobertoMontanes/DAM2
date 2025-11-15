@@ -74,4 +74,11 @@ public class Usuario {
     public boolean isActivo() {
         return this.estado == Estado.ACTIVO;
     }
+
+    public void addSuscripcion(Suscripcion s) {
+        if (this.suscripciones == null) {
+            this.suscripciones = new java.util.ArrayList<>();
+        }
+        this.suscripciones.add(s);
+    }
 }

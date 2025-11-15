@@ -26,5 +26,7 @@ public class Suscripcion {
     private LocalDate fechaFin;
 
     private boolean activa;
+    @Builder.Default
+    private boolean renovacionAutomatica = true;
 
 }

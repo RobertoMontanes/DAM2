@@ -9,8 +9,10 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Objetivo;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Suscripcion;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import com.salesianostriana.dam.gestionsuscripciones.Repositories.PlataformaRepository;
+import com.salesianostriana.dam.gestionsuscripciones.Repositories.SuscripcionRepository;
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,9 +32,12 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
     @Autowired
     private UsuarioService usuarioService;
 
-    @Lazy
-    @Autowired
+    @Lazy @Autowired
     private PlanService planService;
+    @Lazy @Autowired
+    private SuscripcionService suscripcionService;
+    @Autowired
+    private SuscripcionRepository suscripcionRepository;
 
     // CRUD PLATAFORMA
 
@@ -57,6 +63,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         Plataforma p;
         Plan p2;
         Usuario u;
+        LocalDate fechaProcesada;
 
 
         if (!resultado.isExito()) {
@@ -81,6 +88,28 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         planService.save(p2);
 
         p.getPlanes().add(p2);
+
+
+        fechaProcesada = plataformaDTO.getFecha_suscripcion();
+        if (fechaProcesada != null) {
+            System.out.println("Creando suscripciones desde: " + fechaProcesada);
+            do {
+                Suscripcion s = Suscripcion.builder()
+                        .fechaInicio(fechaProcesada)
+                        .fechaFin(fechaProcesada.plus(p2.getFrecuencia()))
+                        .plan(p2)
+                        .usuario(u)
+                        .build();
+                s.setActiva(s.getFechaFin().isAfter(LocalDate.now()));
+                fechaProcesada = fechaProcesada.plus(p2.getFrecuencia());
+                u.addSuscripcion(s);
+                p2.addSuscripcion(s);
+                suscripcionService.save(s);
+                System.out.println("SUSCRIPCION CREADA: " + s);
+            } while (fechaProcesada.isBefore(LocalDate.now()));
+
+
+        }
 
         u.addPlataforma(p);
         usuarioService.save(u);

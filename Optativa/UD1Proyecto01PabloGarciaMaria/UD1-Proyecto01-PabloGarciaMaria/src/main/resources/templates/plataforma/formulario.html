@@ -30,6 +30,14 @@
         <input type="number" th:field="*{plan.frecuencia_meses}" id="meses" min="0"/>
         <label for="anios">Años</label>
         <input type="number" th:field="*{plan.frecuencia_anios}" id="anios" min="0"/>
+
+        <span>Este plan será creado automáticamente junto con la plataforma.</span>
+
+        <h3> Suscripcion </h3>
+        <span> Si dispone de una suscripcion activa indique la fecha de comienzo o en su defecto la fecha del ultimo
+            pago, si la suscripcion no se encuentra activa deje el campo en blanco. </span>
+        <label for="fechaSuscripcion">Fecha de Suscripcion:</label>
+        <input type="date" id="fechaSuscripcion" th:field="*{fecha_suscripcion}" value="null"/>
     </div>
 
 

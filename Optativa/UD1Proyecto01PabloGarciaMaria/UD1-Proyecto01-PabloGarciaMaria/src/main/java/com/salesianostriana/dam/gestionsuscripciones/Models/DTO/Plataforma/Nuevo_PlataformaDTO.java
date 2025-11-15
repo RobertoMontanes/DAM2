@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @AllArgsConstructor
@@ -18,6 +19,8 @@ public class Nuevo_PlataformaDTO {
 
     private String nombre;
     private NuevoPlan_PlataformaDTO plan;
+
+    private LocalDate fecha_suscripcion = null;
 
     public Plataforma fromDTO() {
         return Plataforma.builder()

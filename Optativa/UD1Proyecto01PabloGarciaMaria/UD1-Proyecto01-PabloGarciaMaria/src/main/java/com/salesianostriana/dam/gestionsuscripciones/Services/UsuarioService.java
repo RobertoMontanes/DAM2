@@ -1,9 +1,11 @@
 package com.salesianostriana.dam.gestionsuscripciones.Services;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Extras.ListarPlataformas_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Extras.ListarSuscripcion_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Formulario_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Suscripcion;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import com.salesianostriana.dam.gestionsuscripciones.Repositories.UsuarioRepository;
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
@@ -111,6 +113,8 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         }
         u = uOpt.get();
         model.addAttribute("plataformas", u.getPlataformas().stream().filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList());
+        model.addAttribute("suscripciones", u.getSuscripciones().stream().filter(Suscripcion::isActiva).map(ListarSuscripcion_UsuarioDTO::toDTO).toList());
+
         return "usuario/dashboard";
     }
 }
