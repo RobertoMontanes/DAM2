@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -80,5 +81,38 @@ public class Usuario {
             this.suscripciones = new java.util.ArrayList<>();
         }
         this.suscripciones.add(s);
+    }
+
+    public Double calcularGastoMensual() {
+        double total = 0.0;
+        LocalDate now = LocalDate.now();
+        for (Suscripcion s : suscripciones) {
+            if (s.getFechaFin().getMonth() == now.getMonth() && s.getFechaFin().getYear() == now.getYear()) {
+                total += s.getPlan().getPrecio();
+            }
+        }
+        return total;
+    }
+
+    public Double calcularGastoAnual() {
+        double total = 0.0;
+        LocalDate now = LocalDate.now();
+        for (Suscripcion s : suscripciones) {
+            if (s.getFechaFin().getYear() == now.getYear()) {
+                total += s.getPlan().getPrecio();
+            }
+        }
+        return total;
+
+    }
+
+    public List<Suscripcion> suscripcionesProximasAVencer() {
+        List<Suscripcion> suscripcionesProximas = new ArrayList<>();
+        for (Suscripcion s : suscripciones) {
+            if (s.isActiva() && s.getFechaFin().isBefore(LocalDate.now().plusDays(7))) {
+                suscripcionesProximas.add(s);
+            }
+        }
+        return suscripcionesProximas;
     }
 }

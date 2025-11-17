@@ -23,8 +23,8 @@ public class PlataformaController {
     }
 
     @PostMapping()
-    public String crear(@ModelAttribute(name = "formulario") Nuevo_PlataformaDTO formularioDTO, HttpSession session, RedirectAttributes redirectAttributes) {
-        return service.crear(formularioDTO,session,redirectAttributes);
+    public String crear(@ModelAttribute(name = "formulario") Nuevo_PlataformaDTO formularioDTO, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+        return service.crear(formularioDTO,session,redirectAttributes, model);
     }
 
     @GetMapping("/editar/{id}")

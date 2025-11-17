@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Extras.NuevoPlan_PlataformaDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Categorias;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Estado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class Nuevo_PlataformaDTO {
 
     private String nombre;
     private NuevoPlan_PlataformaDTO plan;
+    private String categoria;
 
     private LocalDate fecha_suscripcion = null;
 
@@ -27,6 +29,7 @@ public class Nuevo_PlataformaDTO {
                 .id(null)
                 .nombre(this.getNombre())
                 .estado(true)
+                .categoria(Categorias.valueOf(this.getCategoria()))
                 .build();
     }
 }

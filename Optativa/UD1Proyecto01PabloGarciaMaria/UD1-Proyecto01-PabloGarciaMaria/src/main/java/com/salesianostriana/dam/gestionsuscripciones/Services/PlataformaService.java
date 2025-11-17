@@ -5,6 +5,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Detal
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Extras.ListarPlanes_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Formulario_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Nuevo_PlataformaDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Categorias;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Objetivo;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
@@ -55,10 +56,11 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         model.addAttribute("plataforma", formularioDTO);
         model.addAttribute("crear", true);
+        model.addAttribute("categorias", Categorias.values());
         return "plataforma/formulario";
     }
 
-    public String crear(Nuevo_PlataformaDTO plataformaDTO, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String crear(Nuevo_PlataformaDTO plataformaDTO, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
         ValidacionResultado resultado = comprobarSesion(session, null, Objetivo.CREAR);
         Plataforma p;
         Plan p2;
@@ -77,6 +79,17 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         if (plataformaDTO == null) {
             redirectAttributes.addFlashAttribute("error", "Algo ha fallado durante el envío del formulario.");
             return "redirect:/plataformas/nuevo";
+        }
+
+        if (plataformaDTO.getPlan().getFrecuencia_dias() <= 0 && plataformaDTO.getPlan().getFrecuencia_meses() <= 0 &&
+                plataformaDTO.getPlan().getFrecuencia_anios() <= 0) {
+            model.addAttribute("error", "Por favor, establece al menos una frecuencia de renovación (días, meses o años).");
+            return this.nuevo(model, session, redirectAttributes, plataformaDTO);
+        }
+
+        if (plataformaDTO.getPlan().getPrecio() <= 0) {
+            model.addAttribute("error", "El precio del plan debe ser mayor que 0.");
+            return this.nuevo(model, session, redirectAttributes, plataformaDTO);
         }
 
         p = plataformaDTO.fromDTO();
@@ -172,8 +185,16 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         }
 
         p.setEstado(false);
+        p.getPlanes().forEach(plan -> {
+            plan.getSuscripciones().stream().filter(Suscripcion::isActiva).forEach(suscripcion -> {
+                suscripcion.setActiva(false);
+                suscripcion.setFechaFin(LocalDate.now());
+                suscripcionRepository.save(suscripcion);
+            });
+        });
         save(p);
-        redirectAttributes.addAttribute("success", "Plataforma desactivada correctamente.");
+
+        redirectAttributes.addFlashAttribute("success", "Plataforma eliminada correctamente.");
         return "redirect:/usuarios";
     }
 

@@ -127,6 +127,10 @@
             font-size: 0.9rem;
         }
 
+        .color-white {
+            color: white !important;
+        }
+
         .alert {
             border-radius: 8px;
             border: none;
@@ -304,8 +308,8 @@
             </div>
             <div class="col-md-4 text-end">
                 <div class="stat-card bg-transparent text-white p-0">
-                    <div class="stat-number" th:text="${suscripciones.size()}">0</div>
-                    <div class="stat-label">Suscripciones Activas</div>
+                    <div class="stat-number color-white" th:text="${suscripciones.size()}">0</div>
+                    <div class="stat-label color-white">Suscripciones Activas</div>
                 </div>
             </div>
         </div>
@@ -384,18 +388,32 @@
                             <div class="stat-number" th:text="${plataformas.size()}">0</div>
                             <div class="stat-label">Plataformas</div>
                         </div>
+
                         <div class="col-6 mb-3">
-                            <div class="stat-number">$45.00</div>
+                            <div class="stat-number" th:text="${gastoMensual}">$45.00</div>
                             <div class="stat-label">Gasto Mensual</div>
                         </div>
+
                         <div class="col-6">
-                            <div class="stat-number">$540.00</div>
+                            <div class="stat-number" th:text="${gastoAnual}"
+                                 data-bs-toggle="tooltip"
+                                 data-bs-placement="top"
+                                 title="Dinero gastado en lo que llevamos de año">
+                                $540.00
+                            </div>
                             <div class="stat-label">Gasto Anual</div>
                         </div>
+
                         <div class="col-6">
-                            <div class="stat-number">3</div>
+                            <div class="stat-number" th:text="${proximasAVencer}"
+                                 data-bs-toggle="tooltip"
+                                 data-bs-placement="top"
+                                 title="Número de suscripciones que vencen en los próximos 7 días">
+                                3
+                            </div>
                             <div class="stat-label">Próximas a Vencer</div>
                         </div>
+
                     </div>
                     <canvas id="statsChart" height="200"></canvas>
                 </div>
@@ -418,22 +436,29 @@
                             <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Precio</th>
                                 <th>Fecha de Inicio</th>
                                 <th>Fecha de Fin</th>
                                 <th>Estado</th>
+                                <th>Autorrenovación</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="suscripcion : ${suscripciones}">
                                 <td th:text="${suscripcion.plataformaNombre}">Nombre de la Suscripción</td>
+                                <td th:text="${suscripcion.precio}">Precio</td>
                                 <td th:text="${suscripcion.fechaInicio}">Fecha de Inicio</td>
                                 <td th:text="${suscripcion.fechaFin}">Fecha de Fin</td>
                                 <td>
                                     <span class="badge-status badge-active">Activa</span>
                                 </td>
+                                <td>
+                                    <span th:if="${suscripcion.autorenovacion}" class="badge-status badge-active">Sí</span>
+                                    <span th:if="${!suscripcion.autorenovacion}" class="badge-status badge-expired">No</span>
+                                </td>
                             </tr>
                             <tr th:if="${suscripciones.empty}">
-                                <td colspan="4" class="text-center text-muted py-4">
+                                <td colspan="6" class="text-center text-muted py-4">
                                     <i class="fas fa-inbox fa-2x mb-2"></i>
                                     <p>No tienes suscripciones activas</p>
                                     <a th:href="@{/suscripciones/nueva}" class="btn btn-primary btn-sm">
@@ -499,12 +524,21 @@
 
 <footer>
     <div class="container text-center">
-        <p class="mb-0">Sistema de Gestión de Suscripciones &copy; 2023</p>
+        <p class="mb-0">Sistema de Gestión de Suscripciones &copy; 2025</p>
     </div>
 </footer>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
 
 <script>
     // Gráfico de estadísticas

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -114,6 +115,11 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         u = uOpt.get();
         model.addAttribute("plataformas", u.getPlataformas().stream().filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList());
         model.addAttribute("suscripciones", u.getSuscripciones().stream().filter(Suscripcion::isActiva).map(ListarSuscripcion_UsuarioDTO::toDTO).toList());
+        model.addAttribute("avisos", new ArrayList<>());
+
+        model.addAttribute("gastoMensual", u.calcularGastoMensual());
+        model.addAttribute("gastoAnual", u.calcularGastoAnual());
+        model.addAttribute("proximasAVencer", u.suscripcionesProximasAVencer().size());
 
         return "usuario/dashboard";
     }

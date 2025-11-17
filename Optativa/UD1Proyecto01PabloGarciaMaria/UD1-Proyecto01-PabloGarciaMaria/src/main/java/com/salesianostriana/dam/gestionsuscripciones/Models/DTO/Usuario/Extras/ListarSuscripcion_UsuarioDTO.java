@@ -16,16 +16,20 @@ public class ListarSuscripcion_UsuarioDTO {
 
     private Long id;
     private String plataformaNombre;
+    private Double precio;
     private String fechaInicio;
     private String fechaFin;
+    private Boolean autorenovacion;
 
 
     public static ListarSuscripcion_UsuarioDTO toDTO(Suscripcion s) {
         return ListarSuscripcion_UsuarioDTO.builder()
                 .id(s.getId())
+                .precio(s.getPlan().getPrecio())
                 .plataformaNombre(s.getPlan().getPlataforma().getNombre())
                 .fechaInicio(s.getFechaInicio().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .fechaFin(s.getFechaFin().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .autorenovacion(s.isRenovacionAutomatica())
                 .build();
     }
 

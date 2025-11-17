@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.gestionsuscripciones.Models;
 
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Categorias;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Estado;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,6 +26,8 @@ public class Plataforma {
     @Builder.Default
     @ToString.Exclude
     private List<Plan> planes = new ArrayList<>();
+
+    private Categorias categoria;
 
     public void modify(Plataforma plataforma) {
         this.nombre = plataforma.getNombre();
