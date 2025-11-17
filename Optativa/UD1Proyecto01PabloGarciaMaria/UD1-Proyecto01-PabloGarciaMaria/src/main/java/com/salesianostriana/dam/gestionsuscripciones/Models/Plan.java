@@ -19,6 +19,7 @@ public class Plan {
     private String nombre;
     private Double precio;
     private Period frecuencia;
+    private Boolean activo;
 
     @ManyToOne
     private Plataforma plataforma;

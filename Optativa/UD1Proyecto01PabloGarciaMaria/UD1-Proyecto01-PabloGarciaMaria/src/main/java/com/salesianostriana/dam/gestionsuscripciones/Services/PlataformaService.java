@@ -107,13 +107,15 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         if (fechaProcesada != null) {
             System.out.println("Creando suscripciones desde: " + fechaProcesada);
             do {
+                System.out.println("Fecha de trabajo actual: " + fechaProcesada);
                 Suscripcion s = Suscripcion.builder()
                         .fechaInicio(fechaProcesada)
                         .fechaFin(fechaProcesada.plus(p2.getFrecuencia()))
                         .plan(p2)
                         .usuario(u)
                         .build();
-                s.setActiva(s.getFechaFin().isAfter(LocalDate.now()));
+                s.setActiva(s.getFechaFin().isAfter(LocalDate.now()) || s.getFechaFin().isEqual(LocalDate.now()));
+                System.out.println("Fecha fin calculada: " + s.getFechaFin());
                 fechaProcesada = fechaProcesada.plus(p2.getFrecuencia());
                 u.addSuscripcion(s);
                 p2.addSuscripcion(s);

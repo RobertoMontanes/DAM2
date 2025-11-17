@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:method="${crear} ? 'POST' : 'PUT'" th:action="@{/suscripciones}">
+
+    <label for="fechaInicio">Fecha de Inicio:</label>
+    <input type="date" id="fechaInicio" name="fechaInicio" th:field="*{fechaInicio}" required/>
+
+    <label for="plan">Plan:</label>
+    <select id="plan" name="plan" th:field="*{plan}" required>
+        <option th:each="plan : ${planes}" th:value="${plan.id}" th:text="${plan.nombre}">Plan Nombre</option>
+    </select>
+
+    <label for="autoRenovacion">Auto Renovación:</label>
+    <input type="checkbox" id="autoRenovacion" name="autoRenovacion" th:field="*{autoRenovacion}"/>
+
+</form>
+
+</body>
+</html>

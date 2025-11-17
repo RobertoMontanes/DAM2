@@ -38,7 +38,7 @@ public class PlanService extends BaseServiceImpl<Plan,Long, PlanRepository> {
         model.addAttribute("plan", planDTO);
         model.addAttribute("crear", true);
 
-        return "planes/formulario";
+        return "plan/formulario";
     }
 
     public String crear(Model model, HttpSession session, RedirectAttributes redirectAttributes, Nuevo_PlanDTO planDTO) {
@@ -84,7 +84,7 @@ public class PlanService extends BaseServiceImpl<Plan,Long, PlanRepository> {
         model.addAttribute("crear", false);
         model.addAttribute("plan", planDTO);
 
-        return "planes/formulario";
+        return "plan/formulario";
     }
 
     public String actualizar(Editar_PlanDTO planDTO, HttpSession session, RedirectAttributes redirectAttributes, Model model) {

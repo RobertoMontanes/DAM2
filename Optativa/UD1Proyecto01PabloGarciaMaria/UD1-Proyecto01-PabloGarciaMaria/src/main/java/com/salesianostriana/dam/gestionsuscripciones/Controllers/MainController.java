@@ -23,6 +23,11 @@ public class MainController {
         return "redirect:/login";
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "redirect:/usuarios";
+    }
+
     @GetMapping("/logout")
     public String logOut(HttpSession session,  RedirectAttributes redirectAttributes) {
         return service.logOut(session,redirectAttributes);
