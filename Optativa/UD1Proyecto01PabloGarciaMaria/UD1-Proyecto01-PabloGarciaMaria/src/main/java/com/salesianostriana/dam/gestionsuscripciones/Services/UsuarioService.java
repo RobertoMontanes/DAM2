@@ -11,6 +11,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Repositories.UsuarioReposit
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,6 +22,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
+
+    private final SuscripcionService suscripcionService;
 
     public String listar(Model model,HttpSession httpSession) {
         model.addAttribute("usuarios", findAll().stream().map(Listar_UsuarioDTO::toDTO).toList());
@@ -112,6 +115,9 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
             redirectAttributes.addFlashAttribute("error","Usuario no encontrado");
             return "redirect:/login";
         }
+
+        suscripcionService.comprobarVencimientos(uOpt.get());
+
         u = uOpt.get();
         model.addAttribute("plataformas", u.getPlataformas().stream().filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList());
         model.addAttribute("suscripciones", u.getSuscripciones().stream().filter(Suscripcion::isActiva).map(ListarSuscripcion_UsuarioDTO::toDTO).toList());

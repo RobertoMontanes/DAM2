@@ -117,4 +117,9 @@ public class ExtraMethods {
         resultado.setExito(true);
         return resultado;
     }
+
+    public static ValidacionResultado comprobarSuscripcion() {
+        
+    }
+
 }

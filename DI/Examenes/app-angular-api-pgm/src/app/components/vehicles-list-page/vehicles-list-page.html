@@ -10,10 +10,8 @@
                         <strong>Price: </strong> {{vehiculo.cost_in_credits}} Credits <br>
                         <strong>Cargo capacity: </strong> {{vehiculo.cargo_capacity}} KG <br>
                         <strong>length: </strong> {{vehiculo.length}}
-
-                        
                     </p>
-                    <a href="{{vehiculo.url}}" class="btn btn-primary">Ver detalles</a>
+                    <a [routerLink]="[vehiculo.id]" class="btn btn-primary">Ver detalles</a>
                 </div>
             </div>
         }   

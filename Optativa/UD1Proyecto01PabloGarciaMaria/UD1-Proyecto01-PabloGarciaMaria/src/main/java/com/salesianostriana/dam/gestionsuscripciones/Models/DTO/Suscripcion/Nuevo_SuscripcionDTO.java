@@ -18,13 +18,13 @@ public class Nuevo_SuscripcionDTO {
     private String fechaInicio = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     private Long planId;
 
-    private Boolean renovacionAutomatica;
+    private Boolean autoRenovacion;
 
     public static Nuevo_SuscripcionDTO toDTO(Suscripcion s) {
         return Nuevo_SuscripcionDTO.builder()
                 .fechaInicio(s.getFechaInicio().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .planId(s.getPlan().getId())
-                .renovacionAutomatica(s.isRenovacionAutomatica())
+                .autoRenovacion(s.isRenovacionAutomatica())
                 .build();
     }
 

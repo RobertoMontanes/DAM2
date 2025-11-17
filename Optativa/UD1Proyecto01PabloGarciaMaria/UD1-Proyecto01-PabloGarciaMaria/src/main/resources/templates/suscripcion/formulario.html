@@ -6,13 +6,13 @@
 </head>
 <body>
 
-<form th:method="${crear} ? 'POST' : 'PUT'" th:action="@{/suscripciones}">
+<form th:method="${crear} ? 'POST' : 'PUT'" th:action="@{/suscripciones}" th:object="${suscripcion}">
 
     <label for="fechaInicio">Fecha de Inicio:</label>
     <input type="date" id="fechaInicio" name="fechaInicio" th:field="*{fechaInicio}" required/>
 
     <label for="plan">Plan:</label>
-    <select id="plan" name="plan" th:field="*{plan}" required>
+    <select id="plan" name="plan" th:field="*{planId}" required>
         <option th:each="plan : ${planes}" th:value="${plan.id}" th:text="${plan.nombre}">Plan Nombre</option>
     </select>
 
