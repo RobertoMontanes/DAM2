@@ -20,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, SuscripcionRepository> {
@@ -28,6 +30,22 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
     private UsuarioService usuarioService;
     @Lazy @Autowired
     private PlanService planService;
+
+    public String cambiarRenovacionAutomatica(Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        ValidacionResultado validacionResultado = ExtraMethods.comprobarSuscripcion(session, usuarioService, id, this);
+        Suscripcion s;
+
+        if (!validacionResultado.isExito()) {
+            redirectAttributes.addFlashAttribute("error", validacionResultado.getError());
+            return validacionResultado.getRedirect();
+        }
+
+        s = (Suscripcion) validacionResultado.getObjeto();
+        redirectAttributes.addFlashAttribute("message", "La renovación automática de la suscripción al plan " + s.getPlan().getNombre() + " ha sido " + (s.isRenovacionAutomatica() ? "desactivada." : "activada."));
+        s.setRenovacionAutomatica(!s.isRenovacionAutomatica());
+        save(s);
+        return "redirect:/dashboard";
+    }
 
     @Builder
     record ListarPlataforma_SuscripcionDTO(Long id, String nombre) {
@@ -84,6 +102,7 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
     public String nuevo(Model model, HttpSession session, RedirectAttributes redirectAttributes, Nuevo_SuscripcionDTO suscripcionDTO) {
         ValidacionResultado validacionResultado = ExtraMethods.comprobarSesion(session, usuarioService);
         Usuario uDueno;
+        List<ListarPlataforma_SuscripcionDTO> listaDTO;
 
         if (!validacionResultado.isExito()) {
             redirectAttributes.addFlashAttribute("error", validacionResultado.getError());
@@ -95,9 +114,35 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
             suscripcionDTO = new Nuevo_SuscripcionDTO();
         }
 
+
+        // Me lo apunto pal futuro por que se me olvida 100%
+        // Pillamos las plataformas, pillamos sus planes, comprobamos si tienen suscripciones o si tienen suscripciones activas
+        // En caso de que o no tengan suscripciones o no tengan ninguna activa, converimos de nuevo a plataformas, luego a DTO y a juir.
+        listaDTO = uDueno.getPlataformas().stream().map(Plataforma::getPlanes)
+                .filter(p -> p.stream()
+                        .map(Plan::getSuscripciones)
+                        .findAny()
+                        .isEmpty()
+                    || p.stream()
+                        .map(Plan::getSuscripciones)
+                        .flatMap(List::stream)
+                        .filter(s -> !s.isActiva())
+                        .toList()
+                        .isEmpty()
+                ).flatMap(List::stream)
+                .map(Plan::getPlataforma)
+                .distinct()
+                .map(ListarPlataforma_SuscripcionDTO::toDTO)
+                .toList();
+
+        if (listaDTO.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "No tienes plataformas para crear suscripciones.");
+            return "redirect:/dashboard";
+        }
+
         model.addAttribute("crear", true);
         model.addAttribute("suscripcion", suscripcionDTO);
-        model.addAttribute("plataformas", uDueno.getPlataformas().stream().map(ListarPlataforma_SuscripcionDTO::toDTO).toList());
+        model.addAttribute("plataformas", listaDTO);
 
         System.out.println(suscripcionDTO);
 
@@ -117,13 +162,76 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
     }
 
     public String crear(Model model, HttpSession session, RedirectAttributes redirectAttributes, Nuevo_SuscripcionDTO suscripcionDTO) {
-        System.out.println("Llega la post");
-        System.out.println("Los datos: " + suscripcionDTO);
+        ValidacionResultado validacionResultado = ExtraMethods.comprobarSesion(session, usuarioService);
+        Optional<Plan> p;
+        Usuario usuarioObjetivo;
+
         if (suscripcionDTO.getPlanId() == null) {
+            if (model.containsAttribute("planListo")) {
+                model.addAttribute("error", "Debes seleccionar un plan.");
+            }
             return nuevo(model, session, redirectAttributes, suscripcionDTO);
         }
 
-        return "Despues lo hago";
+        if (!validacionResultado.isExito()) {
+            redirectAttributes.addFlashAttribute("error", validacionResultado.getError());
+            return validacionResultado.getRedirect();
+        }
+        usuarioObjetivo = (Usuario) validacionResultado.getObjeto();
 
+        p = planService.findById(suscripcionDTO.getPlanId());
+
+        if (p.isEmpty()) {
+            model.addAttribute("error", "El plan seleccionado no existe.");
+            return nuevo(model, session, redirectAttributes, suscripcionDTO);
+        }
+
+        validacionResultado = crearSuscripcionRecursiva(LocalDate.parse(suscripcionDTO.getFechaInicio()),p.get(), usuarioObjetivo);
+
+        if (!validacionResultado.isExito()) {
+            redirectAttributes.addFlashAttribute("error", validacionResultado.getError());
+            return validacionResultado.getRedirect();
+        }
+
+
+        redirectAttributes.addFlashAttribute("message", "Suscripción/es creada correctamente.");
+        return "redirect:/dashboard";
+
+    }
+
+    public ValidacionResultado crearSuscripcionRecursiva(LocalDate fechaProcesada, Plan p, Usuario u) {
+        ValidacionResultado resultado = new ValidacionResultado();
+
+        if (!Objects.equals(p.getPlataforma().getUsuario().getId(), u.getId())) {
+            resultado.setExito(false);
+            resultado.setError("No tienes permiso para añadir suscripciones de la plataforma " + p.getPlataforma().getNombre() + ".");
+            resultado.setRedirect("redirect:/dashboard");
+            return resultado;
+        }
+
+
+        if (fechaProcesada != null) {
+            System.out.println("Creando suscripciones desde: " + fechaProcesada);
+            do {
+                System.out.println("Fecha de trabajo actual: " + fechaProcesada);
+                Suscripcion s = Suscripcion.builder()
+                        .fechaInicio(fechaProcesada)
+                        .fechaFin(fechaProcesada.plus(p.getFrecuencia()))
+                        .plan(p)
+                        .usuario(u)
+                        .build();
+                s.setActiva(s.getFechaFin().isAfter(LocalDate.now()) || s.getFechaFin().isEqual(LocalDate.now()));
+                System.out.println("Fecha fin calculada: " + s.getFechaFin());
+                fechaProcesada = fechaProcesada.plus(p.getFrecuencia());
+                u.addSuscripcion(s);
+                p.addSuscripcion(s);
+                this.save(s);
+            } while (fechaProcesada.isBefore(LocalDate.now()));
+        }
+
+        u.addPlataforma(p.getPlataforma());
+
+        resultado.setExito(true);
+        return resultado;
     }
 }

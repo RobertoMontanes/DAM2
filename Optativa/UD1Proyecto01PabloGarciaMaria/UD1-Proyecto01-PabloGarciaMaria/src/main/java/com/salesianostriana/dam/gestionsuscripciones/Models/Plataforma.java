@@ -22,7 +22,7 @@ public class Plataforma {
     @ManyToOne
     private Usuario usuario;
 
-    @OneToMany
+    @OneToMany(mappedBy = "plataforma")
     @Builder.Default
     @ToString.Exclude
     private List<Plan> planes = new ArrayList<>();
@@ -31,5 +31,12 @@ public class Plataforma {
 
     public void modify(Plataforma plataforma) {
         this.nombre = plataforma.getNombre();
+    }
+
+    public void addPlan(Plan plan) {
+        if (this.planes == null) {
+            this.planes = new ArrayList<>();
+        }
+        this.planes.add(plan);
     }
 }

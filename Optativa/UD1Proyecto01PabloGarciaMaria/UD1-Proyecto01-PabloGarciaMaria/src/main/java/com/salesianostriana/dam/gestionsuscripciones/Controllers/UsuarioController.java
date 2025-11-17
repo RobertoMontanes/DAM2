@@ -4,10 +4,13 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Formular
 import com.salesianostriana.dam.gestionsuscripciones.Services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -54,6 +57,12 @@ public class UsuarioController {
     @GetMapping()
     public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
         return service.verDetalle(model, redirectAttributes,httpSession);
+    }
+
+    @GetMapping("/estadisticas/rapidas")
+    @ResponseBody
+    public ResponseEntity<Map<String, Integer>> verEstadisticasRapidas(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        return service.verEstadisticasRapidas(model, redirectAttributes, httpSession);
     }
 
 }

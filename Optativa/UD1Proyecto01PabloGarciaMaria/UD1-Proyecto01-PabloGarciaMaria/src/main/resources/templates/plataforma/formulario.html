@@ -252,7 +252,7 @@
                 <div class="mb-3">
                     <label for="categoria" class="form-label required-field">Categoría</label>
                     <select class="form-select" id="categoria" th:field="*{categoria}">
-                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <option value="" hidden="" selected>Selecciona una categoría</option>
                         <option th:each="cat : ${categorias}" th:value="${cat}" th:text="${cat}"></option>
                     </select>
                     <div class="form-text">Selecciona la categoría que mejor describa esta plataforma</div>

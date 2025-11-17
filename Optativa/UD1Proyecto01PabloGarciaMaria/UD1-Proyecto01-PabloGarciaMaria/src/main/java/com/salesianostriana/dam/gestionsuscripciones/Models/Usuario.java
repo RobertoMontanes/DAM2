@@ -34,11 +34,11 @@ public class Usuario {
     private LocalDate fechaCreacion;
     private LocalDateTime ultimaConexion;
 
-    @OneToMany
+    @OneToMany(mappedBy = "usuario")
     @ToString.Exclude
     private List<Plataforma> plataformas;
 
-    @OneToMany
+    @OneToMany(mappedBy = "usuario")
     @ToString.Exclude
     private List<Suscripcion> suscripciones;
 
@@ -86,8 +86,8 @@ public class Usuario {
     public Double calcularGastoMensual() {
         double total = 0.0;
         LocalDate now = LocalDate.now();
-        for (Suscripcion s : suscripciones) {
-            if (s.getFechaFin().getMonth() == now.getMonth() && s.getFechaFin().getYear() == now.getYear()) {
+        for (Suscripcion s : suscripciones.stream().filter(s -> s.getPlan().getPlataforma().isEstado()).toList()) {
+            if (s.getFechaInicio().getMonth() == now.getMonth() && s.getFechaInicio().getYear() == now.getYear()) {
                 total += s.getPlan().getPrecio();
             }
         }
@@ -97,8 +97,8 @@ public class Usuario {
     public Double calcularGastoAnual() {
         double total = 0.0;
         LocalDate now = LocalDate.now();
-        for (Suscripcion s : suscripciones) {
-            if (s.getFechaFin().getYear() == now.getYear()) {
+        for (Suscripcion s : suscripciones.stream().filter(s -> s.getPlan().getPlataforma().isEstado()).toList()) {
+            if (s.getFechaInicio().getYear() == now.getYear()) {
                 total += s.getPlan().getPrecio();
             }
         }

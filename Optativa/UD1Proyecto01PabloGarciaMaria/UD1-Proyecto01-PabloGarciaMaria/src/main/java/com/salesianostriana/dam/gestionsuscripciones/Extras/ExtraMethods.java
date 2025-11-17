@@ -6,6 +6,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import com.salesianostriana.dam.gestionsuscripciones.Services.PlanService;
 import com.salesianostriana.dam.gestionsuscripciones.Services.PlataformaService;
+import com.salesianostriana.dam.gestionsuscripciones.Services.SuscripcionService;
 import com.salesianostriana.dam.gestionsuscripciones.Services.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -119,4 +120,30 @@ public class ExtraMethods {
     }
 
 
+    public static ValidacionResultado comprobarSuscripcion(HttpSession session, UsuarioService usuarioService, Long id, SuscripcionService suscripcionService) {
+        ValidacionResultado resultado = comprobarSesion(session, usuarioService);
+        Usuario u;
+
+        if (!resultado.isExito()) {
+            return resultado;
+        }
+        resultado.setExito(false);
+        u = (Usuario) resultado.getObjeto();
+
+        if (suscripcionService.findById(id).isEmpty()) {
+            resultado.setError("No se ha encontrado la suscripción solicitada.");
+            resultado.setRedirect("redirect:/dashboard");
+            return resultado;
+        }
+
+        if (u.getSuscripciones().stream().noneMatch(s -> s.getId().equals(id))) {
+            resultado.setError("No puedes trabajar con una suscripción que no te pertenece.");
+            resultado.setRedirect("redirect:/dashboard");
+            return resultado;
+        }
+
+        resultado.setObjeto(suscripcionService.findById(id).get());
+        resultado.setExito(true);
+        return resultado;
+    }
 }

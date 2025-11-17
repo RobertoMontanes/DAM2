@@ -1,36 +1,470 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${crear} ? 'Nueva Suscripción' : 'Editar Suscripción'">Formulario Suscripción</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary-color: #6b7fd7;
+            --primary-dark: #5a6bc5;
+            --primary-light: #e8ebf9;
+            --border-color: #e0e0e0;
+            --success-color: #28a745;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 700px;
+        }
+
+        .form-header {
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fafbff;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .form-section h3 {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .info-box {
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .info-icon {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+        }
+
+        .form-check-label {
+            color: #444;
+            font-weight: 500;
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner-border {
+            color: var(--primary-color);
+        }
+
+        /* Estilos personalizados para Select2 */
+        .select2-container--bootstrap-5 .select2-selection {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            min-height: 48px;
+            transition: all 0.3s;
+        }
+
+        .select2-container--bootstrap-5 .select2-selection:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+        }
+
+        .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+            padding: 0;
+            line-height: 24px;
+        }
+
+        .select2-container--bootstrap-5 .select2-dropdown {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .select2-container--bootstrap-5 .select2-results__option--selected {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .select2-container--bootstrap-5 .select2-results__option--highlighted {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+        }
+
+        .select2-search--dropdown .select2-search__field:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .form-section {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            <i class="fas fa-layer-group me-2"></i>SubManager
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Suscripciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Plataformas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Estadísticas</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<form th:method="${crear} ? 'POST' : 'PUT'" id="formulario" th:action="@{/suscripciones}" th:object="${suscripcion}">
+<div class="container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title" th:text="${crear} ? 'Crear Nueva Suscripción' : 'Editar Suscripción'">
+                Formulario Suscripción
+            </h1>
+            <p class="text-muted mb-0" th:text="${crear} ?
+                    'Agrega una nueva suscripción a tu cuenta' :
+                    'Modifica la información de tu suscripción'">
+                Complete la información requerida para agregar una nueva suscripción
+            </p>
+        </div>
 
-    <label for="fechaInicio">Fecha de Inicio:</label>
-    <input type="date" id="fechaInicio" name="fechaInicio" th:field="*{fechaInicio}" required/>
+        <!-- Mensajes de alerta -->
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+        </div>
 
-    <label for="plataforma">Plataforma:</label>
-    <select id="plataforma"  th:field="*{plataformaId}" required>
-        <option value="null" selected hidden=""> Selecciona una plataforma </option>
-        <option th:each="plataforma : ${plataformas}"
-                th:value="${plataforma.id}"
-                th:text="${plataforma.nombre}">Plataforma Nombre</option>
-    </select>
+        <div th:if="${message}" class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            <span th:text="${message}"></span>
+        </div>
 
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+        </div>
 
-    <label for="plan">Plan:</label>
-    <select id="plan" th:field="*{planId}" required>
-        <option value="null" selected hidden="" th:if="planListo"> Selecciona un plan </option>
-        <option th:each="plan : ${planes}" th:value="${plan.id}" th:text="${plan.nombre}">Plan Nombre</option>
-    </select>
+        <form th:method="${crear} ? 'POST' : 'PUT'" id="formulario" th:action="@{/suscripciones}" th:object="${suscripcion}">
 
-    <label for="autoRenovacion">Auto Renovación:</label>
-    <input type="checkbox" id="autoRenovacion" th:field="*{autoRenovacion}"/>
+            <!-- Información Básica -->
+            <div class="form-section">
+                <h3><i class="fas fa-calendar-alt me-2"></i>Información de la Suscripción</h3>
 
-    <button type="submit">GUARDAR</button>
+                <div class="mb-3">
+                    <label for="fechaInicio" class="form-label required-field">Fecha de Inicio</label>
+                    <input type="date" class="form-control" id="fechaInicio" name="fechaInicio"
+                           th:field="*{fechaInicio}" required>
+                    <div class="form-text">Selecciona la fecha en que comenzó o comenzará esta suscripción</div>
+                </div>
 
-</form>
+                <div class="mb-3">
+                    <label for="plataforma" class="form-label required-field">Plataforma</label>
+                    <select class="form-select select2-enhanced" id="plataforma" th:field="*{plataformaId}" required
+                            data-placeholder="Selecciona una plataforma..." data-allow-clear="true">
+                        <option value=""></option>
+                        <option th:each="plataforma : ${plataformas}"
+                                th:value="${plataforma.id}"
+                                th:text="${plataforma.nombre}">Plataforma Nombre</option>
+                    </select>
+                    <div class="form-text">Escribe para buscar o selecciona la plataforma</div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle info-icon"></i>
+                    <span>
+                        Si alguna de tus plataformas no se encuentra en la lista eso es debido a que ya dispones
+                        de una suscripción activa con esa plataforma.
+                    </span>
+                </div>
+            </div>
+
+            <!-- Detalles del Plan -->
+            <div class="form-section">
+                <h3><i class="fas fa-cube me-2"></i>Detalles del Plan</h3>
+
+                <div class="mb-3">
+                    <label for="plan" class="form-label required-field">Plan</label>
+                    <select class="form-select select2-enhanced" id="plan" th:field="*{planId}"
+                            data-placeholder="Selecciona un plan..." data-allow-clear="true">
+                        <option value=""></option>
+                        <option th:each="plan : ${planes}" th:value="${plan.id}" th:text="${plan.nombre}">Plan Nombre</option>
+                    </select>
+                    <div class="form-text">Escribe para buscar o selecciona el plan</div>
+                </div>
+            </div>
+
+            <!-- Configuración de Renovación -->
+            <div class="form-section">
+                <h3><i class="fas fa-sync-alt me-2"></i>Configuración de Renovación</h3>
+
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="autoRenovacion" th:field="*{autoRenovacion}">
+                    <label class="form-check-label" for="autoRenovacion">
+                        Auto Renovación
+                    </label>
+                    <div class="form-text">
+                        Activa esta opción si deseas que la suscripción se renueve automáticamente al vencer
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-bell info-icon"></i>
+                    <span>
+                        Con la auto renovación activada, recibirás recordatorios antes de que tu suscripción se renueve.
+                    </span>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-2 text-muted">Cargando planes disponibles...</p>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <a th:href="@{/dashboard}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i>Volver al Dashboard
+                </a>
+
+                <button type="submit" class="btn btn-primary" id="submitButton">
+                    <i class="fas fa-save me-1"></i>
+                    <span th:text="${crear} ? 'Crear Suscripción' : 'Actualizar Suscripción'">Guardar</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery (requerido por Select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar Select2 para todos los selects mejorados
+        $('.select2-enhanced').select2({
+            theme: 'bootstrap-5',
+            width: '100%',
+            language: {
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                }
+            },
+            placeholder: function() {
+                return $(this).data('placeholder');
+            },
+            allowClear: $(this).data('allow-clear') || false
+        });
+
+        const plataformaSelect = $('#plataforma');
+        const planSelect = $('#plan');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const submitButton = document.getElementById('submitButton');
+        const planInfo = document.getElementById('planInfo');
+
+        // Auto-enviar formulario cuando se selecciona plataforma (manteniendo funcionalidad original)
+        plataformaSelect.on('change', function() {
+            if (this.value) {
+                loadingSpinner.style.display = 'block';
+                submitButton.disabled = true;
+                document.getElementById('formulario').submit();
+            }
+        });
+
+        // Habilitar el botón de enviar cuando se carguen los planes
+        if (planSelect.find('option').length > 1) {
+            loadingSpinner.style.display = 'none';
+            submitButton.disabled = false;
+        }
+
+        // Establecer fecha actual como valor por defecto para fecha de inicio
+        const fechaInicio = document.getElementById('fechaInicio');
+        if (fechaInicio && !fechaInicio.value) {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            fechaInicio.value = formattedDate;
+        }
+
+        // Validación del formulario
+        const form = document.getElementById('formulario');
+        form.addEventListener('submit', function(e) {
+            const plataforma = document.getElementById('plataforma').value;
+            const plan = document.getElementById('plan').value;
+            const fecha = document.getElementById('fechaInicio').value;
+
+            if (!plataforma || !plan || !fecha) {
+                e.preventDefault();
+                alert('Por favor, completa todos los campos requeridos');
+                return false;
+            }
+        });
+
+        // Mejorar la experiencia en móviles
+        if (window.innerWidth < 768) {
+            $('.select2-enhanced').select2({
+                dropdownParent: $('.form-container')
+            });
+        }
+    });
+</script>
 </body>
 </html>

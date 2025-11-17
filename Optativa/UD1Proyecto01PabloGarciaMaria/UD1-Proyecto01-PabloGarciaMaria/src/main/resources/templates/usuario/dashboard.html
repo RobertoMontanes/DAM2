@@ -161,6 +161,13 @@
             padding: 6px 12px;
             border-radius: 20px;
             font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .badge-status:hover {
+            transform: scale(1.05);
         }
 
         .badge-active {
@@ -246,13 +253,32 @@
             border-top: 1px solid var(--border-color);
             color: #666;
         }
+
+        .auto-renew-btn {
+            background: none;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .auto-renew-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .price-cell {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
     </style>
 </head>
 <body>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" th:href="@{/dashboard}">
             <i class="fas fa-layer-group me-2"></i>SubManager
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -261,13 +287,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Dashboard</a>
+                    <a class="nav-link active" th:href="@{/dashboard}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Suscripciones</a>
+                    <a class="nav-link" th:href="@{/suscripciones}">Suscripciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Plataformas</a>
+                    <a class="nav-link" th:href="@{/plataformas}">Plataformas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Estadísticas</a>
@@ -308,7 +334,7 @@
             </div>
             <div class="col-md-4 text-end">
                 <div class="stat-card bg-transparent text-white p-0">
-                    <div class="stat-number color-white" th:text="${suscripciones.size()}">0</div>
+                    <div class="stat-number color-white" th:text="${suscripciones != null ? suscripciones.size() : 0}">0</div>
                     <div class="stat-label color-white">Suscripciones Activas</div>
                 </div>
             </div>
@@ -320,9 +346,17 @@
         <h3 class="section-title">Acciones Rápidas</h3>
         <div class="row g-3">
             <div class="col-md-3 col-sm-6">
-                <a th:href="@{/plataformas/nuevo}" class="quick-action-btn">
+                <a th:href="@{/suscripciones/nuevo}" class="quick-action-btn">
                     <div class="quick-action-icon">
                         <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div>Nueva Suscripción</div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <a th:href="@{/plataformas/nuevo}" class="quick-action-btn">
+                    <div class="quick-action-icon">
+                        <i class="fas fa-tv"></i>
                     </div>
                     <div>Agregar Plataforma</div>
                 </a>
@@ -333,14 +367,6 @@
                         <i class="fas fa-chart-pie"></i>
                     </div>
                     <div>Ver Estadísticas</div>
-                </a>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <a href="#" class="quick-action-btn">
-                    <div class="quick-action-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <div>Configurar Alertas</div>
                 </a>
             </div>
             <div class="col-md-3 col-sm-6">
@@ -361,10 +387,10 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-bell me-2"></i>Avisos / Notificaciones</span>
-                    <span class="badge bg-primary rounded-pill" th:text="${avisos.size()}">0</span>
+                    <span class="badge bg-primary rounded-pill" th:text="${avisos != null ? avisos.size() : 0}">0</span>
                 </div>
                 <div class="card-body">
-                    <div th:if="${avisos.empty}" class="text-center text-muted py-3">
+                    <div th:if="${avisos == null || avisos.empty}" class="text-center text-muted py-3">
                         <i class="fas fa-check-circle fa-2x mb-2"></i>
                         <p>No tienes notificaciones pendientes</p>
                     </div>
@@ -385,35 +411,36 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6 mb-3">
-                            <div class="stat-number" th:text="${plataformas.size()}">0</div>
+                            <div class="stat-number" th:text="${plataformas != null ? plataformas.size() : 0}">0</div>
                             <div class="stat-label">Plataformas</div>
                         </div>
 
                         <div class="col-6 mb-3">
-                            <div class="stat-number" th:text="${gastoMensual}">$45.00</div>
+                            <div data-bs-toggle="tooltip"
+                                 data-bs-placement="top"
+                                 title="Dinero gastado en lo que llevamos de mes" class="stat-number" th:text="${gastoMensual != null ? gastoMensual : '€0.00'}">€0.00</div>
                             <div class="stat-label">Gasto Mensual</div>
                         </div>
 
                         <div class="col-6">
-                            <div class="stat-number" th:text="${gastoAnual}"
+                            <div class="stat-number" th:text="${gastoAnual != null ? gastoAnual : '€0.00'}"
                                  data-bs-toggle="tooltip"
                                  data-bs-placement="top"
                                  title="Dinero gastado en lo que llevamos de año">
-                                $540.00
+                                €0.00
                             </div>
                             <div class="stat-label">Gasto Anual</div>
                         </div>
 
                         <div class="col-6">
-                            <div class="stat-number" th:text="${proximasAVencer}"
+                            <div class="stat-number" th:text="${proximasAVencer != null ? proximasAVencer : 0}"
                                  data-bs-toggle="tooltip"
                                  data-bs-placement="top"
                                  title="Número de suscripciones que vencen en los próximos 7 días">
-                                3
+                                0
                             </div>
                             <div class="stat-label">Próximas a Vencer</div>
                         </div>
-
                     </div>
                     <canvas id="statsChart" height="200"></canvas>
                 </div>
@@ -435,10 +462,10 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>Nombre</th>
+                                <th>Plataforma</th>
                                 <th>Precio</th>
-                                <th>Fecha de Inicio</th>
-                                <th>Fecha de Fin</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
                                 <th>Estado</th>
                                 <th>Autorrenovación</th>
                             </tr>
@@ -446,18 +473,30 @@
                             <tbody>
                             <tr th:each="suscripcion : ${suscripciones}">
                                 <td th:text="${suscripcion.plataformaNombre}">Nombre de la Suscripción</td>
-                                <td th:text="${suscripcion.precio}">Precio</td>
+                                <td class="price-cell" th:text="${'€' + suscripcion.precio}">Precio</td>
                                 <td th:text="${suscripcion.fechaInicio}">Fecha de Inicio</td>
                                 <td th:text="${suscripcion.fechaFin}">Fecha de Fin</td>
                                 <td>
                                     <span class="badge-status badge-active">Activa</span>
                                 </td>
                                 <td>
-                                    <span th:if="${suscripcion.autorenovacion}" class="badge-status badge-active">Sí</span>
-                                    <span th:if="${!suscripcion.autorenovacion}" class="badge-status badge-expired">No</span>
+
+                                    <button th:if="${suscripcion.autoRenovacion}" th:data-id="${suscripcion.id}"
+                                            th:onclick="toggleAutoRenew(this)"
+                                            class="auto-renew-btn badge-active">
+                                        <i class="fas fa-sync-alt me-1"></i>Sí
+                                    </button>
+
+                                    <button th:unless="${suscripcion.autoRenovacion}"
+                                            th:onclick="toggleAutoRenew(this)"
+                                            th:data-id="${suscripcion.id}"
+                                            class="auto-renew-btn badge-expired">
+                                        <i class="fas fa-times me-1"></i>No
+                                    </button>
+
                                 </td>
                             </tr>
-                            <tr th:if="${suscripciones.empty}">
+                            <tr th:if="${suscripciones == null || suscripciones.empty}">
                                 <td colspan="6" class="text-center text-muted py-4">
                                     <i class="fas fa-inbox fa-2x mb-2"></i>
                                     <p>No tienes suscripciones activas</p>
@@ -474,8 +513,11 @@
 
             <!-- Plataformas -->
             <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-tv me-2"></i>Mis Plataformas
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-tv me-2"></i>Mis Plataformas</span>
+                    <a th:href="@{/plataformas/nuevo}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i>Nueva Plataforma
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -483,6 +525,7 @@
                             <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Categoría</th>
                                 <th>Acciones</th>
                             </tr>
                             </thead>
@@ -490,10 +533,15 @@
                             <tr th:each="plataforma : ${plataformas}">
                                 <td th:text="${plataforma.nombre}">Nombre de la Plataforma</td>
                                 <td>
-                                    <a th:href="@{|/plataformas/${plataforma.id}|}" class="action-link" title="Ver detalles">
+                                    <span class="badge badge-status badge-active" th:text="${plataforma.categoria}">Categoría</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{|/plataformas/${plataforma.id}|}" class="action-link"
+                                       title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a th:href="@{|/plataformas/editar/${plataforma.id}|}" class="action-link" title="Editar">
+                                    <a th:href="@{|/plataformas/editar/${plataforma.id}|}" class="action-link"
+                                       title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a th:href="@{|/plataformas/eliminar/${plataforma.id}|}"
@@ -504,8 +552,8 @@
                                     </a>
                                 </td>
                             </tr>
-                            <tr th:if="${plataformas.empty}">
-                                <td colspan="2" class="text-center text-muted py-4">
+                            <tr th:if="${plataformas == null || plataformas.empty}">
+                                <td colspan="3" class="text-center text-muted py-4">
                                     <i class="fas fa-tv fa-2x mb-2"></i>
                                     <p>No tienes plataformas registradas</p>
                                     <a th:href="@{/plataformas/nuevo}" class="btn btn-primary btn-sm">
@@ -532,43 +580,73 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // Inicializar tooltips
     document.addEventListener('DOMContentLoaded', function () {
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     });
-</script>
 
-<script>
+    // Función para cambiar la autorrenovación
+    function toggleAutoRenew(button) {
+        const isCurrentlyActive = button.classList.contains('badge-active');
+        const action = isCurrentlyActive ? 'desactivar' : 'activar'
+        let suscripcionId = button.getAttribute('data-id');
+
+        if (confirm(`¿Estás seguro de que quieres ${action} la autorrenovación?`)) {
+            // Aquí iría la llamada AJAX o redirección
+            window.location.href = `/suscripciones/autorrenovacion/` + suscripcionId;
+        }
+    }
+
     // Gráfico de estadísticas
-    document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('statsChart').getContext('2d');
-        const statsChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Entretenimiento', 'Productividad', 'Educación', 'Otros'],
-                datasets: [{
-                    data: [45, 25, 20, 10],
-                    backgroundColor: [
-                        '#6b7fd7',
-                        '#8a9de8',
-                        '#a9b9f0',
-                        '#c8d4f8'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
+    document.addEventListener('DOMContentLoaded', async function () {
+        const ctx = document.getElementById('statsChart');
+        let datosApi;
+
+        try {
+            const response = await fetch('http://localhost:9000/usuarios/estadisticas/rapidas');
+            if (!response.ok) throw new Error('Error en la solicitud: ' + response.status);
+            datosApi = await response.json();
+            console.log('Estadísticas rápidas:', datosApi);
+        } catch (error) {
+            console.error('Hubo un problema con la petición:', error);
+            return;
+        }
+
+        if (ctx && datosApi) {
+            // Obtener etiquetas y valores dinámicamente
+            const labels = Object.keys(datosApi);
+            const data = Object.values(datosApi);
+
+            // Colores base (puedes agregar más si hay más categorías)
+            const backgroundColors = [
+                '#6b7fd7', '#8a9de8', '#a9b9f0', '#c8d4f8', '#f4a261', '#e76f51'
+            ];
+
+            const statsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors.slice(0, labels.length),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     });
+
 </script>
 </body>
 </html>

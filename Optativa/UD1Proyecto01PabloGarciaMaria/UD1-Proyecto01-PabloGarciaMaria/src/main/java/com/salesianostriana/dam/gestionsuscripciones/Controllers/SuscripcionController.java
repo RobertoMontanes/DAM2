@@ -18,14 +18,17 @@ public class SuscripcionController {
 
     @GetMapping("/nuevo")
     public String nuevo(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        System.out.println("GET PETO");
         return service.nuevo(model, session, redirectAttributes, null);
     }
 
     @PostMapping()
     public String crear(Model model, HttpSession session, RedirectAttributes redirectAttributes, @ModelAttribute Nuevo_SuscripcionDTO suscripcionDTO) {
-        System.out.println("PostMapping");
         return service.crear(model, session, redirectAttributes, suscripcionDTO);
+    }
+
+    @GetMapping("/autorrenovacion/{id}")
+    public String cambiarRenovacionAutomatica(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        return service.cambiarRenovacionAutomatica(id, session, redirectAttributes);
     }
 
 }

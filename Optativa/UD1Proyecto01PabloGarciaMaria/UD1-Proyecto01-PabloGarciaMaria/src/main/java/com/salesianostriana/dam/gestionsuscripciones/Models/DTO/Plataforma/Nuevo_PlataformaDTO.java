@@ -22,7 +22,7 @@ public class Nuevo_PlataformaDTO {
     private NuevoPlan_PlataformaDTO plan;
     private String categoria;
 
-    private LocalDate fecha_suscripcion = null;
+    private String fecha_suscripcion = null;
 
     public Plataforma fromDTO() {
         return Plataforma.builder()

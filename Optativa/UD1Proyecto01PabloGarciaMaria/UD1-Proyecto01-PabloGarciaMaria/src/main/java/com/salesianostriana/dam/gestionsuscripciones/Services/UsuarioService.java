@@ -1,9 +1,13 @@
 package com.salesianostriana.dam.gestionsuscripciones.Services;
 
+import com.salesianostriana.dam.gestionsuscripciones.Extras.ExtraMethods;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Extras.ListarPlataformas_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Extras.ListarSuscripcion_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Formulario_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Categorias;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Suscripcion;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
@@ -11,14 +15,16 @@ import com.salesianostriana.dam.gestionsuscripciones.Repositories.UsuarioReposit
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioRepository> {
@@ -128,5 +134,35 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         model.addAttribute("proximasAVencer", u.suscripcionesProximasAVencer().size());
 
         return "usuario/dashboard";
+    }
+
+    public ResponseEntity<Map<String,Integer>> verEstadisticasRapidas(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        ValidacionResultado vr = ExtraMethods.comprobarSesion(httpSession, this);
+        Map<String, Integer> conteo = new HashMap<>();
+        Long id = (Long) httpSession.getAttribute("id");
+        List<Plataforma> plataformas;
+        Usuario u;
+
+        if (!vr.isExito()) {
+            redirectAttributes.addFlashAttribute("error", vr.getError());
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        u = (Usuario) vr.getObjeto();
+
+        suscripcionService.comprobarVencimientos(u);
+
+        plataformas = u.getPlataformas();
+        
+        for (Plataforma p : plataformas) {
+            if (conteo.containsKey(p.getCategoria().name())) {
+                conteo.put(p.getCategoria().name(), conteo.get(p.getCategoria().name()) + 1);
+            } else {
+                conteo.put(p.getCategoria().name(), 1);
+            }
+        }
+
+        return ResponseEntity.ok(conteo);
+
     }
 }

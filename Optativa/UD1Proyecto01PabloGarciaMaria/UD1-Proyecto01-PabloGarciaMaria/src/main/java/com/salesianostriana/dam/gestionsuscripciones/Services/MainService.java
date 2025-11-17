@@ -1,6 +1,8 @@
 package com.salesianostriana.dam.gestionsuscripciones.Services;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.LogIn_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import java.util.List;
 public class MainService {
 
     private final UsuarioService usuarioService;
+    private final PlataformaService plataformaService;
+    private final PlanService planService;
 
     public String logOut(HttpSession session, RedirectAttributes redirectAttributes) {
         if (session.getId() != null && session.getAttribute("id") != null) {
@@ -30,7 +34,6 @@ public class MainService {
     }
 
     public String logIn(Model model, LogIn_UsuarioDTO logIn_usuarioDTO, HttpSession session) {
-
         if (session.getId() != null && session.getAttribute("id") != null) {
             return "redirect:/usuarios";
         }
@@ -40,7 +43,6 @@ public class MainService {
         }
 
         model.addAttribute("usuario", logIn_usuarioDTO);
-
 
         return "main/login";
     }
@@ -76,4 +78,7 @@ public class MainService {
 
     }
 
+    public String redirectToDashboard(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        return usuarioService.verDetalle(model, redirectAttributes, session);
+    }
 }

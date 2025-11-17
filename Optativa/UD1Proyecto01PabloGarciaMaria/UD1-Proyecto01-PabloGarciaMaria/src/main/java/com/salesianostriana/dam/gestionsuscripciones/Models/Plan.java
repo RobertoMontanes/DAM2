@@ -24,7 +24,7 @@ public class Plan {
     @ManyToOne
     private Plataforma plataforma;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "plan")
     @ToString.Exclude
     private List<Suscripcion> suscripciones;
 

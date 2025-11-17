@@ -24,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +76,9 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         u = (Usuario) resultado.getObjeto();
 
+        if (plataformaDTO.getFecha_suscripcion() != null && !plataformaDTO.getFecha_suscripcion().isEmpty()) {
+            plataformaDTO.setFecha_suscripcion(LocalDate.parse(plataformaDTO.getFecha_suscripcion()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        }
 
         if (plataformaDTO == null) {
             redirectAttributes.addFlashAttribute("error", "Algo ha fallado durante el envío del formulario.");
@@ -92,6 +96,13 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
             return this.nuevo(model, session, redirectAttributes, plataformaDTO);
         }
 
+        System.out.println(plataformaDTO);
+
+        if (plataformaDTO.getCategoria() == null || plataformaDTO.getCategoria().isEmpty()) {
+            model.addAttribute("error", "Por favor, selecciona una categoría para la plataforma.");
+            return this.nuevo(model, session, redirectAttributes, plataformaDTO);
+        }
+
         p = plataformaDTO.fromDTO();
         p.setUsuario(u);
         save(p);
@@ -102,31 +113,15 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         p.getPlanes().add(p2);
 
-
-        fechaProcesada = plataformaDTO.getFecha_suscripcion();
-        if (fechaProcesada != null) {
-            System.out.println("Creando suscripciones desde: " + fechaProcesada);
-            do {
-                System.out.println("Fecha de trabajo actual: " + fechaProcesada);
-                Suscripcion s = Suscripcion.builder()
-                        .fechaInicio(fechaProcesada)
-                        .fechaFin(fechaProcesada.plus(p2.getFrecuencia()))
-                        .plan(p2)
-                        .usuario(u)
-                        .build();
-                s.setActiva(s.getFechaFin().isAfter(LocalDate.now()) || s.getFechaFin().isEqual(LocalDate.now()));
-                System.out.println("Fecha fin calculada: " + s.getFechaFin());
-                fechaProcesada = fechaProcesada.plus(p2.getFrecuencia());
-                u.addSuscripcion(s);
-                p2.addSuscripcion(s);
-                suscripcionService.save(s);
-                System.out.println("SUSCRIPCION CREADA: " + s);
-            } while (fechaProcesada.isBefore(LocalDate.now()));
-
-
+        if (plataformaDTO.getFecha_suscripcion() != null && !plataformaDTO.getFecha_suscripcion().isEmpty()) {
+            resultado = suscripcionService.crearSuscripcionRecursiva(LocalDate.parse(plataformaDTO.getFecha_suscripcion()), p2, u);
+            if (!resultado.isExito()) {
+                redirectAttributes.addFlashAttribute("error", resultado.getError());
+                return resultado.getRedirect();
+            }
         }
 
-        u.addPlataforma(p);
+
         usuarioService.save(u);
 
         return "redirect:/usuarios";
@@ -147,8 +142,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         } else {
             model.addAttribute("plataforma", plataformaDTO);
         }
-
-
+        model.addAttribute("categorias", Categorias.values());
         model.addAttribute("crear", false);
         return "plataforma/formulario";
 

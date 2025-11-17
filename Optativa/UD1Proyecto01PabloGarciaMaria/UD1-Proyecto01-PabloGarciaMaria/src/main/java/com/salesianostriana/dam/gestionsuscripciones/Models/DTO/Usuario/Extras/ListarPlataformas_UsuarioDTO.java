@@ -7,12 +7,14 @@ import lombok.*;
 public class ListarPlataformas_UsuarioDTO {
 
     private Long id;
+    private String categoria;
     private String nombre;
 
     public static ListarPlataformas_UsuarioDTO toDTO(Plataforma p) {
         return ListarPlataformas_UsuarioDTO.builder()
                 .id(p.getId())
                 .nombre(p.getNombre())
+                .categoria(p.getCategoria().name())
                 .build();
     }
 

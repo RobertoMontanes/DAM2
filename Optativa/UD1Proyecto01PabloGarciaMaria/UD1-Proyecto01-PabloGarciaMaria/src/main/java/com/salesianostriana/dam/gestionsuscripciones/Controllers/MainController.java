@@ -24,8 +24,8 @@ public class MainController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
-        return "redirect:/usuarios";
+    public String dashboard(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        return service.redirectToDashboard(model, session, redirectAttributes);
     }
 
     @GetMapping("/logout")
