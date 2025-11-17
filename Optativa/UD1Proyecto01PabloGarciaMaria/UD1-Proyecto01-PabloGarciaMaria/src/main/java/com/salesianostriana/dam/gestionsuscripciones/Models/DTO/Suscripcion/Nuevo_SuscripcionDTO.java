@@ -17,6 +17,7 @@ public class Nuevo_SuscripcionDTO {
 
     private String fechaInicio = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     private Long planId;
+    private Long plataformaId;
 
     private Boolean autoRenovacion;
 

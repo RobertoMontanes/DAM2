@@ -4,6 +4,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Extras.ExtraMethods;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Suscripcion.Nuevo_SuscripcionDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Suscripcion;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import com.salesianostriana.dam.gestionsuscripciones.Repositories.SuscripcionRepository;
@@ -27,6 +28,16 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
     private UsuarioService usuarioService;
     @Lazy @Autowired
     private PlanService planService;
+
+    @Builder
+    record ListarPlataforma_SuscripcionDTO(Long id, String nombre) {
+        public static ListarPlataforma_SuscripcionDTO toDTO(Plataforma p) {
+            return ListarPlataforma_SuscripcionDTO.builder()
+                    .id(p.getId())
+                    .nombre(p.getNombre())
+                    .build();
+        }
+    }
 
     public void comprobarVencimientos(Usuario usuario) {
         List<Suscripcion> suscripciones = usuario.getSuscripciones().stream().filter(Suscripcion::isActiva).toList();
@@ -72,24 +83,47 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
 
     public String nuevo(Model model, HttpSession session, RedirectAttributes redirectAttributes, Nuevo_SuscripcionDTO suscripcionDTO) {
         ValidacionResultado validacionResultado = ExtraMethods.comprobarSesion(session, usuarioService);
+        Usuario uDueno;
 
         if (!validacionResultado.isExito()) {
             redirectAttributes.addFlashAttribute("error", validacionResultado.getError());
             return validacionResultado.getRedirect();
         }
 
+        uDueno = (Usuario) validacionResultado.getObjeto();
         if (suscripcionDTO == null) {
             suscripcionDTO = new Nuevo_SuscripcionDTO();
         }
 
         model.addAttribute("crear", true);
         model.addAttribute("suscripcion", suscripcionDTO);
-        model.addAttribute("planes", planService.findAll().stream().filter(Plan::getActivo).map(ListarPlan_SuscripcionDTO::toDTO).toList());
+        model.addAttribute("plataformas", uDueno.getPlataformas().stream().map(ListarPlataforma_SuscripcionDTO::toDTO).toList());
+
+        System.out.println(suscripcionDTO);
+
+        if (suscripcionDTO.getPlataformaId() != null) {
+            Nuevo_SuscripcionDTO finalSuscripcionDTO = suscripcionDTO;
+            Plataforma p = uDueno.getPlataformas().stream().filter(plataforma -> plataforma.getId().equals(finalSuscripcionDTO.getPlataformaId())).findFirst().orElse(null);
+            if (p != null) {
+                model.addAttribute("planListo", true);
+                model.addAttribute("planes", p.getPlanes().stream().map(ListarPlan_SuscripcionDTO::toDTO).toList());
+            } else {
+                redirectAttributes.addFlashAttribute("error", "No tienes acceso a la plataforma seleccionada.");
+                return nuevo(model, session, redirectAttributes, suscripcionDTO);
+            }
+        }
 
         return "suscripcion/formulario";
     }
 
     public String crear(Model model, HttpSession session, RedirectAttributes redirectAttributes, Nuevo_SuscripcionDTO suscripcionDTO) {
-        return "despues lo hago";
+        System.out.println("Llega la post");
+        System.out.println("Los datos: " + suscripcionDTO);
+        if (suscripcionDTO.getPlanId() == null) {
+            return nuevo(model, session, redirectAttributes, suscripcionDTO);
+        }
+
+        return "Despues lo hago";
+
     }
 }

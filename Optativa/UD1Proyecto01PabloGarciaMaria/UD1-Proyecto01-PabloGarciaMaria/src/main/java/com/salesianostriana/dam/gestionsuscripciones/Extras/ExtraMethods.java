@@ -118,8 +118,5 @@ public class ExtraMethods {
         return resultado;
     }
 
-    public static ValidacionResultado comprobarSuscripcion() {
-        
-    }
 
 }

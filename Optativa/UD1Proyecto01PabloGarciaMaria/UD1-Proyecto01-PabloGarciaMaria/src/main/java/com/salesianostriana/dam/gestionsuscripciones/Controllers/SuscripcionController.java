@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -21,11 +18,13 @@ public class SuscripcionController {
 
     @GetMapping("/nuevo")
     public String nuevo(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        System.out.println("GET PETO");
         return service.nuevo(model, session, redirectAttributes, null);
     }
 
-    @PostMapping
-    public String crear(Model model, HttpSession session, RedirectAttributes redirectAttributes, @ModelAttribute("suscripcion")Nuevo_SuscripcionDTO suscripcionDTO) {
+    @PostMapping()
+    public String crear(Model model, HttpSession session, RedirectAttributes redirectAttributes, @ModelAttribute Nuevo_SuscripcionDTO suscripcionDTO) {
+        System.out.println("PostMapping");
         return service.crear(model, session, redirectAttributes, suscripcionDTO);
     }
 
