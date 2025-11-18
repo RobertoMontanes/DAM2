@@ -14,6 +14,7 @@ public class Detalles_PlataformaDTO {
     public Long id;
     public String nombre;
     public List<ListarPlanes_PlataformaDTO> planes;
+    private String categoria;
 
 
 

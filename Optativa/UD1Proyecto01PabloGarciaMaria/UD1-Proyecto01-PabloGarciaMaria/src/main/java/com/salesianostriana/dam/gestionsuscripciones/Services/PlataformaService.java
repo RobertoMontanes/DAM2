@@ -232,6 +232,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         return Detalles_PlataformaDTO.builder()
                 .id(p.getId())
                 .nombre(p.getNombre())
+                .categoria(p.getCategoria().name())
                 .planes(planes)
                 .build();
     }

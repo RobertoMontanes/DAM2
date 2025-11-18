@@ -1,4 +1,5 @@
-INSERT INTO usuarios (id, nombre, apellidos, email, password, fecha_creacion, estado) VALUES (1, 'Usuario', 'pruebas', 'pruebas@gmail.com','1234','2025-11-13',0);
+INSERT INTO usuarios (nombre, apellidos, email, password, fecha_creacion, estado) VALUES ('Usuario', 'pruebas', 'pruebas@gmail.com','1234','2025-11-13',0);
+INSERT INTO usuarios (nombre, apellidos, email, password, fecha_creacion, estado) VALUES ('Usuario', 'relleno', 'pruebas2@gmail.com','1234','2025-11-18',0);
 
 INSERT INTO plataformas (id, nombre, estado, categoria, usuario_id) VALUES (1, 'Netflix', true, '0', 1);
 INSERT INTO plataformas (id, nombre, estado, categoria, usuario_id) VALUES (2, 'HBO Max', true, '0', 1);

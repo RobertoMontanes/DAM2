@@ -287,16 +287,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/dashboard}">Dashboard</a>
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/suscripciones}">Suscripciones</a>
+                    <a class="nav-link" th:href="@{/dashboard#suscripciones}">Suscripciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/plataformas}">Plataformas</a>
+                    <a class="nav-link" th:href="@{/dashboard#plataformas}">Plataformas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Estadísticas</a>
+                    <a class="nav-link" href="@{/estadisticas}">Estadísticas</a>
                 </li>
                 <li class="nav-item ms-2">
                     <a class="btn btn-outline-primary" th:href="@{/logout}">
@@ -384,7 +384,7 @@
         <!-- Columna izquierda: Notificaciones y Estadísticas -->
         <div class="col-lg-4">
             <!-- Notificaciones -->
-            <div class="card">
+            <div class="card" id="notificaciones">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-bell me-2"></i>Avisos / Notificaciones</span>
                     <span class="badge bg-primary rounded-pill" th:text="${avisos != null ? avisos.size() : 0}">0</span>
@@ -404,7 +404,7 @@
             </div>
 
             <!-- Estadísticas -->
-            <div class="card">
+            <div class="card" id="estadisticas">
                 <div class="card-header">
                     <i class="fas fa-chart-bar me-2"></i>Estadísticas
                 </div>
@@ -450,7 +450,7 @@
         <!-- Columna derecha: Suscripciones y Plataformas -->
         <div class="col-lg-8">
             <!-- Suscripciones -->
-            <div class="card">
+            <div class="card" id="suscripciones">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-list me-2"></i>Mis Suscripciones</span>
                     <a th:href="@{/suscripciones/nuevo}" class="btn btn-primary btn-sm">
@@ -512,7 +512,7 @@
             </div>
 
             <!-- Plataformas -->
-            <div class="card">
+            <div class="card" id="plataformas">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-tv me-2"></i>Mis Plataformas</span>
                     <a th:href="@{/plataformas/nuevo}" class="btn btn-primary btn-sm">

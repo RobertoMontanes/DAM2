@@ -11,10 +11,10 @@ public class ListarPlanes_PlataformaDTO {
 
     private Long id;
     private String nombre;
-    private double precio;
-    private int frecuencia_dias;
-    private int frecuencia_meses;
-    private int frecuencia_anios;
+    private Double precio;
+    private Integer frecuencia_dias;
+    private Integer frecuencia_meses;
+    private Integer frecuencia_anios;
 
     public static ListarPlanes_PlataformaDTO toDTO(Plan plan) {
         return ListarPlanes_PlataformaDTO.builder()

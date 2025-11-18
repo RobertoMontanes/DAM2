@@ -1,32 +1,363 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${crear} ? 'Nuevo Plan' : 'Editar Plan'">Formulario Plan</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #6b7fd7;
+            --primary-dark: #5a6bc5;
+            --primary-light: #e8ebf9;
+            --border-color: #e0e0e0;
+            --success-color: #28a745;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 700px;
+        }
+
+        .form-header {
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fafbff;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .form-section h3 {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .frequency-inputs {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .frequency-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .frequency-group .form-control {
+            text-align: center;
+        }
+
+        .info-box {
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .info-icon {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .form-section {
+                padding: 15px;
+            }
+
+            .frequency-inputs {
+                flex-direction: column;
+            }
+
+            .frequency-group {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .input-group-text {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            <i class="fas fa-layer-group me-2"></i>SubManager
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard#suscripciones}">Suscripciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard#plataformas}">Plataformas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@{/estadisticas}">Estadísticas</a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-outline-primary" th:href="@{/logout}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<form th:method="${crear} ? POST : PUT" action="/planes" th:object="${plan}">
+<div class="container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title" th:text="${crear} ? 'Crear Nuevo Plan' : 'Editar Plan'">
+                Formulario Plan
+            </h1>
+            <p class="text-muted mb-0" th:text="${crear} ?
+                'Configura un nuevo plan para tu plataforma' :
+                'Modifica la información del plan'">
+                Complete la información requerida para el plan
+            </p>
+        </div>
 
-    <input type="hidden" th:if="${!crear}" th:field="*{id}" />
+        <!-- Mensajes de alerta -->
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+        </div>
 
-    <label for="planNombre">Nombre del Plan:</label>
-    <input type="text" id="planNombre" name="planNombre" th:field="*{nombre}" />
+        <div th:if="${message}" class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            <span th:text="${message}"></span>
+        </div>
 
-    <label for="planPrecio">Precio del Plan:</label>
-    <input type="number" id="planPrecio" name="planPrecio" th:field="*{precio}" step="0.01" required/>
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+        </div>
 
-    <h3> Frecuencia de actualizacion </h3>
-    <label for="dias">Días</label>
-    <input type="number" th:field="*{frecuencia_dias}" id="dias" min="0"/>
-    <label for="meses">Meses</label>
-    <input type="number" th:field="*{frecuencia_meses}" id="meses" min="0"/>
-    <label for="anios">Años</label>
-    <input type="number" th:field="*{frecuencia_anios}" id="anios" min="0"/>
+        <form th:method="${crear} ? 'POST' : 'PUT'" th:action="@{/planes}" th:object="${plan}">
+            <input type="hidden" th:if="${!crear}" th:field="*{id}" />
 
-    <button type="submit">GUARDAR</button>
+            <!-- Información Básica del Plan -->
+            <div class="form-section">
+                <h3><i class="fas fa-info-circle me-2"></i>Información Básica</h3>
 
-</form>
+                <div class="mb-3">
+                    <label for="planNombre" class="form-label">Nombre del Plan</label>
+                    <input type="text" class="form-control" id="planNombre" name="planNombre"
+                           th:field="*{nombre}" placeholder="Ej: Plan Básico, Premium, Familiar">
+                    <div class="form-text">Asigna un nombre descriptivo para este plan</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="planPrecio" class="form-label required-field">Precio del Plan</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" id="planPrecio" name="planPrecio"
+                               th:field="*{precio}" step="0.01" min="0" placeholder="0.00" required>
+                        <span class="input-group-text">USD</span>
+                    </div>
+                    <div class="form-text">Ingresa el precio mensual o del período establecido</div>
+                </div>
+            </div>
+
+            <!-- Frecuencia de Actualización -->
+            <div class="form-section">
+                <h3><i class="fas fa-sync-alt me-2"></i>Frecuencia de Actualización</h3>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle info-icon"></i>
+                    <span>
+                        Establece cada cuánto tiempo se renueva esta suscripción.
+                        Al menos un campo debe tener un valor mayor a 0.
+                    </span>
+                </div>
+
+                <div class="frequency-inputs">
+                    <div class="frequency-group">
+                        <label for="dias" class="form-label">Días</label>
+                        <input type="number" class="form-control" th:field="*{frecuencia_dias}"
+                               id="dias" min="0" placeholder="0">
+                        <div class="form-text text-center">días</div>
+                    </div>
+
+                    <div class="frequency-group">
+                        <label for="meses" class="form-label">Meses</label>
+                        <input type="number" class="form-control" th:field="*{frecuencia_meses}"
+                               id="meses" min="0" placeholder="0">
+                        <div class="form-text text-center">meses</div>
+                    </div>
+
+                    <div class="frequency-group">
+                        <label for="anios" class="form-label">Años</label>
+                        <input type="number" class="form-control" th:field="*{frecuencia_anios}"
+                               id="anios" min="0" placeholder="0">
+                        <div class="form-text text-center">años</div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <div class="form-text">
+                        <strong>Ejemplos comunes:</strong><br>
+                        • <strong>Mensual:</strong> 0 días, 1 mes, 0 años<br>
+                        • <strong>Trimestral:</strong> 0 días, 3 meses, 0 años<br>
+                        • <strong>Anual:</strong> 0 días, 0 meses, 1 año<br>
+                        • <strong>Semanal:</strong> 7 días, 0 meses, 0 años
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen del Plan -->
+            <div class="info-box" id="planSummary" style="display: none;">
+                <i class="fas fa-clipboard-check info-icon"></i>
+                <div id="summaryContent">
+                    <!-- El resumen se generará dinámicamente con JavaScript -->
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <a th:href="@{/plataformas/{id}(id=${plataformaId})}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i>Volver a la Plataforma
+                </a>
+
+                <button type="submit" class="btn btn-primary" id="submitButton">
+                    <i class="fas fa-save me-1"></i>
+                    <span th:text="${crear} ? 'Crear Plan' : 'Actualizar Plan'">Guardar</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

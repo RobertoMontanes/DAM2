@@ -250,19 +250,23 @@
                     <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Suscripciones</a>
+                    <a class="nav-link" th:href="@{/dashboard#suscripciones}">Suscripciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Plataformas</a>
+                    <a class="nav-link" th:href="@{/dashboard#plataformas}">Plataformas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Estadísticas</a>
+                    <a class="nav-link" href="@{/estadisticas}">Estadísticas</a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-outline-primary" th:href="@{/logout}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                    </a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-
 <div class="container">
     <div class="form-container">
         <div class="form-header">
