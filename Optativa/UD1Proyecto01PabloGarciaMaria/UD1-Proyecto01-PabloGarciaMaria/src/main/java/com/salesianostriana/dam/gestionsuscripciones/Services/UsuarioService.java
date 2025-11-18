@@ -14,6 +14,8 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import com.salesianostriana.dam.gestionsuscripciones.Repositories.UsuarioRepository;
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
 import jakarta.servlet.http.HttpSession;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -108,6 +110,13 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
     }
 
     public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        @Builder
+        record PaginationInfo(Long number, Long size, Long numberOfElements, int totalElements, boolean first, int totalPages, boolean last) {}
+        List<ListarPlataformas_UsuarioDTO> plataformas;
+        List<ListarSuscripcion_UsuarioDTO> suscripciones;
+
+        Long perPage = 5L, actualPage = 1L;
+
         Long id = (Long) httpSession.getAttribute("id");
 
         if (id == null) {
@@ -125,13 +134,19 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         suscripcionService.comprobarVencimientos(uOpt.get());
 
         u = uOpt.get();
-        model.addAttribute("plataformas", u.getPlataformas().stream().filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList());
-        model.addAttribute("suscripciones", u.getSuscripciones().stream().filter(Suscripcion::isActiva).map(ListarSuscripcion_UsuarioDTO::toDTO).toList());
+        plataformas = u.getPlataformas().stream().filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList();
+        suscripciones =  u.getSuscripciones().stream().filter(Suscripcion::isActiva).map(ListarSuscripcion_UsuarioDTO::toDTO).toList();
+        model.addAttribute("plataformas", plataformas.stream().skip(actualPage*perPage).limit(perPage).toList());
+        model.addAttribute("suscripciones", suscripciones.stream().skip(actualPage*perPage).limit(perPage).toList());
         model.addAttribute("avisos", new ArrayList<>());
 
         model.addAttribute("gastoMensual", u.calcularGastoMensual());
         model.addAttribute("gastoAnual", u.calcularGastoAnual());
         model.addAttribute("proximasAVencer", u.suscripcionesProximasAVencer().size());
+        int finalPagePlat = Math.round(plataformas.size() / perPage);
+        int finalPageSus = Math.round(suscripciones.size() / perPage);
+        model.addAttribute("suscripcionPage", new PaginationInfo(actualPage,perPage,0L,suscripciones.size(),actualPage == 1, finalPageSus, actualPage == finalPageSus)) ;
+        model.addAttribute("plataformaPage", new PaginationInfo(actualPage,perPage,0L,plataformas.size(),actualPage==1, finalPagePlat, actualPage == finalPagePlat));
 
         return "usuario/dashboard";
     }

@@ -1,0 +1,173 @@
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-film me-2"></i>Películas Populares
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Películas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Series</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">Descubre las Películas Más Populares</h1>
+            <p class="lead">Explora nuestro catálogo de películas más taquilleras y mejor valoradas</p>
+            <div class="mt-4">
+                <button class="btn btn-lg btn-primary me-2">
+                    <i class="fas fa-play me-1"></i> Ver Trailers
+                </button>
+                <button class="btn btn-lg btn-outline-light">
+                    <i class="fas fa-info-circle me-1"></i> Más Información
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="genreFilter" class="form-label">Género</label>
+                    <select class="form-select" id="genreFilter">
+                        <option selected>Todos los géneros</option>
+                        <option>Acción</option>
+                        <option>Aventura</option>
+                        <option>Comedia</option>
+                        <option>Drama</option>
+                        <option>Ciencia Ficción</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="yearFilter" class="form-label">Año</label>
+                    <select class="form-select" id="yearFilter">
+                        <option selected>Todos los años</option>
+                        <option>2023</option>
+                        <option>2022</option>
+                        <option>2021</option>
+                        <option>2020</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="sortFilter" class="form-label">Ordenar por</label>
+                    <select class="form-select" id="sortFilter">
+                        <option selected>Popularidad</option>
+                        <option>Calificación</option>
+                        <option>Fecha de lanzamiento</option>
+                        <option>Alfabéticamente</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movies Grid -->
+        <div id="moviesGrid" class="row g-4">
+            @for (movie of movies; track $index) {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="card movie-card h-100">
+                        <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" class="card-img-top movie-poster" [alt]="movie.title">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title movie-title">{{movie.title}}</h5>
+                                @if (movie.adult) {
+                                    <span class="adult-badge">+18</span>
+                                }
+                            </div>
+                            <p class="card-text movie-overview">{{movie.overview}}</p>
+                            <div class="movie-meta mb-3">
+                                <div><strong>Fecha de estreno:</strong> {{movie.release_date}}</div>
+                                <div><strong>Idioma original:</strong> {{movie.original_language}}</div>
+                            </div>
+                            <div class="d-flex flex-wrap mb-3">
+                                @for (genre of movie.genre_ids; track $index) {
+                                    <span class="badge badge-genre me-1 mb-1">{{genre}}</span>
+                                }
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i> {{movie.vote_average}}/10
+                                </div>
+                                <small class="text-muted">{{movie.vote_count}} votos</small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <button class="btn btn-primary w-100">
+                                <i class="fas fa-info-circle me-1"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Siguiente</a>
+                </li>
+            </ul>
+        </nav> -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-film me-2"></i>Películas Populares</h5>
+                    <p>Tu destino para descubrir las películas más populares y mejor valoradas del momento.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Enlaces Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Inicio</a></li>
+                        <li><a href="#" class="text-white">Películas</a></li>
+                        <li><a href="#" class="text-white">Series</a></li>
+                        <li><a href="#" class="text-white">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Síguenos</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="text-center">
+                <p>&copy; 2023 Películas Populares. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
