@@ -123,7 +123,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         usuarioService.save(u);
 
-        return "redirect:/usuarios";
+        return "redirect:/dashboard";
     }
 
     public String editar(Model model, HttpSession session, RedirectAttributes redirectAttributes, Formulario_PlataformaDTO plataformaDTO, Long id) {
@@ -160,7 +160,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         p.modify(formularioDTO.fromDTO());
         save(p);
-        return "redirect:/usuarios";
+        return "redirect:/dashboard";
     }
 
     public String eliminar(Long id, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -176,7 +176,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         if (!p.isEstado()) {
             redirectAttributes.addFlashAttribute("error", "No se puede eliminar una plataforma que ya está desactivada.");
-            return "redirect:/usuarios";
+            return "redirect:/dashboard";
         }
 
         p.setEstado(false);
@@ -190,7 +190,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         save(p);
 
         redirectAttributes.addFlashAttribute("success", "Plataforma eliminada correctamente.");
-        return "redirect:/usuarios";
+        return "redirect:/dashboard";
     }
 
     public String verDetalle(Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes, Long page, Long size, String query) {

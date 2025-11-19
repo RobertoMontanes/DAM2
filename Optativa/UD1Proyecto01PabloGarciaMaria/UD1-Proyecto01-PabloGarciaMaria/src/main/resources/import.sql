@@ -114,6 +114,4 @@ INSERT INTO suscripcion (usuario_id, plan_id, fecha_inicio, fecha_fin, activa, r
 INSERT INTO suscripcion (usuario_id, plan_id, fecha_inicio, fecha_fin, activa, renovacion_automatica) VALUES (1, 20, '2025-10-01', '2025-11-01', false, true);
 INSERT INTO suscripcion (usuario_id, plan_id, fecha_inicio, fecha_fin, activa, renovacion_automatica) VALUES (1, 20, '2025-11-01', '2025-12-01', true, true);
 
-
-ALTER TABLE usuarios ALTER COLUMN id RESTART WITH 2;
 ALTER TABLE plataformas ALTER COLUMN id RESTART WITH 14;

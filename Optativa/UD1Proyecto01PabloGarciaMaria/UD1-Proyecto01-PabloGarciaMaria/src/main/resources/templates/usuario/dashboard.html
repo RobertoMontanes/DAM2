@@ -909,6 +909,10 @@
         }
 
         if (ctx && datosApi) {
+            if (Object.keys(datosApi).length === 0) {
+                ctx.outerHTML = '<p class="text-center text-muted m-4">No hay datos suficientes para mostrar el gráfico.</p>';
+                return;
+            }
             const labels = Object.keys(datosApi);
             const data = Object.values(datosApi);
             const backgroundColors = ['#6b7fd7', '#8a9de8', '#a9b9f0', '#c8d4f8', '#f4a261', '#e76f51'];

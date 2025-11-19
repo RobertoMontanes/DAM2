@@ -1,7 +1,9 @@
 package com.salesianostriana.dam.gestionsuscripciones.Services;
 
+import com.salesianostriana.dam.gestionsuscripciones.Extras.ExtraMethods;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.LogIn_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Register_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
@@ -37,7 +39,7 @@ public class MainService {
 
     public String logIn(Model model, LogIn_UsuarioDTO logIn_usuarioDTO, HttpSession session) {
         if (session.getId() != null && session.getAttribute("id") != null) {
-            return "redirect:/usuarios";
+            return "redirect:/dashboard";
         }
 
         if (logIn_usuarioDTO == null) {
@@ -65,7 +67,7 @@ public class MainService {
                     session.setAttribute("id", u.getId());
                     u.setUltimaConexion(LocalDateTime.now());
                     usuarioService.save(u);
-                    return "redirect:/usuarios";
+                    return "redirect:/dashboard";
                 } else {
                     model.addAttribute("error", "El usuario no está activo. Contacte con el administrador.");
                     return logIn(model, logIn_usuarioDTO,session);
@@ -89,9 +91,37 @@ public class MainService {
             usuarioDTO = new Register_UsuarioDTO();
         }
 
-        // PROCESAR DATOS DE NUEVO USUARIO.
-
         model.addAttribute("usuario", usuarioDTO);
         return "main/register";
+    }
+
+    public String processRegister(Model model, RedirectAttributes redirectAttributes, Register_UsuarioDTO usuarioDTO, HttpSession session) {
+        Usuario uFinal;
+        if (session.getId() != null && session.getAttribute("id") != null) {
+            return "redirect:/dashboard";
+        }
+
+        for (String email : usuarioService.findAll().stream().map(Usuario::getEmail).toList()) {
+            if (email.equals(usuarioDTO.getEmail())) {
+                model.addAttribute("error", "El email ya está en uso.");
+                usuarioDTO.setPassword("");
+                usuarioDTO.setPassword_confirmation("");
+                model.addAttribute("errorField", "email");
+                return register(usuarioDTO, model);
+            }
+        }
+
+        if (!usuarioDTO.getPassword().equals(usuarioDTO.getPassword_confirmation())) {
+            model.addAttribute("error", "Las contraseñas no coinciden.");
+            usuarioDTO.setPassword("");
+            usuarioDTO.setPassword_confirmation("");
+            model.addAttribute("errorField", "password");
+            return register(usuarioDTO, model);
+        }
+
+        uFinal = usuarioService.save(usuarioDTO.fromDTO());
+        session.setAttribute("id", uFinal.getId());
+        redirectAttributes.addFlashAttribute("message", "¡Registro completado con éxito. Bienvenido " + uFinal.getNombre() + "!");
+        return "redirect:/dashboard";
     }
 }

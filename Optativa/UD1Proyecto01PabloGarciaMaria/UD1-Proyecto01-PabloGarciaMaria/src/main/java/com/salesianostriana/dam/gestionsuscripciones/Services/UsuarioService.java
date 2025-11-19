@@ -64,7 +64,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         save(u);
 
 
-        return "redirect:/usuarios";
+        return "redirect:/dashboard";
     }
 
     public String cambiarEstado(Long id, RedirectAttributes redirectAttributes) {
@@ -78,7 +78,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
             redirectAttributes.addFlashAttribute("error", "No se ha encontrado el usuario solicitado.");
         }
 
-        return "redirect:/usuarios";
+        return "redirect:/dashboard";
     }
 
     public String editar(Long id, Model model, RedirectAttributes redirectAttributes) {
@@ -89,7 +89,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
             return "admin/usuario/formulario";
         } else {
             redirectAttributes.addFlashAttribute("error", "No se ha encontrado el usuario solicitado.");
-            return "redirect:/usuarios";
+            return "redirect:/dashboard";
         }
     }
 
@@ -98,7 +98,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         Usuario uOrg;
         if (uOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Usuario no encontrado");
-            return "redirect:/usuarios";
+            return "redirect:/dashboard";
         }
         uOrg = uOpt.get();
         if (usuarioDTO.getPassword() == null || usuarioDTO.getPassword().isEmpty()) {
@@ -106,7 +106,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         }
         save(uOrg.modify(usuarioDTO.fromDTO()));
         redirectAttributes.addFlashAttribute("success", "Usuario editado correctamente");
-        return "redirect:/usuarios";
+        return "redirect:/dashboard";
     }
 
     public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession, Long page, Long size, String query) {

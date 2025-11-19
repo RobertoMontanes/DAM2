@@ -103,14 +103,14 @@ public class ExtraMethods {
         if (u.findPlataformaById(idPlataforma)) {
             System.out.println(u.getPlataformas());
             resultado.setError("No puedes trabajar con una plataforma que no te pertenece.");
-            resultado.setRedirect("redirect:/usuarios");
+            resultado.setRedirect("redirect:/dashboard");
             return resultado;
         }
 
         Optional<Plataforma> pOpt = plataformaService.findById(idPlataforma);
         if (pOpt.isEmpty()) {
             resultado.setError("No se ha encontrado la plataforma solicitada.");
-            resultado.setRedirect("redirect:/usuarios");
+            resultado.setRedirect("redirect:/dashboard");
             return resultado;
         }
 

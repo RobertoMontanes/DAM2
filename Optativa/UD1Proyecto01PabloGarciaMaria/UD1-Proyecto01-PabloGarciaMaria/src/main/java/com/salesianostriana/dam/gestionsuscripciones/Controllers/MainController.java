@@ -1,15 +1,13 @@
 package com.salesianostriana.dam.gestionsuscripciones.Controllers;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.LogIn_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Register_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Services.MainService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -54,5 +52,10 @@ public class MainController {
     @GetMapping ("/register")
     public String register(Model model) {
         return service.register(null, model);
+    }
+
+    @PostMapping("/register")
+    public String processRegister(Model model, RedirectAttributes redirectAttributes, @ModelAttribute Register_UsuarioDTO usuario, HttpSession session) {
+        return service.processRegister(model,redirectAttributes,usuario, session);
     }
 }
