@@ -1,0 +1,6 @@
+<select name="genero" id="genero">
+    <option hidden selected>Select an option</option>
+    @for (genre of genreList; track $index) {
+    <option [value]="genre.id">{{genre.name}}</option>
+    }
+</select>
