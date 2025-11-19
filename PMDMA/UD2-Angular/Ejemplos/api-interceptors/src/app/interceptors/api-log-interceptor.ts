@@ -4,8 +4,6 @@ const apiToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MTBjZjY3ZDA3YTBhMDQ2YTMyNDgwZ
 
 export const apiLogInterceptor: HttpInterceptorFn = (req, next) => {
 
-    console.log("asd");
-
   let reqHeader = req.clone({
     headers: req.headers.set('Authorization', `Bearer ${apiToken}`)
   })

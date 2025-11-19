@@ -1,0 +1,118 @@
+.movie-filter-container {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh;
+}
+
+.genre-button {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.genre-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.genre-button.active {
+    background-color: #007bff;
+    border-color: #0056b3;
+    color: white;
+}
+
+.movie-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
+}
+
+.movie-poster {
+    height: 300px;
+    object-fit: cover;
+}
+
+.no-poster {
+    height: 300px;
+    object-fit: cover;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.text-white {
+    color: #ffffff !important;
+}
+
+.alert-info {
+    background-color: rgba(23, 162, 184, 0.2);
+    border-color: rgba(23, 162, 184, 0.5);
+    color: #e8f4f8;
+}
+
+.pagination-section {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.15);
+    border-color: rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .movies-grid {
+        gap: 1rem;
+    }
+    
+    .movie-poster, .no-poster {
+        height: 250px;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .genre-list {
+        justify-content: center;
+    }
+    
+    .movie-poster, .no-poster {
+        height: 200px;
+    }
+    
+    .pagination-section {
+        margin-top: 3rem !important;
+    }

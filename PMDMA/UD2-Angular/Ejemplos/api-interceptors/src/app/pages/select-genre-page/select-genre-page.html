@@ -1,11 +1,11 @@
-<div class="movie-filter-container">
+<div class="movie-filter-container container-fluid py-4">
     <!-- Filtro de géneros -->
-    <div class="genre-filter">
-        <h2>Filtrar por Género</h2>
-        <div class="genre-list">
+    <div class="genre-filter mb-4">
+        <h2 class="h4 mb-3 text-white">Filtrar por Género</h2>
+        <div class="genre-list d-flex flex-wrap gap-2">
             @for (genre of genreList; track $index) {
-            <button class="genre-button"
-                (click)="selectGenre(genre)">
+            <button class="genre-button btn btn-outline-light btn-sm"
+                    (click)="selectGenre(genre)">
                 {{ genre.name }}
             </button>
             }
@@ -13,40 +13,70 @@
     </div>
 
     <!-- Mensaje cuando no hay género seleccionado -->
-    <div class="no-selection-message">
-        <p>Selecciona un género para filtrar las películas</p>
+    <div class="no-selection-message alert alert-info text-center">
+        <p class="mb-0">Selecciona un género para filtrar las películas</p>
     </div>
     
 
     <!-- Lista de películas del género seleccionado -->
     <div class="movie-list-section">
-        <h2 id="titleGenre">Películas Sin Genero seleccionado</h2>        
-        <div class="movies-grid">
+        <h2 id="titleGenre" class="h4 mb-3 text-white">Películas Sin Género seleccionado</h2>        
+        <div class="movies-grid row g-3">
             @for (movie of movieList; track $index) {
-            <div class="movie-card">
-                <!-- Poster de la película -->
-                @if (movie.poster_path) {
-                <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title"
-                    class="movie-poster">
-                } @else {
-                <div class="no-poster">Sin imagen</div>
-                }
-
-                <!-- Información de la película -->
-                <div class="movie-info">
-                    <h3 class="movie-title">{{ movie.title }}</h3>
-                    <p class="movie-overview">{{ movie.overview }}</p>
-                    <div class="movie-details">
-                        <span class="release-date">{{ movie.release_date}}</span>
-                        <span class="rating">⭐ {{ movie.vote_average }}/10</span>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="movie-card card h-100 shadow-sm">
+                    <!-- Poster de la película -->
+                    <div class="movie-poster-container">
+                        @if (movie.poster_path) {
+                        <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" 
+                            [alt]="movie.title"
+                            class="movie-poster card-img-top">
+                        } @else {
+                        <div class="no-poster card-img-top d-flex align-items-center justify-content-center bg-light text-muted">
+                            <span>Sin imagen</span>
+                        </div>
+                        }
                     </div>
-                    @if (movie.adult) {
-                    <span class="adult-badge">+18</span>
-                    }
+
+                    <!-- Información de la película -->
+                    <div class="movie-info card-body d-flex flex-column">
+                        <h3 class="movie-title card-title h6">{{ movie.title }}</h3>
+                        <p class="movie-overview card-text flex-grow-1 small text-muted line-clamp-3">
+                            {{ movie.overview }}
+                        </p>
+                        <div class="movie-details d-flex justify-content-between align-items-center mt-auto">
+                            <span class="release-date badge bg-secondary">{{ movie.release_date}}</span>
+                            <span class="rating small">
+                                <i class="bi bi-star-fill text-warning"></i> 
+                                {{ movie.vote_average }}/10
+                            </span>
+                        </div>
+                        @if (movie.adult) {
+                        <div class="mt-2">
+                            <span class="adult-badge badge bg-danger">+18</span>
+                        </div>
+                        }
+                    </div>
                 </div>
             </div>
             }
         </div>
+
+        <!-- Paginación -->
+        <div class="pagination-section mt-5 pt-4 border-top">
+            <div class="d-flex justify-content-center align-items-center">
+                @if (!end) {
+                <button class="btn btn-primary btn-lg px-4 py-2" (click)="loadNextPage()">
+                    <i class="bi bi-arrow-down-circle me-2"></i>
+                    Cargar Más Películas
+                </button>
+                } @else {
+                <div class="alert alert-warning text-center mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    NO HAY MÁS PELÍCULAS QUE CARGAR
+                </div>
+                }
+            </div>
+        </div>
     </div>
-    
 </div>

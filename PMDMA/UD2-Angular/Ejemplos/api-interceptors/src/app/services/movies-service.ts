@@ -12,12 +12,12 @@ export class MoviesService {
 
   baseURL = "https://api.themoviedb.org/3";
 
-    getMoviesByGenre(id: String) {
-      return this.http.get<MovieListResponse>(`${this.baseURL}/discover/movie?with_genres=${id}`)
+    getMoviesByGenre(page: number,id: String) {
+      return this.http.get<MovieListResponse>(`${this.baseURL}/discover/movie?page=${page}&&with_genres=${id}`)
     }
     
-    getMovies() {
-      return this.http.get<MovieListResponse>(`${this.baseURL}/discover/movie`)
+    getMovies(page: number,) {
+      return this.http.get<MovieListResponse>(`${this.baseURL}/discover/movie?page=${page}`)
     }
   
 }
