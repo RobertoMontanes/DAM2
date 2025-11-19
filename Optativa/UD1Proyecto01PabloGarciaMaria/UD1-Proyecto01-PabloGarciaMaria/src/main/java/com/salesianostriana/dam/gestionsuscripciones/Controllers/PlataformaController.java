@@ -43,8 +43,11 @@ public class PlataformaController {
     }
 
     @GetMapping("/{id}")
-    public String verDetalle(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        return service.verDetalle(id,model,session,redirectAttributes);
+    public String verDetalle(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes,
+                             @RequestParam(required = false, defaultValue = "0") Long page,
+                             @RequestParam(required = false, defaultValue = "5") Long size,
+                             @RequestParam(required = false, defaultValue = "") String q) {
+        return service.verDetalle(id,model,session,redirectAttributes,page,size,q);
     }
 
     @GetMapping("/{id}/planes/nuevo")

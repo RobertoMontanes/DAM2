@@ -331,6 +331,13 @@
             border-radius: 6px;
             padding: 6px 10px;
             background-color: white;
+            color: #333;
+        }
+
+        .items-per-page label {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
         }
 
         .table-controls {
@@ -338,24 +345,41 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            gap: 15px;
         }
 
         .search-box {
             position: relative;
-            max-width: 300px;
+            flex: 1;
+            max-width: 400px;
         }
 
         .search-box input {
-            padding-left: 35px;
+            padding-left: 40px;
             border-radius: 20px;
+            border: 1px solid var(--border-color);
         }
 
         .search-box i {
             position: absolute;
-            left: 12px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #6c757d;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .search-form .form-control {
+            flex: 1;
+        }
+
+        .search-form .btn {
+            white-space: nowrap;
         }
 
         @media (max-width: 768px) {
@@ -373,6 +397,50 @@
             .search-box {
                 max-width: 100%;
             }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .items-per-page {
+                justify-content: center;
+            }
+        }
+
+        /* Mejoras visuales para las tablas */
+        .table-hover tbody tr:hover {
+            background-color: rgba(107, 127, 215, 0.04);
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        .card-body > .table-responsive {
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Estados vacíos mejorados */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        .empty-state h5 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #777;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -436,7 +504,7 @@
             </div>
             <div class="col-md-4 text-end">
                 <div class="stat-card bg-transparent text-white p-0">
-                    <div class="stat-number color-white" th:text="${totalSuscripciones != null ? totalSuscripciones : 0}">0</div>
+                    <div class="stat-number color-white" th:text="${suscripcionPage.totalElements != null ? suscripcionPage.totalElements : 0}">0</div>
                     <div class="stat-label color-white">Suscripciones Totales</div>
                 </div>
             </div>
@@ -492,7 +560,7 @@
                     <span class="badge bg-primary rounded-pill" th:text="${avisos != null ? avisos.size() : 0}">0</span>
                 </div>
                 <div class="card-body">
-                    <div th:if="${avisos == null || avisos.empty}" class="text-center text-muted py-3">
+                    <div th:if="${avisos == null || avisos.empty}" class="text-center text-muted py-4">
                         <i class="fas fa-check-circle fa-2x mb-2"></i>
                         <p>No tienes notificaciones pendientes</p>
                     </div>
@@ -513,7 +581,7 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6 mb-3">
-                            <div class="stat-number" th:text="${totalPlataformas != null ? totalPlataformas : 0}">0</div>
+                            <div class="stat-number" th:text="${plataformaPage.totalElements != null ? plataformaPage.totalElements : 0}">0</div>
                             <div class="stat-label">Plataformas</div>
                         </div>
 
@@ -561,19 +629,13 @@
                 </div>
                 <div class="card-body">
                     <!-- Controles de tabla -->
-                    <div class="table-controls">
+                    <div class="table-controls p-3 pb-0">
                         <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" class="form-control" id="searchSuscripciones" placeholder="Buscar suscripciones...">
-                        </div>
-                        <div class="items-per-page">
-                            <span>Mostrar:</span>
-                            <select id="itemsPerPageSuscripciones">
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
+                            <form th:action="@{/dashboard#suscripciones}" method="get" class="search-form">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" name="q" placeholder="Buscar suscripciones..." th:value="${param.q}">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                            </form>
                         </div>
                     </div>
 
@@ -590,11 +652,11 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="suscripcion, stat : ${suscripciones}">
+                            <tr th:each="suscripcion : ${suscripciones}">
                                 <td th:text="${suscripcion.plataformaNombre}">Nombre de la Suscripción</td>
                                 <td class="price-cell" th:text="${'€' + suscripcion.precio}">Precio</td>
-                                <td th:text="${#temporals.format(suscripcion.fechaInicio, 'dd/MM/yyyy')}">Fecha de Inicio</td>
-                                <td th:text="${#temporals.format(suscripcion.fechaFin, 'dd/MM/yyyy')}">Fecha de Fin</td>
+                                <td th:text="${suscripcion.fechaInicio}">Fecha de Inicio</td>
+                                <td th:text="${suscripcion.fechaFin}">Fecha de Fin</td>
                                 <td>
                                     <span class="badge-status badge-active">Activa</span>
                                 </td>
@@ -613,11 +675,12 @@
                                 </td>
                             </tr>
                             <tr th:if="${suscripciones == null || suscripciones.empty}">
-                                <td colspan="6" class="text-center text-muted py-4">
-                                    <i class="fas fa-inbox fa-2x mb-2"></i>
-                                    <p>No tienes suscripciones activas</p>
-                                    <a th:href="@{/suscripciones/nuevo}" class="btn btn-primary btn-sm">
-                                        Agregar tu primera suscripción
+                                <td colspan="6" class="empty-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <h5>No tienes suscripciones activas</h5>
+                                    <p class="text-muted">Comienza agregando tu primera suscripción</p>
+                                    <a th:href="@{/suscripciones/nuevo}" class="btn btn-primary">
+                                        <i class="fas fa-plus me-1"></i>Agregar Suscripción
                                     </a>
                                 </td>
                             </tr>
@@ -625,7 +688,7 @@
                         </table>
                     </div>
 
-                    <!-- Paginación de Suscripciones -->
+                    <!-- Paginación de Suscripciones - Actualizada para coincidir con plataformas -->
                     <div class="pagination-container" th:if="${suscripciones != null && !suscripciones.empty}">
                         <div class="pagination-info">
                             Mostrando <span th:text="${(suscripcionPage.number * suscripcionPage.size) + 1}">1</span> -
@@ -635,41 +698,44 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item" th:classappend="${suscripcionPage.first} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/dashboard(page=0, size=${suscripcionPage.size})}#suscripciones">
+                                    <a class="page-link" th:href="@{'/dashboard?page=0&size=' + ${suscripcionPage.size} + '#suscripciones'}">
                                         <i class="fas fa-angle-double-left"></i>
                                     </a>
                                 </li>
                                 <li class="page-item" th:classappend="${suscripcionPage.first} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/dashboard(page=${suscripcionPage.number-1}, size=${suscripcionPage.size})}#suscripciones">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${suscripcionPage.number-1} + '&size=' + ${suscripcionPage.size} + '#suscripciones'}">
                                         <i class="fas fa-angle-left"></i>
                                     </a>
                                 </li>
 
-                                <li th:each="page : ${#numbers.sequence(0, suscripcionPage.totalPages-1)}"
+                                <li th:each="page : ${#numbers.sequence(0, suscripcionPage.totalPages < 4 ? suscripcionPage.totalPages : 4)}"
                                     class="page-item" th:classappend="${page == suscripcionPage.number} ? 'active' : ''">
-                                    <a class="page-link" th:href="@{/dashboard(page=${page}, size=${suscripcionPage.size})}#suscripciones"
-                                       th:text="${page + 1}">1</a>
+                                    <a class="page-link"
+                                       th:href="@{'/dashboard?page=' + ${page} + '&size=' + ${suscripcionPage.size} + '#suscripciones'}"
+                                       th:text="${page + 1}">
+                                    </a>
                                 </li>
 
                                 <li class="page-item" th:classappend="${suscripcionPage.last} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/dashboard(page=${suscripcionPage.number+1}, size=${suscripcionPage.size})}#suscripciones">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${suscripcionPage.number+1} + '&size=' + ${suscripcionPage.size} + '#suscripciones'}">
                                         <i class="fas fa-angle-right"></i>
                                     </a>
                                 </li>
                                 <li class="page-item" th:classappend="${suscripcionPage.last} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/dashboard(page=${suscripcionPage.totalPages-1}, size=${suscripcionPage.size})}#suscripciones">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${suscripcionPage.totalPages-1} + '&size=' + ${suscripcionPage.size} + '#suscripciones'}">
                                         <i class="fas fa-angle-double-right"></i>
                                     </a>
                                 </li>
                             </ul>
                         </nav>
                         <div class="items-per-page">
-                            <span>Por página:</span>
-                            <select onchange="location = this.value;">
-                                <option th:each="size : ${[5, 10, 25, 50]}"
-                                        th:value="@{/dashboard(page=0, size=${size})}#suscripciones"
+                            <label for="porPageSuscripciones">Por página:</label>
+                            <select id="porPageSuscripciones" onchange="location = this.value;">
+                                <option th:each="size : ${ {5,10,25,50} }"
+                                        th:value="@{'/dashboard?page=0&size=' + ${size} + '#suscripciones'}"
                                         th:selected="${size == suscripcionPage.size}"
-                                        th:text="${size}">10</option>
+                                        th:text="${size}">
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -686,19 +752,13 @@
                 </div>
                 <div class="card-body">
                     <!-- Controles de tabla -->
-                    <div class="table-controls">
+                    <div class="table-controls p-3 pb-0">
                         <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" class="form-control" id="searchPlataformas" placeholder="Buscar plataformas...">
-                        </div>
-                        <div class="items-per-page">
-                            <span>Mostrar:</span>
-                            <select id="itemsPerPagePlataformas">
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
+                            <form th:action="@{/dashboard#plataformas}" method="get" class="search-form">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" name="q" placeholder="Buscar plataformas..." th:value="${param.q}">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                            </form>
                         </div>
                     </div>
 
@@ -735,11 +795,12 @@
                                 </td>
                             </tr>
                             <tr th:if="${plataformas == null || plataformas.empty}">
-                                <td colspan="3" class="text-center text-muted py-4">
-                                    <i class="fas fa-tv fa-2x mb-2"></i>
-                                    <p>No tienes plataformas registradas</p>
-                                    <a th:href="@{/plataformas/nuevo}" class="btn btn-primary btn-sm">
-                                        Agregar tu primera plataforma
+                                <td colspan="3" class="empty-state">
+                                    <i class="fas fa-tv"></i>
+                                    <h5>No tienes plataformas registradas</h5>
+                                    <p class="text-muted">Comienza agregando tu primera plataforma</p>
+                                    <a th:href="@{/plataformas/nuevo}" class="btn btn-primary">
+                                        <i class="fas fa-plus me-1"></i>Agregar Plataforma
                                     </a>
                                 </td>
                             </tr>
@@ -757,44 +818,45 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item" th:classappend="${plataformaPage.first} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/dashboard#plataformas?page=0&size=${plataformaPage.size}}">
+                                    <a class="page-link" th:href="@{'/dashboard?page=0&size=' + ${plataformaPage.size} + '#plataformas'}">
                                         <i class="fas fa-angle-double-left"></i>
                                     </a>
                                 </li>
-                                <li class="page-item" th:classappend="${plataformaPage.first} ? '' : 'disabled'">
-                                    <a class="page-link" th:href="@{/dashboard#plataformas?page=${plataformaPage.number-1}&&size=${plataformaPage.size}}">
+                                <li class="page-item" th:classappend="${plataformaPage.first} ? 'disabled' : ''">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.number-1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
                                         <i class="fas fa-angle-left"></i>
                                     </a>
                                 </li>
 
-                                <li th:each="page : ${#numbers.sequence(0, plataformaPage.totalPages-1)}"
+                                <li th:each="page : ${#numbers.sequence(0, plataformaPage.totalPages < 4 ? plataformaPage.totalPages : 4)}"
                                     class="page-item" th:classappend="${page == plataformaPage.number} ? 'active' : ''">
-                                    <a class="page-link" th:href="@{/dashboard#plataformas?page=${page}&size=${plataformaPage.size}}"
-                                       th:text="${page + 1}">1</a>
+                                    <a class="page-link"
+                                       th:href="@{'/dashboard?page=' + ${page} + '&size=' + ${plataformaPage.size} + '#plataformas'}"
+                                       th:text="${page + 1}">
+                                    </a>
                                 </li>
 
                                 <li class="page-item" th:classappend="${plataformaPage.last} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/dashboard#plataformas?page=${plataformaPage.number+1}&size=${plataformaPage.size}}">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.number+1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
                                         <i class="fas fa-angle-right"></i>
                                     </a>
                                 </li>
                                 <li class="page-item" th:classappend="${plataformaPage.last} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{/dashboard#plataformas?page=${plataformaPage.totalPages-1}&size=${plataformaPage.size}}">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.totalPages-1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
                                         <i class="fas fa-angle-double-right"></i>
                                     </a>
                                 </li>
                             </ul>
                         </nav>
                         <div class="items-per-page">
-                            <label for="porPage">Por página:</label>
-                            <select id="porPage" onchange="location = this.value;">
+                            <label for="porPagePlataformas">Por página:</label>
+                            <select id="porPagePlataformas" onchange="location = this.value;">
                                 <option th:each="size : ${ {5,10,25,50} }"
-                                        th:value="@{/dashboard#plataformas(page=0, size=${size})}"
+                                        th:value="@{'/dashboard?page=0&size=' + ${size} + '#plataformas'}"
                                         th:selected="${size == plataformaPage.size}"
                                         th:text="${size}">
                                 </option>
                             </select>
-
                         </div>
                     </div>
                 </div>
@@ -828,32 +890,9 @@
         let suscripcionId = button.getAttribute('data-id');
 
         if (confirm(`¿Estás seguro de que quieres ${action} la autorrenovación?`)) {
-            // Aquí iría la llamada AJAX o redirección
             window.location.href = `/suscripciones/autorrenovacion/` + suscripcionId;
         }
     }
-
-    // Búsqueda en tiempo real para suscripciones
-    document.getElementById('searchSuscripciones')?.addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('#tablaSuscripciones tbody tr');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-    });
-
-    // Búsqueda en tiempo real para plataformas
-    document.getElementById('searchPlataformas')?.addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('#tablaPlataformas tbody tr');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-    });
 
     // Gráfico de estadísticas
     document.addEventListener('DOMContentLoaded', async function () {
@@ -864,21 +903,15 @@
             const response = await fetch('http://localhost:9000/usuarios/estadisticas/rapidas');
             if (!response.ok) throw new Error('Error en la solicitud: ' + response.status);
             datosApi = await response.json();
-            console.log('Estadísticas rápidas:', datosApi);
         } catch (error) {
             console.error('Hubo un problema con la petición:', error);
             return;
         }
 
         if (ctx && datosApi) {
-            // Obtener etiquetas y valores dinámicamente
             const labels = Object.keys(datosApi);
             const data = Object.values(datosApi);
-
-            // Colores base (puedes agregar más si hay más categorías)
-            const backgroundColors = [
-                '#6b7fd7', '#8a9de8', '#a9b9f0', '#c8d4f8', '#f4a261', '#e76f51'
-            ];
+            const backgroundColors = ['#6b7fd7', '#8a9de8', '#a9b9f0', '#c8d4f8', '#f4a261', '#e76f51'];
 
             const statsChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -900,23 +933,6 @@
                 }
             });
         }
-    });
-
-    // Cambiar número de elementos por página
-    document.getElementById('itemsPerPageSuscripciones')?.addEventListener('change', function(e) {
-        const size = e.target.value;
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set('size', size);
-        currentUrl.searchParams.set('page', '0');
-        window.location.href = currentUrl.toString() + '#suscripciones';
-    });
-
-    document.getElementById('itemsPerPagePlataformas')?.addEventListener('change', function(e) {
-        const size = e.target.value;
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set('size', size);
-        currentUrl.searchParams.set('page', '0');
-        window.location.href = currentUrl.toString() + '#plataformas';
     });
 
 </script>

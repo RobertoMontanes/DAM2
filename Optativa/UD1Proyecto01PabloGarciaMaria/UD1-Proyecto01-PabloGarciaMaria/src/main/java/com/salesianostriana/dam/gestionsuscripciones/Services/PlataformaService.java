@@ -16,7 +16,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Repositories.PlataformaRepo
 import com.salesianostriana.dam.gestionsuscripciones.Repositories.SuscripcionRepository;
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlataformaService extends BaseServiceImpl<Plataforma, Long, PlataformaRepository> {
@@ -194,9 +193,14 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         return "redirect:/usuarios";
     }
 
-    public String verDetalle(Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String verDetalle(Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes, Long page, Long size, String query) {
+        @Builder
+        record PaginationInfo(Long number, Long size, int numberOfElements, int totalElements, boolean first, int totalPages, boolean last) {}
         ValidacionResultado resultado = comprobarSesion(session, id, Objetivo.Detalles);
         Plataforma p;
+        List<Plan> planesLimited;
+        long perPage, actualPage;
+        int finalPage;
 
         if (!resultado.isExito()) {
             redirectAttributes.addFlashAttribute("error", resultado.getError());
@@ -205,7 +209,30 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
 
         p = (Plataforma) resultado.getObjeto();
 
-        model.addAttribute("plataforma", toDTO(p));
+        if (size == null) {
+            perPage = 5L;
+        } else {
+            perPage = size;
+        }
+
+        if (page == null) {
+            actualPage = 0L;
+        } else {
+            actualPage = page;
+        }
+
+        finalPage = Math.round((float) p.getPlanes().size() / perPage);
+
+        planesLimited = p.getPlanes().stream().filter(plan -> {
+            if (query == null || query.isEmpty()) {
+                return true;
+            } else {
+                return plan.getNombre().toLowerCase().contains(query.toLowerCase());
+            }
+        }).skip(actualPage * perPage).limit(perPage).toList();
+
+        model.addAttribute("plataforma", Detalles_PlataformaDTO.toDTO(p, planesLimited));
+        model.addAttribute("planesPage", new PaginationInfo(actualPage, perPage, planesLimited.size(), p.getPlanes().size(), actualPage == 0,finalPage, actualPage >= finalPage));
         session.setAttribute("idPlataforma", p.getId());
 
         return "plataforma/detalles";
@@ -223,19 +250,6 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
     }
 
     // EXTRAS:
-
-    private Detalles_PlataformaDTO toDTO(Plataforma p) {
-        List<ListarPlanes_PlataformaDTO> planes = p.getPlanes().stream()
-                .map(ListarPlanes_PlataformaDTO::toDTO)
-                .toList();
-
-        return Detalles_PlataformaDTO.builder()
-                .id(p.getId())
-                .nombre(p.getNombre())
-                .categoria(p.getCategoria().name())
-                .planes(planes)
-                .build();
-    }
 
     private ValidacionResultado comprobarSesion(HttpSession session, Long idPlataforma, Objetivo objetivo) {
         ValidacionResultado resultado = ExtraMethods.comprobarSesion(session, usuarioService);

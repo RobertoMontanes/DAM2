@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.gestionsuscripciones.Services;
 
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.LogIn_UsuarioDTO;
+import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Register_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
@@ -78,7 +80,18 @@ public class MainService {
 
     }
 
-    public String redirectToDashboard(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        return usuarioService.verDetalle(model, redirectAttributes, session);
+    public String redirectToDashboard(Model model, HttpSession session, RedirectAttributes redirectAttributes,Long page, Long size, String query) {
+        return usuarioService.verDetalle(model, redirectAttributes, session, page, size, query);
+    }
+
+    public String register(Register_UsuarioDTO usuarioDTO, Model model) {
+        if (usuarioDTO == null) {
+            usuarioDTO = new Register_UsuarioDTO();
+        }
+
+        // PROCESAR DATOS DE NUEVO USUARIO.
+
+        model.addAttribute("usuario", usuarioDTO);
+        return "main/register";
     }
 }

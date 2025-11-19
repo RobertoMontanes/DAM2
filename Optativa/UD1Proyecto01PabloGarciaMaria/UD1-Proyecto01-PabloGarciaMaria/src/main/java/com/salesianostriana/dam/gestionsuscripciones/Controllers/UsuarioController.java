@@ -55,8 +55,11 @@ public class UsuarioController {
 
 //    @GetMapping("/{id}")
     @GetMapping()
-    public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
-        return service.verDetalle(model, redirectAttributes,httpSession);
+    public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession,
+                             @RequestParam(required = false, defaultValue = "0") Long page,
+                             @RequestParam(required = false, defaultValue = "5") Long size,
+                             @RequestParam(required = false, defaultValue = "") String q) {
+        return service.verDetalle(model, redirectAttributes,httpSession, page, size, q);
     }
 
     @GetMapping("/estadisticas/rapidas")

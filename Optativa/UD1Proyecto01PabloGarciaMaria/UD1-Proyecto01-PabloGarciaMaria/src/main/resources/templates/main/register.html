@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - SubManager</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #6b7fd7;
+            --primary-dark: #5a6bc5;
+            --primary-light: #e8ebf9;
+            --border-color: #e0e0e0;
+            --success-color: #28a745;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fb 0%, #e8ebf9 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-logo {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .register-title {
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .register-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+        }
+
+        .input-group-text {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .password-input {
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+
+        .password-toggle {
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.2s;
+            background: none;
+            border: none;
+            padding: 0 12px;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-dark);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .form-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .terms-check {
+            margin: 20px 0;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+        }
+
+        .form-check-label {
+            color: #444;
+            font-size: 0.9rem;
+        }
+
+        .form-check-label a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .form-check-label a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .register-container {
+                padding: 30px 20px;
+            }
+
+            .register-logo {
+                font-size: 2rem;
+            }
+
+            .register-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animaciones suaves */
+        .register-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mejoras de accesibilidad */
+        .form-control:focus {
+            outline: none;
+        }
+
+        .btn:focus {
+            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.5);
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <div class="register-header">
+        <div class="register-logo">
+            <i class="fas fa-layer-group"></i>
+        </div>
+        <h1 class="register-title">Crear Cuenta</h1>
+        <p class="register-subtitle">Únete a SubManager y comienza a gestionar tus suscripciones</p>
+    </div>
+
+    <!-- Mensajes de alerta -->
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <div th:if="${message}" class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle me-2"></i>
+        <span th:text="${message}"></span>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${success}"></span>
+    </div>
+
+    <form th:action="@{/registro}" th:object="${usuario}" method="post" id="registroForm">
+        <!-- Información Personal -->
+        <div class="form-section">
+            <h5 class="mb-3" style="color: var(--primary-dark);">
+                <i class="fas fa-user me-2"></i>Información Personal
+            </h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="nombre" class="form-label required-field">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre"
+                           placeholder="Tu nombre" required th:field="*{nombre}">
+                    <div class="form-text">Ingresa tu nombre de pila</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="apellidos" class="form-label required-field">Apellidos</label>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos"
+                           placeholder="Tus apellidos" required th:field="*{apellidos}">
+                    <div class="form-text">Ingresa tus apellidos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información de Cuenta -->
+        <div class="form-section">
+            <h5 class="mb-3" style="color: var(--primary-dark);">
+                <i class="fas fa-envelope me-2"></i>Información de Cuenta
+            </h5>
+
+            <div class="mb-3">
+                <label for="email" class="form-label required-field">Correo Electrónico</label>
+                <input type="email" class="form-control" id="email" name="email"
+                       placeholder="tu@email.com" required th:field="*{email}">
+                <div class="form-text">Utiliza una dirección de correo válida</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label required-field">Contraseña</label>
+                <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    <input type="password" class="form-control password-input" id="password"
+                           name="password" placeholder="Crea una contraseña segura" required th:field="*{password}">
+                    <button type="button" class="btn password-toggle" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="form-text">Mínimo 8 caracteres, incluye mayúsculas, minúsculas y números</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label required-field">Confirmar Contraseña</label>
+                <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    <input type="password" class="form-control password-input" id="confirmPassword"
+                           name="confirmPassword" placeholder="Repite tu contraseña" required>
+                </div>
+                <div class="form-text">Ambas contraseñas deben coincidir</div>
+            </div>
+        </div>
+
+        <!-- Términos y Condiciones -->
+        <div class="form-section">
+            <div class="form-check terms-check">
+                <input class="form-check-input" type="checkbox" id="terminos" required>
+                <label class="form-check-label" for="terminos">
+                    Acepto los <a href="#" data-bs-toggle="modal" data-bs-target="#terminosModal">términos y condiciones</a>
+                    y la <a href="#" data-bs-toggle="modal" data-bs-target="#privacidadModal">política de privacidad</a>
+                </label>
+            </div>
+        </div>
+
+        <!-- Botón de Registro -->
+        <button type="submit" class="btn btn-primary mb-3">
+            <i class="fas fa-user-plus me-2"></i>Crear Cuenta
+        </button>
+
+        <!-- Enlace a Login -->
+        <div class="login-link">
+            <p>¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia sesión aquí</a></p>
+        </div>
+    </form>
+</div>
+
+<!-- Modal Términos y Condiciones -->
+<div class="modal fade" id="terminosModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Términos y Condiciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Aceptación de los Términos</h6>
+                <p>Al registrarte en SubManager, aceptas cumplir con estos términos y condiciones.</p>
+
+                <h6>2. Uso del Servicio</h6>
+                <p>SubManager es una plataforma para gestionar suscripciones personales. No nos hacemos responsables del uso que des a la información almacenada.</p>
+
+                <h6>3. Privacidad de Datos</h6>
+                <p>Respetamos tu privacidad y protegemos tus datos personales según nuestra política de privacidad.</p>
+
+                <h6>4. Limitación de Responsabilidad</h6>
+                <p>SubManager se proporciona "tal cual" sin garantías de ningún tipo.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Política de Privacidad -->
+<div class="modal fade" id="privacidadModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Política de Privacidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Información que Recopilamos</h6>
+                <p>Recopilamos información personal que nos proporcionas durante el registro: nombre, apellidos, email y contraseña.</p>
+
+                <h6>2. Uso de la Información</h6>
+                <p>Utilizamos tu información para proporcionar el servicio de gestión de suscripciones y mejorar tu experiencia.</p>
+
+                <h6>3. Protección de Datos</h6>
+                <p>Implementamos medidas de seguridad para proteger tu información personal.</p>
+
+                <h6>4. Tus Derechos</h6>
+                <p>Tienes derecho a acceder, rectificar y eliminar tu información personal en cualquier momento.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const togglePassword = document.getElementById('togglePassword');
+        const form = document.getElementById('registroForm');
+
+        // Función para mostrar/ocultar contraseña
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+
+        // Mejorar UX en móviles
+        if (window.innerWidth < 768) {
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.addEventListener('focus', function() {
+                    setTimeout(() => {
+                        this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>

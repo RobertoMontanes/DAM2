@@ -222,14 +222,24 @@
 
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: #666;
         }
 
         .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ccc;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        .empty-state h5 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #777;
+            margin-bottom: 20px;
         }
 
         .actions-section {
@@ -248,7 +258,141 @@
             margin-right: 0;
         }
 
+        /* Estilos para la paginación */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid var(--border-color);
+            border-radius: 0 0 12px 12px;
+        }
+
+        .pagination-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .pagination {
+            margin: 0;
+        }
+
+        .page-link {
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            margin: 0 2px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .page-link:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border-color: var(--primary-color);
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .page-item.disabled .page-link {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-color: var(--border-color);
+        }
+
+        .items-per-page {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .items-per-page select {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 10px;
+            background-color: white;
+            color: #333;
+        }
+
+        .items-per-page label {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+            padding: 0 20px;
+            padding-top: 20px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            padding-left: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .search-form .form-control {
+            flex: 1;
+        }
+
+        .search-form .btn {
+            white-space: nowrap;
+        }
+
         @media (max-width: 768px) {
+            .pagination-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .table-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .items-per-page {
+                justify-content: center;
+            }
+
             .details-container {
                 padding: 20px;
                 margin: 20px 10px;
@@ -366,8 +510,8 @@
                 </div>
                 <div class="col-md-4 text-end">
                     <div class="text-white">
-                        <div class="h4 mb-1" th:text="${plataforma.planes != null ? plataforma.planes.size() : 0}">0</div>
-                        <div class="text-white-50">Planes Disponibles</div>
+                        <div class="h4 mb-1" th:text="${planesPage != null ? planesPage.totalElements : 0}">0</div>
+                        <div class="text-white-50">Planes Totales</div>
                     </div>
                 </div>
             </div>
@@ -403,6 +547,18 @@
                             <i class="fas fa-plus me-1"></i>Nuevo Plan
                         </a>
                     </div>
+
+                    <!-- Controles de tabla para planes -->
+                    <div class="table-controls">
+                        <div class="search-box">
+                            <form th:action="@{|/plataformas/${plataforma.id}|}" method="get" class="search-form">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" name="q" placeholder="Buscar planes..." th:value="${param.q}">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
+
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
@@ -466,6 +622,58 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Paginación de Planes -->
+                        <div class="pagination-container" th:if="${plataforma.planes != null && !plataforma.planes.empty}">
+                            <div class="pagination-info">
+                                Mostrando <span th:text="${(planesPage.number * planesPage.size) + 1}">1</span> -
+                                <span th:text="${(planesPage.number * planesPage.size) + planesPage.numberOfElements}">10</span> de
+                                <span th:text="${planesPage.totalElements}">100</span> planes
+                            </div>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item" th:classappend="${planesPage.first} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{'/plataformas/' + ${plataforma.id} + '?page=0&size=' + ${planesPage.size}}">
+                                            <i class="fas fa-angle-double-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${planesPage.first} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{'/plataformas/' + ${plataforma.id} + '?page=' + ${planesPage.number-1} + '&size=' + ${planesPage.size}}">
+                                            <i class="fas fa-angle-left"></i>
+                                        </a>
+                                    </li>
+
+                                    <li th:each="page : ${#numbers.sequence(0, planesPage.totalPages)}"
+                                        class="page-item" th:classappend="${page == planesPage.number} ? 'active' : ''">
+                                        <a class="page-link"
+                                           th:href="@{'/plataformas/' + ${plataforma.id} + '?page=' + ${page} + '&size=' + ${planesPage.size}}"
+                                           th:text="${page+1}">
+                                        </a>
+                                    </li>
+
+                                    <li class="page-item" th:classappend="${planesPage.last} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{'/plataformas/' + ${plataforma.id} + '?page=' + ${planesPage.number+1} + '&size=' + ${planesPage.size}}">
+                                            <i class="fas fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${planesPage.last} ? 'disabled' : ''">
+                                        <a class="page-link" th:href="@{'/plataformas/' + ${plataforma.id} + '?page=' + ${planesPage.totalPages-1} + '&size=' + ${planesPage.size}}">
+                                            <i class="fas fa-angle-double-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="items-per-page">
+                                <label for="porPagePlanes">Por página:</label>
+                                <select id="porPagePlanes" onchange="location = this.value;">
+                                    <option th:each="size : ${ {5,10,25,50} }"
+                                            th:value="@{'/plataformas/' + ${plataforma.id} + '?page=0&size=' + ${size}}"
+                                            th:selected="${size == planesPage.size}"
+                                            th:text="${size}">
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -109,13 +109,26 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         return "redirect:/usuarios";
     }
 
-    public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+    public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession, Long page, Long size, String query) {
         @Builder
-        record PaginationInfo(Long number, Long size, Long numberOfElements, int totalElements, boolean first, int totalPages, boolean last) {}
+        record PaginationInfo(Long number, Long size, int numberOfElements, int totalElements, boolean first, int totalPages, boolean last) {}
         List<ListarPlataformas_UsuarioDTO> plataformas;
         List<ListarSuscripcion_UsuarioDTO> suscripciones;
+        List<ListarPlataformas_UsuarioDTO> plataformasLimited;
+        List<ListarSuscripcion_UsuarioDTO> suscripcionesLimited;
+        long perPage, actualPage;
 
-        Long perPage = 5L, actualPage = 1L;
+        if (size == null) {
+            perPage = 5L;
+        } else {
+            perPage = size;
+        }
+
+        if (page == null) {
+            actualPage = 0L;
+        } else {
+            actualPage = page;
+        }
 
         Long id = (Long) httpSession.getAttribute("id");
 
@@ -134,19 +147,28 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         suscripcionService.comprobarVencimientos(uOpt.get());
 
         u = uOpt.get();
-        plataformas = u.getPlataformas().stream().filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList();
+        plataformas = u.getPlataformas().stream().filter(p -> {
+            if (query == null || query.isEmpty()) {
+                return true;
+            } else {
+                return p.getNombre().toLowerCase().contains(query.toLowerCase());
+            }
+        }).filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList();
         suscripciones =  u.getSuscripciones().stream().filter(Suscripcion::isActiva).map(ListarSuscripcion_UsuarioDTO::toDTO).toList();
-        model.addAttribute("plataformas", plataformas.stream().skip(actualPage*perPage).limit(perPage).toList());
-        model.addAttribute("suscripciones", suscripciones.stream().skip(actualPage*perPage).limit(perPage).toList());
+        plataformasLimited = plataformas.stream().skip(actualPage*perPage).limit(perPage).toList();
+        suscripcionesLimited = suscripciones.stream().skip(actualPage*perPage).limit(perPage).toList();
+        model.addAttribute("plataformas", plataformasLimited);
+        model.addAttribute("suscripciones", suscripcionesLimited);
         model.addAttribute("avisos", new ArrayList<>());
+        model.addAttribute("page", page);
 
         model.addAttribute("gastoMensual", u.calcularGastoMensual());
         model.addAttribute("gastoAnual", u.calcularGastoAnual());
         model.addAttribute("proximasAVencer", u.suscripcionesProximasAVencer().size());
         int finalPagePlat = Math.round(plataformas.size() / perPage);
         int finalPageSus = Math.round(suscripciones.size() / perPage);
-        model.addAttribute("suscripcionPage", new PaginationInfo(actualPage,perPage,0L,suscripciones.size(),actualPage == 1, finalPageSus, actualPage == finalPageSus)) ;
-        model.addAttribute("plataformaPage", new PaginationInfo(actualPage,perPage,0L,plataformas.size(),actualPage==1, finalPagePlat, actualPage == finalPagePlat));
+        model.addAttribute("suscripcionPage", new PaginationInfo(actualPage,perPage,suscripcionesLimited.size(),suscripciones.size(),actualPage == 0, finalPageSus, actualPage == finalPageSus)) ;
+        model.addAttribute("plataformaPage", new PaginationInfo(actualPage,perPage,plataformasLimited.size(),plataformas.size(),actualPage==0, finalPagePlat, actualPage == finalPagePlat));
 
         return "usuario/dashboard";
     }

@@ -85,13 +85,14 @@ public class Usuario {
 
     public Double calcularGastoMensual() {
         double total = 0.0;
+        int finalResult;
         LocalDate now = LocalDate.now();
         for (Suscripcion s : suscripciones.stream().filter(s -> s.getPlan().getPlataforma().isEstado()).toList()) {
             if (s.getFechaInicio().getMonth() == now.getMonth() && s.getFechaInicio().getYear() == now.getYear()) {
                 total += s.getPlan().getPrecio();
             }
         }
-        return total;
+        return Math.round(total * 100.0) / 100.0;
     }
 
     public Double calcularGastoAnual() {
@@ -102,7 +103,7 @@ public class Usuario {
                 total += s.getPlan().getPrecio();
             }
         }
-        return total;
+        return Math.round(total * 100.0) / 100.0;
 
     }
 

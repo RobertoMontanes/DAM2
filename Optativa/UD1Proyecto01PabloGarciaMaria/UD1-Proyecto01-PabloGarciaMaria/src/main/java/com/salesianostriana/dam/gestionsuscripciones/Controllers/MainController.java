@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -24,8 +25,10 @@ public class MainController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        return service.redirectToDashboard(model, session, redirectAttributes);
+    public String dashboard(Model model, HttpSession session, RedirectAttributes redirectAttributes, @RequestParam(required = false, defaultValue = "0") Long page,
+                            @RequestParam(required = false, defaultValue = "5") Long size,
+                            @RequestParam(required = false) String q) {
+        return service.redirectToDashboard(model, session, redirectAttributes, page ,size, q);
     }
 
     @GetMapping("/logout")
@@ -45,6 +48,11 @@ public class MainController {
 
     @GetMapping("/entrarya")
     public String entrarYa(Model model, HttpSession session) {
-        return checkLogIn(model,new LogIn_UsuarioDTO("pruebas@gmail.com","1234"),session);
+        return service.checkLogIn(model,new LogIn_UsuarioDTO("pruebas@gmail.com","1234"),session);
+    }
+
+    @GetMapping ("/register")
+    public String register(Model model) {
+        return service.register(null, model);
     }
 }
