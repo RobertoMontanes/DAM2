@@ -1,6 +1,52 @@
-<select name="genero" id="genero">
-    <option hidden selected>Select an option</option>
-    @for (genre of genreList; track $index) {
-    <option [value]="genre.id">{{genre.name}}</option>
-    }
-</select>
+<div class="movie-filter-container">
+    <!-- Filtro de géneros -->
+    <div class="genre-filter">
+        <h2>Filtrar por Género</h2>
+        <div class="genre-list">
+            @for (genre of genreList; track $index) {
+            <button class="genre-button"
+                (click)="selectGenre(genre)">
+                {{ genre.name }}
+            </button>
+            }
+        </div>
+    </div>
+
+    <!-- Mensaje cuando no hay género seleccionado -->
+    <div class="no-selection-message">
+        <p>Selecciona un género para filtrar las películas</p>
+    </div>
+    
+
+    <!-- Lista de películas del género seleccionado -->
+    <div class="movie-list-section">
+        <h2 id="titleGenre">Películas Sin Genero seleccionado</h2>        
+        <div class="movies-grid">
+            @for (movie of movieList; track $index) {
+            <div class="movie-card">
+                <!-- Poster de la película -->
+                @if (movie.poster_path) {
+                <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title"
+                    class="movie-poster">
+                } @else {
+                <div class="no-poster">Sin imagen</div>
+                }
+
+                <!-- Información de la película -->
+                <div class="movie-info">
+                    <h3 class="movie-title">{{ movie.title }}</h3>
+                    <p class="movie-overview">{{ movie.overview }}</p>
+                    <div class="movie-details">
+                        <span class="release-date">{{ movie.release_date}}</span>
+                        <span class="rating">⭐ {{ movie.vote_average }}/10</span>
+                    </div>
+                    @if (movie.adult) {
+                    <span class="adult-badge">+18</span>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    
+</div>
