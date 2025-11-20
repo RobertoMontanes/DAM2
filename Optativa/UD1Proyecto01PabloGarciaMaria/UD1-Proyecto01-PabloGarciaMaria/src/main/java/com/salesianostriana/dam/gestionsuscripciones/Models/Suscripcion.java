@@ -16,10 +16,10 @@ public class Suscripcion {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private Usuario usuario;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private Plan plan;
 
     private LocalDate fechaInicio;

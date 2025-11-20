@@ -22,6 +22,7 @@ public class NuevoPlan_PlataformaDTO {
                 .frecuencia(Period.of(this.getFrecuencia_anios(),
                         this.getFrecuencia_meses(),
                         this.getFrecuencia_dias()))
+                .activo(true)
                 .build();
     }
 }

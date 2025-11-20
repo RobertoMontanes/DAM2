@@ -10,6 +10,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.Usuario;
 import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.BindParam;
@@ -18,7 +19,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EstadisticasService {
@@ -29,8 +32,11 @@ public class EstadisticasService {
     public String cargarEstadisticas(Model model, RedirectAttributes redirectAttributes, HttpSession session, int diasPeriodo, String nombreCategoria, String idPlataforma) {
         ValidacionResultado vr = ExtraMethods.comprobarSesion(session, usuarioService);
         Usuario usuario;
-        List<Suscripcion> suscripciones, suscripcionesFiltradas;
+        List<Suscripcion> suscripciones, suscripcionesFiltradas, suscripcionesFiltradasAnteriores;
+        List<Plataforma> totalPlataformas;
         String periodoStr;
+        double gastoTotal, gastoTotalAnterior, gastoPromedio, gastoPromedioAnterior;
+        int variacionSuscripciones;
 
         if (!vr.isExito()) {
             redirectAttributes.addFlashAttribute("error", vr.getError());
@@ -48,14 +54,18 @@ public class EstadisticasService {
         };
 
         suscripciones = usuario.getSuscripciones();
+
+        if (suscripciones.size() <= 0) {
+            redirectAttributes.addFlashAttribute("error", "No tienes suscripciones registradas aún. Añade alguna para ver estadísticas.");
+            return "redirect:/dashboard";
+        }
+
         if (nombreCategoria != null && !nombreCategoria.equals("all")) {
             suscripcionesFiltradas = suscripciones.stream()
-                    .filter(Suscripcion::isActiva)
                     .filter(s -> s.getPlan().getPlataforma().getCategoria().name().equals(nombreCategoria))
                     .toList();
         } else {
             suscripcionesFiltradas = suscripciones.stream()
-                    .filter(Suscripcion::isActiva)
                     .toList();
         }
 
@@ -64,11 +74,19 @@ public class EstadisticasService {
                     .filter(s -> s.getPlan().getPlataforma().getId().toString().equals(idPlataforma))
                     .toList();
         }
+        suscripcionesFiltradasAnteriores = suscripcionesFiltradas;
 
         if (diasPeriodo != 999) {
+            suscripcionesFiltradasAnteriores = suscripcionesFiltradas.stream()
+                    .filter(s -> s.getFechaInicio().isBefore(LocalDate.now().minusDays(diasPeriodo)))
+                    .filter(s -> s.getFechaInicio().isAfter(LocalDate.now().minusDays(diasPeriodo* 2L)))
+                    .toList();
             suscripcionesFiltradas = suscripcionesFiltradas.stream()
                     .filter(s -> s.getFechaInicio().isAfter(LocalDate.now().minusDays(diasPeriodo)))
                     .toList();
+
+            System.out.println(suscripcionesFiltradasAnteriores);
+            System.out.println(suscripcionesFiltradas);
         }
 
         record ListarPlataformasDTO(Long id, String nombre){};
@@ -78,10 +96,41 @@ public class EstadisticasService {
                 .filter(Plataforma::isEstado)
                 .map(p -> new ListarPlataformasDTO(p.getId(), p.getNombre())).
                 toList());
+
         model.addAttribute("periodoActual", periodoStr);
+
+        gastoTotal = suscripcionesFiltradas.stream()
+                .mapToDouble(s -> s.getPlan().getPrecio()).sum();
+        model.addAttribute("gastoTotal", gastoTotal);
+
+        gastoTotalAnterior = suscripcionesFiltradasAnteriores.stream()
+                .mapToDouble(s -> s.getPlan().getPrecio()).sum();
+        model.addAttribute("variacionGastoTotal",calcularVariacion(gastoTotalAnterior, gastoTotal));
+
+        model.addAttribute("totalSuscripciones", suscripcionesFiltradas.size());
+        model.addAttribute("variacionSuscripciones", suscripcionesFiltradas.size() - suscripcionesFiltradasAnteriores.size());
+
+
+        gastoPromedio = gastoTotal / suscripcionesFiltradas.size();
+        gastoPromedioAnterior = gastoTotalAnterior / suscripcionesFiltradasAnteriores.size();
+        model.addAttribute("gastoPromedio", gastoPromedio);
+        model.addAttribute("variacionGastoPromedio", calcularVariacion(gastoPromedioAnterior,gastoPromedio));
+        totalPlataformas = suscripcionesFiltradas.stream().map(s -> s.getPlan().getPlataforma()).distinct().toList();
+        model.addAttribute("totalPlataformas", totalPlataformas.size());
+        model.addAttribute("nuevasPlataformas", suscripcionesFiltradasAnteriores.stream()
+                        .map(s -> s.getPlan().getPlataforma())
+                        .distinct()
+                        .filter(p -> !totalPlataformas.contains(p))
+                        .toList()
+                        .size()
+                );
 
 
         return "estadisticas/estadisticas";
+    }
+
+    private Double calcularVariacion(Double valorInicial, Double valorFinal) {
+        return 100 * (valorFinal - valorInicial) / valorInicial;
     }
 
     private Double calcularMensualidad(Plan plan){

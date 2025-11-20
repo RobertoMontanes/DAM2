@@ -102,12 +102,12 @@
             border-radius: 12px;
         }
 
-        .change-positive {
+        .change-negative {
             background-color: #e7f7ef;
             color: #1ea97c;
         }
 
-        .change-negative {
+        .change-positive {
             background-color: #fef2f2;
             color: #ef4444;
         }
@@ -182,7 +182,7 @@
         }
 
         .select2-enhanced {
-            width: 100% !important;
+            width: 100∞ !important;
         }
 
         .metric-grid {
@@ -298,59 +298,59 @@
             </div>
         </div>
 
-<!--        &lt;!&ndash; Métricas Principales &ndash;&gt;-->
-<!--        <div class="metric-grid">-->
-<!--            <div class="stat-card">-->
-<!--                <div class="stat-number" th:text="'€' + ${#numbers.formatDecimal(gastoTotal, 1, 2)}">€0.00</div>-->
-<!--                <div class="stat-label">Gasto Total</div>-->
-<!--                <div class="trend-indicator">-->
-<!--                    <span th:classappend="${variacionGastoTotal >= 0} ? 'change-positive' : 'change-negative'"-->
-<!--                          class="stat-change">-->
-<!--                        <i th:classappend="${variacionGastoTotal >= 0} ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>-->
-<!--                        <span th:text="${#numbers.formatDecimal(variacionGastoTotal, 1, 1)} + '%'">0%</span>-->
-<!--                    </span>-->
-<!--                    <span class="text-muted ms-2">vs período anterior</span>-->
-<!--                </div>-->
-<!--            </div>-->
+        <!-- Métricas Principales -->
+        <div class="metric-grid">
+            <div class="stat-card">
+                <div class="stat-number" th:text="'€' + ${#numbers.formatDecimal(gastoTotal, 1, 2)}">€0.00</div>
+                <div class="stat-label">Gasto Total</div>
+                <div class="trend-indicator">
+                    <span th:classappend="${variacionGastoTotal >= 0} ? 'change-positive' : 'change-negative'"
+                          class="stat-change">
+                        <i th:classappend="${variacionGastoTotal >= 0} ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+                        <span th:text="${#numbers.formatDecimal(variacionGastoTotal, 1, 1)} + '%'">0%</span>
+                    </span>
+                    <span class="text-muted ms-2">vs período anterior</span>
+                </div>
+            </div>
 
-<!--            <div class="stat-card">-->
-<!--                <div class="stat-number" th:text="${totalSuscripciones}">0</div>-->
-<!--                <div class="stat-label">Suscripciones Activas</div>-->
-<!--                <div class="trend-indicator">-->
-<!--                    <span th:classappend="${variacionSuscripciones >= 0} ? 'change-positive' : 'change-negative'"-->
-<!--                          class="stat-change">-->
-<!--                        <i th:classappend="${variacionSuscripciones >= 0} ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>-->
-<!--                        <span th:text="${variacionSuscripciones} + ''">0</span>-->
-<!--                    </span>-->
-<!--                    <span class="text-muted ms-2">cambios</span>-->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="stat-card">
+                <div class="stat-number" th:text="${totalSuscripciones}">0</div>
+                <div class="stat-label">Suscripciones Activas</div>
+                <div class="trend-indicator">
+                    <span th:classappend="${variacionSuscripciones >= 0} ? 'change-positive' : 'change-negative'"
+                          class="stat-change">
+                        <i th:classappend="${variacionSuscripciones >= 0} ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+                        <span th:text="${variacionSuscripciones} + ''">0</span>
+                    </span>
+                    <span class="text-muted ms-2">cambios</span>
+                </div>
+            </div>
 
-<!--            <div class="stat-card">-->
-<!--                <div class="stat-number" th:text="'€' + ${#numbers.formatDecimal(gastoPromedio, 1, 2)}">€0.00</div>-->
-<!--                <div class="stat-label">Gasto Promedio Mensual</div>-->
-<!--                <div class="trend-indicator">-->
-<!--                    <span th:classappend="${variacionGastoPromedio >= 0} ? 'change-positive' : 'change-negative'"-->
-<!--                          class="stat-change">-->
-<!--                        <i th:classappend="${variacionGastoPromedio >= 0} ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>-->
-<!--                        <span th:text="${#numbers.formatDecimal(variacionGastoPromedio, 1, 1)} + '%'">0%</span>-->
-<!--                    </span>-->
-<!--                    <span class="text-muted ms-2">vs período anterior</span>-->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="stat-card">
+                <div class="stat-number" th:text="'€' + ${#numbers.formatDecimal(gastoPromedio, 1, 2)}">€0.00</div>
+                <div class="stat-label">Gasto Promedio Mensual</div>
+                <div class="trend-indicator">
+                    <span th:classappend="${variacionGastoPromedio >= 0} ? 'change-positive' : 'change-negative'"
+                          class="stat-change">
+                        <i th:classappend="${variacionGastoPromedio >= 0} ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+                        <span th:text="${#numbers.formatDecimal(variacionGastoPromedio, 1, 1)} + '%'">0%</span>
+                    </span>
+                    <span class="text-muted ms-2">vs período anterior</span>
+                </div>
+            </div>
 
-<!--            <div class="stat-card">-->
-<!--                <div class="stat-number" th:text="${totalPlataformas}">0</div>-->
-<!--                <div class="stat-label">Plataformas Diferentes</div>-->
-<!--                <div class="trend-indicator">-->
-<!--                    <span class="stat-change change-positive">-->
-<!--                        <i class="fas fa-plus"></i>-->
-<!--                        <span th:text="${nuevasPlataformas}">0</span>-->
-<!--                    </span>-->
-<!--                    <span class="text-muted ms-2">nuevas este período</span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+            <div class="stat-card">
+                <div class="stat-number" th:text="${totalPlataformas}">0</div>
+                <div class="stat-label">Plataformas Diferentes</div>
+                <div class="trend-indicator">
+                    <span class="stat-change change-positive">
+                        <i class="fas fa-plus"></i>
+                        <span th:text="${nuevasPlataformas}">0</span>
+                    </span>
+                    <span class="text-muted ms-2">nuevas este período</span>
+                </div>
+            </div>
+        </div>
 
 <!--        &lt;!&ndash; Primera Fila: Gráficos Principales &ndash;&gt;-->
 <!--        <div class="row">-->
@@ -580,146 +580,146 @@
         });
 
 
-        // Gráfico de Evolución de Gastos Mensuales
-        const gastosMensualesCtx = document.getElementById('gastosMensualesChart');
-        if (gastosMensualesCtx) {
-            new Chart(gastosMensualesCtx, {
-                type: 'line',
-                data: {
-                    labels: [[${mesesLabels}]],
-                    datasets: [{
-                        label: 'Gasto Mensual (€)',
-                        data: [[${gastosMensualesData}]],
-                        borderColor: '#6b7fd7',
-                        backgroundColor: 'rgba(107, 127, 215, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
+<!--        // Gráfico de Evolución de Gastos Mensuales-->
+<!--        const gastosMensualesCtx = document.getElementById('gastosMensualesChart');-->
+<!--        if (gastosMensualesCtx) {-->
+<!--            new Chart(gastosMensualesCtx, {-->
+<!--                type: 'line',-->
+<!--                data: {-->
+<!--                    labels: [[${mesesLabels}]],-->
+<!--                    datasets: [{-->
+<!--                        label: 'Gasto Mensual (€)',-->
+<!--                        data: [[${gastosMensualesData}]],-->
+<!--                        borderColor: '#6b7fd7',-->
+<!--                        backgroundColor: 'rgba(107, 127, 215, 0.1)',-->
+<!--                        borderWidth: 3,-->
+<!--                        fill: true,-->
+<!--                        tension: 0.4-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    responsive: true,-->
+<!--                    plugins: {-->
+<!--                        legend: {-->
+<!--                            display: false-->
+<!--                        }-->
+<!--                    },-->
+<!--                    scales: {-->
+<!--                        y: {-->
+<!--                            beginAtZero: true,-->
+<!--                            grid: {-->
+<!--                                color: 'rgba(0, 0, 0, 0.05)'-->
+<!--                            }-->
+<!--                        },-->
+<!--                        x: {-->
+<!--                            grid: {-->
+<!--                                display: false-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
 
-        // Gráfico de Distribución por Categoría
-        const distribucionCategoriaCtx = document.getElementById('distribucionCategoriaChart');
-        if (distribucionCategoriaCtx) {
-            new Chart(distribucionCategoriaCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: [[${categoriasLabels}]],
-                    datasets: [{
-                        data: [[${categoriasData}]],
-                        backgroundColor: [[${categoriasColores}]],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-        }
+<!--        // Gráfico de Distribución por Categoría-->
+<!--        const distribucionCategoriaCtx = document.getElementById('distribucionCategoriaChart');-->
+<!--        if (distribucionCategoriaCtx) {-->
+<!--            new Chart(distribucionCategoriaCtx, {-->
+<!--                type: 'doughnut',-->
+<!--                data: {-->
+<!--                    labels: [[${categoriasLabels}]],-->
+<!--                    datasets: [{-->
+<!--                        data: [[${categoriasData}]],-->
+<!--                        backgroundColor: [[${categoriasColores}]],-->
+<!--                        borderWidth: 0-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    responsive: true,-->
+<!--                    plugins: {-->
+<!--                        legend: {-->
+<!--                            position: 'bottom'-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
 
-        // Gráfico de Gasto por Plataforma
-        const gastoPlataformaCtx = document.getElementById('gastoPlataformaChart');
-        if (gastoPlataformaCtx) {
-            new Chart(gastoPlataformaCtx, {
-                type: 'bar',
-                data: {
-                    labels: [[${plataformasLabels}]],
-                    datasets: [{
-                        label: 'Gasto Total (€)',
-                        data: [[${plataformasData}]],
-                        backgroundColor: [[${plataformasColores}]],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
+<!--        // Gráfico de Gasto por Plataforma-->
+<!--        const gastoPlataformaCtx = document.getElementById('gastoPlataformaChart');-->
+<!--        if (gastoPlataformaCtx) {-->
+<!--            new Chart(gastoPlataformaCtx, {-->
+<!--                type: 'bar',-->
+<!--                data: {-->
+<!--                    labels: [[${plataformasLabels}]],-->
+<!--                    datasets: [{-->
+<!--                        label: 'Gasto Total (€)',-->
+<!--                        data: [[${plataformasData}]],-->
+<!--                        backgroundColor: [[${plataformasColores}]],-->
+<!--                        borderWidth: 0-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    responsive: true,-->
+<!--                    plugins: {-->
+<!--                        legend: {-->
+<!--                            display: false-->
+<!--                        }-->
+<!--                    },-->
+<!--                    scales: {-->
+<!--                        y: {-->
+<!--                            beginAtZero: true,-->
+<!--                            grid: {-->
+<!--                                color: 'rgba(0, 0, 0, 0.05)'-->
+<!--                            }-->
+<!--                        },-->
+<!--                        x: {-->
+<!--                            grid: {-->
+<!--                                display: false-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
 
-        // Gráfico de Renovaciones por Mes
-        const renovacionesCtx = document.getElementById('renovacionesChart');
-        if (renovacionesCtx) {
-            new Chart(renovacionesCtx, {
-                type: 'bar',
-                data: {
-                    labels: [[${renovacionesLabels}]],
-                    datasets: [{
-                        label: 'Renovaciones',
-                        data: [[${renovacionesData}]],
-                        backgroundColor: '#8a9de8',
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
+<!--        // Gráfico de Renovaciones por Mes-->
+<!--        const renovacionesCtx = document.getElementById('renovacionesChart');-->
+<!--        if (renovacionesCtx) {-->
+<!--            new Chart(renovacionesCtx, {-->
+<!--                type: 'bar',-->
+<!--                data: {-->
+<!--                    labels: [[${renovacionesLabels}]],-->
+<!--                    datasets: [{-->
+<!--                        label: 'Renovaciones',-->
+<!--                        data: [[${renovacionesData}]],-->
+<!--                        backgroundColor: '#8a9de8',-->
+<!--                        borderWidth: 0-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    responsive: true,-->
+<!--                    plugins: {-->
+<!--                        legend: {-->
+<!--                            display: false-->
+<!--                        }-->
+<!--                    },-->
+<!--                    scales: {-->
+<!--                        y: {-->
+<!--                            beginAtZero: true,-->
+<!--                            grid: {-->
+<!--                                color: 'rgba(0, 0, 0, 0.05)'-->
+<!--                            }-->
+<!--                        },-->
+<!--                        x: {-->
+<!--                            grid: {-->
+<!--                                display: false-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
 
 
 

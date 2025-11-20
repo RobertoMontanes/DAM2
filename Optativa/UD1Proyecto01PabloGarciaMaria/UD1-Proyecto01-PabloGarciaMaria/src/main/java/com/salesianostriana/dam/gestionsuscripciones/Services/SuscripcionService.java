@@ -135,6 +135,8 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
                 .map(ListarPlataforma_SuscripcionDTO::toDTO)
                 .toList();
 
+        System.out.println(listaDTO);
+
         if (listaDTO.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "No tienes plataformas para crear suscripciones.");
             return "redirect:/dashboard";
@@ -186,7 +188,7 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
             return nuevo(model, session, redirectAttributes, suscripcionDTO);
         }
 
-        validacionResultado = crearSuscripcionRecursiva(LocalDate.parse(suscripcionDTO.getFechaInicio()),p.get(), usuarioObjetivo);
+        validacionResultado = crearSuscripcionRecursiva(LocalDate.parse(suscripcionDTO.getFechaInicio()),p.get(), usuarioObjetivo,suscripcionDTO.getAutoRenovacion());
 
         if (!validacionResultado.isExito()) {
             redirectAttributes.addFlashAttribute("error", validacionResultado.getError());
@@ -199,7 +201,7 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
 
     }
 
-    public ValidacionResultado crearSuscripcionRecursiva(LocalDate fechaProcesada, Plan p, Usuario u) {
+    public ValidacionResultado crearSuscripcionRecursiva(LocalDate fechaProcesada, Plan p, Usuario u, Boolean autoRenov) {
         ValidacionResultado resultado = new ValidacionResultado();
 
         if (!Objects.equals(p.getPlataforma().getUsuario().getId(), u.getId())) {
@@ -219,14 +221,16 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
                         .fechaFin(fechaProcesada.plus(p.getFrecuencia()))
                         .plan(p)
                         .usuario(u)
+                        .renovacionAutomatica(autoRenov)
                         .build();
                 s.setActiva(s.getFechaFin().isAfter(LocalDate.now()) || s.getFechaFin().isEqual(LocalDate.now()));
+                System.out.println("Activo: " + s.isActiva());
                 System.out.println("Fecha fin calculada: " + s.getFechaFin());
                 fechaProcesada = fechaProcesada.plus(p.getFrecuencia());
                 u.addSuscripcion(s);
                 p.addSuscripcion(s);
                 this.save(s);
-            } while (fechaProcesada.isBefore(LocalDate.now()));
+            } while (fechaProcesada.isBefore(LocalDate.now()) && autoRenov);
         }
 
         u.addPlataforma(p.getPlataforma());

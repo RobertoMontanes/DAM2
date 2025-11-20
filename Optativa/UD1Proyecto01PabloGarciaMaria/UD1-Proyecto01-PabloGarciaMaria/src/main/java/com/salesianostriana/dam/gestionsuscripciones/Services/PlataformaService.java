@@ -37,8 +37,6 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
     private PlanService planService;
     @Lazy @Autowired
     private SuscripcionService suscripcionService;
-    @Autowired
-    private SuscripcionRepository suscripcionRepository;
 
     // CRUD PLATAFORMA
 
@@ -113,7 +111,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         p.getPlanes().add(p2);
 
         if (plataformaDTO.getFecha_suscripcion() != null && !plataformaDTO.getFecha_suscripcion().isEmpty()) {
-            resultado = suscripcionService.crearSuscripcionRecursiva(LocalDate.parse(plataformaDTO.getFecha_suscripcion()), p2, u);
+            resultado = suscripcionService.crearSuscripcionRecursiva(LocalDate.parse(plataformaDTO.getFecha_suscripcion()), p2, u, true);
             if (!resultado.isExito()) {
                 redirectAttributes.addFlashAttribute("error", resultado.getError());
                 return resultado.getRedirect();
@@ -166,6 +164,7 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
     public String eliminar(Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         ValidacionResultado resultado = comprobarSesion(session, id, Objetivo.ELIMINAR);
         Plataforma p;
+        Usuario u;
 
         if (!resultado.isExito()) {
             redirectAttributes.addFlashAttribute("error", resultado.getError());
@@ -180,14 +179,23 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
         }
 
         p.setEstado(false);
+
+        u = p.getUsuario();
+        u.getPlataformas().remove(p);
+        p.setUsuario(null);
+        usuarioService.save(u);
+
+
         p.getPlanes().forEach(plan -> {
-            plan.getSuscripciones().stream().filter(Suscripcion::isActiva).forEach(suscripcion -> {
-                suscripcion.setActiva(false);
-                suscripcion.setFechaFin(LocalDate.now());
-                suscripcionRepository.save(suscripcion);
-            });
+            for (Suscripcion s : plan.getSuscripciones()) {
+                s.setPlan(null);
+                suscripcionService.delete(s);
+            }
+
+            plan.setPlataforma(null);
+            planService.delete(plan);
         });
-        save(p);
+        delete(p);
 
         redirectAttributes.addFlashAttribute("success", "Plataforma eliminada correctamente.");
         return "redirect:/dashboard";
