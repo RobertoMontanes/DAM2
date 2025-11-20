@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.monumentos.servicios;
 
 import com.salesianostriana.dam.monumentos.modelos.CrearMonumentoCmd;
-import com.salesianostriana.dam.monumentos.errores.Monumento;
+import com.salesianostriana.dam.monumentos.modelos.Monumento;
 import com.salesianostriana.dam.monumentos.errores.MonumentoNotFoundException;
 import com.salesianostriana.dam.monumentos.repositorios.MonumentoRepository;
 import lombok.RequiredArgsConstructor;

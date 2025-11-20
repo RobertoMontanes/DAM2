@@ -1,7 +1,5 @@
 package com.salesianostriana.dam.monumentos.modelos;
 
-import com.salesianostriana.dam.monumentos.errores.Monumento;
-
 public record CrearMonumentoCmd(
         String isoCode,
         String pais,

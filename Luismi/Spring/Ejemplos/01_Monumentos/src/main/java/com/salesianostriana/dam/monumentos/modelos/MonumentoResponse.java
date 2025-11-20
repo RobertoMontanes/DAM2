@@ -1,7 +1,5 @@
 package com.salesianostriana.dam.monumentos.modelos;
 
-import com.salesianostriana.dam.monumentos.errores.Monumento;
-
 public record MonumentoResponse(
         Long id,
         String isoCode,

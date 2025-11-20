@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.monumentos.errores;
+package com.salesianostriana.dam.monumentos.modelos;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

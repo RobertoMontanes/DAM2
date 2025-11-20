@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.monumentos.controladores;
 
 import com.salesianostriana.dam.monumentos.modelos.CrearMonumentoCmd;
-import com.salesianostriana.dam.monumentos.errores.Monumento;
+import com.salesianostriana.dam.monumentos.modelos.Monumento;
 import com.salesianostriana.dam.monumentos.modelos.MonumentoResponse;
 import com.salesianostriana.dam.monumentos.servicios.MonumentoServicio;
 import io.swagger.v3.oas.annotations.Operation;
