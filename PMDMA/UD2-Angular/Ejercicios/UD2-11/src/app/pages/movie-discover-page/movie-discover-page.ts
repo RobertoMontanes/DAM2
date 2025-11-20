@@ -4,14 +4,19 @@ import { Movie } from '../../interfaces/movie-list-response';
 import { GenresService } from '../../services/genres-service';
 import { DiscoverService } from '../../services/discover-service';
 import { TvDiscoverResponse, TvShow } from '../../interfaces/tv-discover-response';
+import { DatePipe, SlicePipe } from '@angular/common';
 
 @Component({
   selector: 'app-movie-discover-page',
-  imports: [],
+  imports: [SlicePipe, DatePipe],
   templateUrl: './movie-discover-page.html',
   styleUrl: './movie-discover-page.css',
 })
 export class MovieDiscoverPage implements OnInit {
+  
+  ConvertToString(objetive: number) {
+    return String(objetive)
+  }
 
   constructor(private genreService: GenresService, private discoverService: DiscoverService) {}
 
