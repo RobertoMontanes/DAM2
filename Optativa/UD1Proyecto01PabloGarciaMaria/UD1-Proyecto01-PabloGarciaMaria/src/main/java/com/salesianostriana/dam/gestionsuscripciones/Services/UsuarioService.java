@@ -6,6 +6,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Extras.L
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Listar_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Usuario.Formulario_UsuarioDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Categorias;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.PaginationInfo;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
@@ -110,8 +111,6 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
     }
 
     public String verDetalle(Model model, RedirectAttributes redirectAttributes, HttpSession httpSession, Long page, Long size, String query) {
-        @Builder
-        record PaginationInfo(Long number, Long size, int numberOfElements, int totalElements, boolean first, int totalPages, boolean last) {}
         List<ListarPlataformas_UsuarioDTO> plataformas;
         List<ListarSuscripcion_UsuarioDTO> suscripciones;
         List<ListarPlataformas_UsuarioDTO> plataformasLimited;
@@ -125,7 +124,7 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         }
 
         if (page == null) {
-            actualPage = 0L;
+            actualPage = 1L;
         } else {
             actualPage = page;
         }
@@ -165,8 +164,8 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
         model.addAttribute("gastoMensual", u.calcularGastoMensual());
         model.addAttribute("gastoAnual", u.calcularGastoAnual());
         model.addAttribute("proximasAVencer", u.suscripcionesProximasAVencer().size());
-        int finalPagePlat = Math.round(plataformas.size() / perPage);
-        int finalPageSus = Math.round(suscripciones.size() / perPage);
+        int finalPagePlat = Math.round((float) plataformas.size() / perPage);
+        int finalPageSus = Math.round((float) suscripciones.size() / perPage);
         model.addAttribute("suscripcionPage", new PaginationInfo(actualPage,perPage,suscripcionesLimited.size(),suscripciones.size(),actualPage == 0, finalPageSus, actualPage == finalPageSus)) ;
         model.addAttribute("plataformaPage", new PaginationInfo(actualPage,perPage,plataformasLimited.size(),plataformas.size(),actualPage==0, finalPagePlat, actualPage == finalPagePlat));
 

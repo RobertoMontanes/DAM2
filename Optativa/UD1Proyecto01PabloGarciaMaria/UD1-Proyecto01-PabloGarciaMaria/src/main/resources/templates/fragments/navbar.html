@@ -1,0 +1,25 @@
+<nav th:fragment="navbar" class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            <i class="fas fa-layer-group me-2"></i>SubManager
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/estadisticas}">Estadísticas</a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-outline-primary" th:href="@{/logout}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

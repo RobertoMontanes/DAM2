@@ -85,7 +85,7 @@ public class Usuario {
 
     public Double calcularGastoMensual() {
         double total = 0.0;
-        int finalResult;
+        // Si inicio este mes, entonces se cobra este mes.
         LocalDate now = LocalDate.now();
         for (Suscripcion s : suscripciones.stream().filter(s -> s.getPlan().getPlataforma().isEstado()).toList()) {
             if (s.getFechaInicio().getMonth() == now.getMonth() && s.getFechaInicio().getYear() == now.getYear()) {

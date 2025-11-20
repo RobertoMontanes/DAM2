@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.gestionsuscripciones.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.salesianostriana.dam.gestionsuscripciones.Services.EstadisticasService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class EstadisticasController {
                                 @RequestParam(required = false, defaultValue = "all") String categoria,
                                 @RequestParam(required = false, defaultValue = "all") String plataforma
 
-    ){
+    ) throws JsonProcessingException {
         return service.cargarEstadisticas(model, redirectAttributes, session, periodo, categoria, plataforma);
     }
 

@@ -47,5 +47,13 @@ public class Plan {
         }
         this.suscripciones.add(s);
     }
+
+    public double calcularGastoMensual() {
+        int dias = Math.abs(this.frecuencia.getDays() / 30);
+        int meses = this.frecuencia.getMonths();
+        int years = this.frecuencia.getYears() * 12;
+        int total = dias + meses + years;
+        return this.precio / total;
+    }
 }
 

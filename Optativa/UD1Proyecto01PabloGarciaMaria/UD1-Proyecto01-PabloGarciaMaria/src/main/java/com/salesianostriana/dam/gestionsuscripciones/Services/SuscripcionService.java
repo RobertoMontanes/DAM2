@@ -11,7 +11,6 @@ import com.salesianostriana.dam.gestionsuscripciones.Repositories.SuscripcionRep
 import com.salesianostriana.dam.gestionsuscripciones.Services.Base.BaseServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -114,23 +113,8 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
             suscripcionDTO = new Nuevo_SuscripcionDTO();
         }
 
-
-        // Me lo apunto pal futuro por que se me olvida 100%
-        // Pillamos las plataformas, pillamos sus planes, comprobamos si tienen suscripciones o si tienen suscripciones activas
-        // En caso de que o no tengan suscripciones o no tengan ninguna activa, converimos de nuevo a plataformas, luego a DTO y a juir.
-        listaDTO = uDueno.getPlataformas().stream().map(Plataforma::getPlanes)
-                .filter(p -> p.stream()
-                        .map(Plan::getSuscripciones)
-                        .findAny()
-                        .isEmpty()
-                    || p.stream()
-                        .map(Plan::getSuscripciones)
-                        .flatMap(List::stream)
-                        .filter(s -> !s.isActiva())
-                        .toList()
-                        .isEmpty()
-                ).flatMap(List::stream)
-                .map(Plan::getPlataforma)
+        listaDTO = uDueno.getPlataformas().stream()
+                .filter(p -> !p.checkActiveSuscription())
                 .distinct()
                 .map(ListarPlataforma_SuscripcionDTO::toDTO)
                 .toList();
@@ -213,9 +197,7 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
 
 
         if (fechaProcesada != null) {
-            System.out.println("Creando suscripciones desde: " + fechaProcesada);
             do {
-                System.out.println("Fecha de trabajo actual: " + fechaProcesada);
                 Suscripcion s = Suscripcion.builder()
                         .fechaInicio(fechaProcesada)
                         .fechaFin(fechaProcesada.plus(p.getFrecuencia()))
@@ -224,8 +206,6 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
                         .renovacionAutomatica(autoRenov)
                         .build();
                 s.setActiva(s.getFechaFin().isAfter(LocalDate.now()) || s.getFechaFin().isEqual(LocalDate.now()));
-                System.out.println("Activo: " + s.isActiva());
-                System.out.println("Fecha fin calculada: " + s.getFechaFin());
                 fechaProcesada = fechaProcesada.plus(p.getFrecuencia());
                 u.addSuscripcion(s);
                 p.addSuscripcion(s);

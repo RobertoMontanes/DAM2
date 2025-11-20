@@ -7,6 +7,7 @@ import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Formu
 import com.salesianostriana.dam.gestionsuscripciones.Models.DTO.Plataforma.Nuevo_PlataformaDTO;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Categorias;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.Objetivo;
+import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.PaginationInfo;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Extras.ValidacionResultado;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plan;
 import com.salesianostriana.dam.gestionsuscripciones.Models.Plataforma;
@@ -202,8 +203,6 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
     }
 
     public String verDetalle(Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes, Long page, Long size, String query) {
-        @Builder
-        record PaginationInfo(Long number, Long size, int numberOfElements, int totalElements, boolean first, int totalPages, boolean last) {}
         ValidacionResultado resultado = comprobarSesion(session, id, Objetivo.Detalles);
         Plataforma p;
         List<Plan> planesLimited;

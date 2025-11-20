@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Data @Builder @AllArgsConstructor
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Suscripcion {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne()

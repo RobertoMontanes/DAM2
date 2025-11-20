@@ -29,6 +29,7 @@ public class Plataforma {
 
     private Categorias categoria;
 
+
     public void modify(Plataforma plataforma) {
         this.nombre = plataforma.getNombre();
     }
@@ -38,5 +39,16 @@ public class Plataforma {
             this.planes = new ArrayList<>();
         }
         this.planes.add(plan);
+    }
+
+    public boolean checkActiveSuscription() {
+        for (Plan plan : this.planes) {
+            for(Suscripcion suscripcion : plan.getSuscripciones()) {
+                if (suscripcion.isActiva()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
