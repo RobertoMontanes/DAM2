@@ -1,0 +1,28 @@
+<!-- intentad hacer una cosa decente y que muestre una barra de navegación superior, con un logo para vuestra aplicación. -->
+
+<span>{{actualKind}}</span>
+<button (click)="changeKind()">Change KIND</button>
+
+
+<h2 class="h4 mb-3 text-white bg-black">Filtrar por Género</h2>
+<div class="genre-list d-flex flex-wrap gap-2 bg-black">
+    @for (genre of genreList; track $index) {
+    <button class="genre-button btn btn-outline-light btn-sm"
+            (click)="changeGenre(genre.id)">
+        {{ genre.name }}
+    </button>
+    }
+</div>
+
+<h2>{{actualKind}} List</h2>
+@if (actualKind == "movie") {
+    @for (movie of movieList; track $index) {
+        <p>{{movie.id}} - {{movie.title}}</p>
+    }
+} @else {
+    @for (tvShow of tvShowList; track $index) {
+        <p>{{tvShow.id}} - {{tvShow.name}}</p>
+    }
+}
+
+<button (click)="nextPage()">Load more</button>
