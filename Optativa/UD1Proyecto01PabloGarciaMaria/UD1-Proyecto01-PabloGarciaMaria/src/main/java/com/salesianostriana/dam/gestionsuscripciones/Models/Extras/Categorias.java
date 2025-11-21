@@ -1,5 +1,7 @@
 package com.salesianostriana.dam.gestionsuscripciones.Models.Extras;
 
+import lombok.ToString;
+
 public enum Categorias {
 
     ENTRETENIMIENTO,
@@ -7,6 +9,6 @@ public enum Categorias {
     DEPORTES,
     MUSICA,
     NOTICIAS,
-    OTROS
+    OTROS;
 
 }

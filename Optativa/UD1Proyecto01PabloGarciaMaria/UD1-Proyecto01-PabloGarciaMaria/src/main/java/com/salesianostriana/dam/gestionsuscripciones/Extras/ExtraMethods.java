@@ -18,11 +18,27 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class ExtraMethods {
+
+    public static String generateRandomColor() {
+        String[] caracteres = {
+                "0", "1", "2", "3", "4", "5", "6",  "7", "8", "9", "A", "B", "C", "D", "E", "F"
+        };
+        String cad = "#";
+        int len = 6;
+        Random rnd = new Random(System.nanoTime());
+
+        for  (int i = 0; i < len; i++) {
+            cad += caracteres[rnd.nextInt(caracteres.length)];
+        }
+        return cad;
+    }
+
 
     public static ValidacionResultado comprobarSesion(HttpSession session, UsuarioService usuarioService) {
         ValidacionResultado resultado = new ValidacionResultado();
