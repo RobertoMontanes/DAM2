@@ -6,16 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estadísticas - SubManager</title>
 
-     Bootstrap CSS 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-     Font Awesome para iconos 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-     Chart.js para gráficos 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-     Select2 CSS 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
         rel="stylesheet" />
@@ -318,6 +314,14 @@
             <div class="metric-grid">
                 <div class="stat-card">
                     <div class="stat-number" th:text="'€' + ${#numbers.formatDecimal(gastoTotal, 1, 2)}">€0.00</div>
+                    <!-- Expliacion rapida para no volverme loco. 
+                        Gasto total de ESTADISTICAS (GTE).
+                        Gasto mensual de DASHBOARD (GMD).
+                        EVOLUCION DE GASTOS MENSUALES  (EGM)
+
+                        NO SON LO MISMO, GTE se basa en un periodo, es decir, los ultimos 30 dias.
+                        GMD y EGM si que son lo mismo por que ambos se basan en el mes para buscar suscripciones.
+                    -->
                     <div class="stat-label">Gasto Total</div>
                     <div class="trend-indicator">
                         <span th:classappend="${variacionGastoTotal >= 0} ? 'change-positive' : 'change-negative'"
@@ -422,7 +426,7 @@
                 </div>
             </div>
 
-             &lt;!&ndash; Tercera Fila: Insights y Comparativas &ndash;&gt; 
+             <!-- &lt;!&ndash; Tercera Fila: Insights y Comparativas &ndash;&gt;  -->
             <div class="row">
                 <div class="col-lg-6">
                     <div class="chart-container">

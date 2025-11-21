@@ -135,22 +135,28 @@ public class EstadisticasService {
         gastoTotal = calcularTotalSuscripciones(suscripcionesFiltradas);
         gastoTotalAnterior = calcularTotalSuscripciones(suscripcionesFiltradasAnteriores);
         variacionGastoTotal = calcularVariacion(gastoTotalAnterior, gastoTotal);
-        gastoPromedio = gastoTotal / suscripcionesFiltradas.size();
+        gastoPromedio = suscripcionesFiltradas.isEmpty() ? 0 : gastoTotal / suscripcionesFiltradas.size();
         gastoPromedioAnterior = gastoTotalAnterior / suscripcionesFiltradasAnteriores.size();
         totalPlataformasAnterior = suscripcionesFiltradasAnteriores.stream().map(s -> s.getPlan().getPlataforma()).distinct().toList();
 
 
         // GRAFICO GASTOS MESES
-        for (int i = 12; i >= 1; i--) {
+        for (int i = 12; i >= 0; i--) {
             LocalDate start = LocalDate.now().minusMonths(i).withDayOfMonth(1);
             LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
             ultimos12Meses.add(start.getMonth().name());
 
             double totalMes = suscripciones.stream()
-                    .filter(s -> !(s.getFechaFin().isBefore(start) || s.getFechaInicio().isAfter(end)))
+                    .filter(s -> s.getFechaInicio().getMonth().equals(start.getMonth())
+                            && s.getFechaInicio().getYear() == start.getYear())
                     .mapToDouble(s -> s.getPlan().getPrecio())
                     .sum();
+
+            System.out.println(suscripciones.stream()
+                    .filter(s -> !(s.getFechaFin().isBefore(start) || s.getFechaInicio().isAfter(end)))
+                    .map(s -> s.getPlan().getPrecio())
+                    .toList());
 
             suscripcionesUltimos12Meses.add(totalMes);
         }

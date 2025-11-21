@@ -101,7 +101,6 @@ public class ExtraMethods {
 
         u = (Usuario) resultado.getObjeto();
         if (u.findPlataformaById(idPlataforma)) {
-            System.out.println(u.getPlataformas());
             resultado.setError("No puedes trabajar con una plataforma que no te pertenece.");
             resultado.setRedirect("redirect:/dashboard");
             return resultado;

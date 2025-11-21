@@ -119,7 +119,6 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
                 .map(ListarPlataforma_SuscripcionDTO::toDTO)
                 .toList();
 
-        System.out.println(listaDTO);
 
         if (listaDTO.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "No tienes plataformas para crear suscripciones.");
@@ -130,7 +129,6 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
         model.addAttribute("suscripcion", suscripcionDTO);
         model.addAttribute("plataformas", listaDTO);
 
-        System.out.println(suscripcionDTO);
 
         if (suscripcionDTO.getPlataformaId() != null) {
             Nuevo_SuscripcionDTO finalSuscripcionDTO = suscripcionDTO;

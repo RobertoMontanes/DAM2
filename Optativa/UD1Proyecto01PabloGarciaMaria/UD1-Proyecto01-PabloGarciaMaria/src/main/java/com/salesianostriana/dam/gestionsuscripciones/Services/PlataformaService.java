@@ -94,7 +94,6 @@ public class PlataformaService extends BaseServiceImpl<Plataforma, Long, Platafo
             return this.nuevo(model, session, redirectAttributes, plataformaDTO);
         }
 
-        System.out.println(plataformaDTO);
 
         if (plataformaDTO.getCategoria() == null || plataformaDTO.getCategoria().isEmpty()) {
             model.addAttribute("error", "Por favor, selecciona una categoría para la plataforma.");

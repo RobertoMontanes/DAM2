@@ -485,15 +485,7 @@
     <div class="quick-actions">
         <h3 class="section-title">Acciones Rápidas</h3>
         <div class="row g-3">
-            <div class="col-md-3 col-sm-6">
-                <a th:href="@{/suscripciones/nuevo}" class="quick-action-btn">
-                    <div class="quick-action-icon">
-                        <i class="fas fa-plus-circle"></i>
-                    </div>
-                    <div>Nueva Suscripción</div>
-                </a>
-            </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-4 col-sm-6">
                 <a th:href="@{/plataformas/nuevo}" class="quick-action-btn">
                     <div class="quick-action-icon">
                         <i class="fas fa-tv"></i>
@@ -501,7 +493,15 @@
                     <div>Agregar Plataforma</div>
                 </a>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-4 col-sm-6">
+                <a th:href="@{/suscripciones/nuevo}" class="quick-action-btn">
+                    <div class="quick-action-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div>Nueva Suscripción</div>
+                </a>
+            </div>
+            <div class="col-md-4 col-sm-12">
                 <a th:href="@{/estadisticas}" class="quick-action-btn">
                     <div class="quick-action-icon">
                         <i class="fas fa-chart-pie"></i>
@@ -509,14 +509,14 @@
                     <div>Ver Estadísticas</div>
                 </a>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <!-- <div class="col-md-3 col-sm-6">
                 <a href="#" class="quick-action-btn">
                     <div class="quick-action-icon">
                         <i class="fas fa-cog"></i>
                     </div>
                     <div>Ajustes</div>
                 </a>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -524,7 +524,8 @@
         <!-- Columna izquierda: Notificaciones y Estadísticas -->
         <div class="col-lg-4">
             <!-- Notificaciones -->
-            <div class="card" id="notificaciones">
+            <!-- Ya lo intentare hacer en algun momento...1 -->
+            <!-- <div class="card" id="notificaciones">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-bell me-2"></i>Avisos / Notificaciones</span>
                     <span class="badge bg-primary rounded-pill" th:text="${avisos != null ? avisos.size() : 0}">0</span>
@@ -541,7 +542,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Estadísticas -->
             <div class="card" id="estadisticas">
@@ -589,6 +590,125 @@
 
         <!-- Columna derecha: Suscripciones y Plataformas -->
         <div class="col-lg-8">
+            <!-- Plataformas -->
+            <div class="card" id="plataformas">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-tv me-2"></i>Mis Plataformas</span>
+                    <a th:href="@{/plataformas/nuevo}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i>Nueva Plataforma
+                    </a>
+                </div>
+                <div class="card-body">
+                    <!-- Controles de tabla -->
+                    <div class="table-controls p-3 pb-0">
+                        <div class="search-box">
+                            <form th:action="@{/dashboard#plataformas}" method="get" class="search-form">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" name="q" placeholder="Buscar plataformas..." th:value="${param.q}">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="tablaPlataformas">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="plataforma : ${plataformas}">
+                                <td th:text="${plataforma.nombre}">Nombre de la Plataforma</td>
+                                <td>
+                                    <span class="badge badge-status badge-active" th:text="${plataforma.categoria}">Categoría</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{|/plataformas/${plataforma.id}|}" class="action-link"
+                                       title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a th:href="@{|/plataformas/editar/${plataforma.id}|}" class="action-link"
+                                       title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a th:href="@{|/plataformas/eliminar/${plataforma.id}|}"
+                                       class="action-link text-danger"
+                                       title="Eliminar"
+                                       onclick="return confirm('¿Estás seguro de que deseas eliminar esta plataforma?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${plataformas == null || plataformas.empty}">
+                                <td colspan="3" class="empty-state">
+                                    <i class="fas fa-tv"></i>
+                                    <h5>No tienes plataformas registradas</h5>
+                                    <p class="text-muted">Comienza agregando tu primera plataforma</p>
+                                    <a th:href="@{/plataformas/nuevo}" class="btn btn-primary">
+                                        <i class="fas fa-plus me-1"></i>Agregar Plataforma
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación de Plataformas -->
+                    <div class="pagination-container" th:if="${plataformas != null && !plataformas.empty  and plataformaPage.totalPages > 1}">
+                        <div class="pagination-info">
+                            Mostrando <span th:text="${(plataformaPage.number * plataformaPage.size) + 1}">1</span> -
+                            <span th:text="${(plataformaPage.number * plataformaPage.size) + plataformaPage.numberOfElements}">10</span> de
+                            <span th:text="${plataformaPage.totalElements}">100</span> plataformas
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item" th:classappend="${plataformaPage.first} ? 'disabled' : ''">
+                                    <a class="page-link" th:href="@{'/dashboard?page=0&size=' + ${plataformaPage.size} + '#plataformas'}">
+                                        <i class="fas fa-angle-double-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:classappend="${plataformaPage.first} ? 'disabled' : ''">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.number-1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                </li>
+
+                                <li th:each="page : ${#numbers.sequence(plataformaPage.number-1 < 0 ? 0 : plataformaPage.number-1, plataformaPage.totalPages-1 < 4 ? plataformaPage.totalPages-1 : 4)}"
+                                    class="page-item" th:classappend="${page == plataformaPage.number} ? 'active' : ''">
+                                    <a class="page-link"
+                                       th:href="@{'/dashboard?page=' + ${page} + '&size=' + ${plataformaPage.size} + '#plataformas'}"
+                                       th:text="${page + 1}">
+                                    </a>
+                                </li>
+
+                                <li class="page-item" th:classappend="${plataformaPage.last} ? 'disabled' : ''">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.number+1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:classappend="${plataformaPage.last} ? 'disabled' : ''">
+                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.totalPages-1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="items-per-page">
+                            <label for="porPagePlataformas">Por página:</label>
+                            <select id="porPagePlataformas" onchange="location = this.value;">
+                                <option th:each="size : ${ {5,10,25,50} }"
+                                        th:value="@{'/dashboard?page=0&size=' + ${size} + '#plataformas'}"
+                                        th:selected="${size == plataformaPage.size}"
+                                        th:text="${size}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Suscripciones -->
             <div class="card" id="suscripciones">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -704,126 +824,6 @@
                                 <option th:each="size : ${ {5,10,25,50} }"
                                         th:value="@{'/dashboard?page=0&size=' + ${size} + '#suscripciones'}"
                                         th:selected="${size == suscripcionPage.size}"
-                                        th:text="${size}">
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plataformas -->
-            <div class="card" id="plataformas">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="fas fa-tv me-2"></i>Mis Plataformas</span>
-                    <a th:href="@{/plataformas/nuevo}" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus me-1"></i>Nueva Plataforma
-                    </a>
-                </div>
-                <div class="card-body">
-                    <!-- Controles de tabla -->
-                    <div class="table-controls p-3 pb-0">
-                        <div class="search-box">
-                            <form th:action="@{/dashboard#plataformas}" method="get" class="search-form">
-                                <i class="fas fa-search"></i>
-                                <input type="text" class="form-control" name="q" placeholder="Buscar plataformas..." th:value="${param.q}">
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="tablaPlataformas">
-                            <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Categoría</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="plataforma : ${plataformas}">
-                                <td th:text="${plataforma.nombre}">Nombre de la Plataforma</td>
-                                <td>
-                                    <span class="badge badge-status badge-active" th:text="${plataforma.categoria}">Categoría</span>
-                                </td>
-                                <td>
-                                    <a th:href="@{|/plataformas/${plataforma.id}|}" class="action-link"
-                                       title="Ver detalles">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a th:href="@{|/plataformas/editar/${plataforma.id}|}" class="action-link"
-                                       title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a th:href="@{|/plataformas/eliminar/${plataforma.id}|}"
-                                       class="action-link text-danger"
-                                       title="Eliminar"
-                                       onclick="return confirm('¿Estás seguro de que deseas eliminar esta plataforma?');">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr th:if="${plataformas == null || plataformas.empty}">
-                                <td colspan="3" class="empty-state">
-                                    <i class="fas fa-tv"></i>
-                                    <h5>No tienes plataformas registradas</h5>
-                                    <p class="text-muted">Comienza agregando tu primera plataforma</p>
-                                    <a th:href="@{/plataformas/nuevo}" class="btn btn-primary">
-                                        <i class="fas fa-plus me-1"></i>Agregar Plataforma
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Paginación de Plataformas -->
-                    <div class="pagination-container" th:if="${plataformas != null && !plataformas.empty  and plataformaPage.totalPages > 1}">
-                        <div class="pagination-info">
-                            Mostrando <span th:text="${(plataformaPage.number * plataformaPage.size) + 1}">1</span> -
-                            <span th:text="${(plataformaPage.number * plataformaPage.size) + plataformaPage.numberOfElements}">10</span> de
-                            <span th:text="${plataformaPage.totalElements}">100</span> plataformas
-                        </div>
-                        <nav>
-                            <ul class="pagination">
-                                <li class="page-item" th:classappend="${plataformaPage.first} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{'/dashboard?page=0&size=' + ${plataformaPage.size} + '#plataformas'}">
-                                        <i class="fas fa-angle-double-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page-item" th:classappend="${plataformaPage.first} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.number-1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
-                                        <i class="fas fa-angle-left"></i>
-                                    </a>
-                                </li>
-
-                                <li th:each="page : ${#numbers.sequence(plataformaPage.number-1 < 0 ? 0 : plataformaPage.number-1, plataformaPage.totalPages-1 < 4 ? plataformaPage.totalPages-1 : 4)}"
-                                    class="page-item" th:classappend="${page == plataformaPage.number} ? 'active' : ''">
-                                    <a class="page-link"
-                                       th:href="@{'/dashboard?page=' + ${page} + '&size=' + ${plataformaPage.size} + '#plataformas'}"
-                                       th:text="${page + 1}">
-                                    </a>
-                                </li>
-
-                                <li class="page-item" th:classappend="${plataformaPage.last} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.number+1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
-                                        <i class="fas fa-angle-right"></i>
-                                    </a>
-                                </li>
-                                <li class="page-item" th:classappend="${plataformaPage.last} ? 'disabled' : ''">
-                                    <a class="page-link" th:href="@{'/dashboard?page=' + ${plataformaPage.totalPages-1} + '&size=' + ${plataformaPage.size} + '#plataformas'}">
-                                        <i class="fas fa-angle-double-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <div class="items-per-page">
-                            <label for="porPagePlataformas">Por página:</label>
-                            <select id="porPagePlataformas" onchange="location = this.value;">
-                                <option th:each="size : ${ {5,10,25,50} }"
-                                        th:value="@{'/dashboard?page=0&size=' + ${size} + '#plataformas'}"
-                                        th:selected="${size == plataformaPage.size}"
                                         th:text="${size}">
                                 </option>
                             </select>
