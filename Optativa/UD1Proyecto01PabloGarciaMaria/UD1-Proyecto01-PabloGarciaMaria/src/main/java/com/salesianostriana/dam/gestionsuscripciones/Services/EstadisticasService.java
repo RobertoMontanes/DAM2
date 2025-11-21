@@ -38,7 +38,7 @@ public class EstadisticasService {
                 .map(Plan::getSuscripciones)
                 .flatMap(List::stream).toList();
 
-        return (double) ((pSize * 100) / sList.size());
+        return sList.isEmpty() ? 0 : (double) ((pSize * 100) / sList.size());
     }
 
     private Double calcularVariacion(Double valorInicial, Double valorFinal) {
@@ -90,6 +90,7 @@ public class EstadisticasService {
                     .toList();
             suscripcionesFiltradas = suscripcionesFiltradas.stream()
                     .filter(s -> s.getFechaInicio().isAfter(LocalDate.now().minusDays(diasPeriodo)))
+                    .filter(Suscripcion::isActiva)
                     .toList();
         }
         return new FiltradoSuscripciones(suscripcionesFiltradas, suscripcionesFiltradasAnteriores);
@@ -114,9 +115,10 @@ public class EstadisticasService {
         }
         return estadisticasPlataformas;
     }
+
     private Map<String, Double> prepararGraficoUltimosMeses(List<Suscripcion> suscripciones) {
-        Map<String, Double> grafico12Meses = new HashMap<>();
-        for (int i = 12; i >= 0; i--) {
+        Map<String, Double> grafico12Meses = new LinkedHashMap<>();
+        for (int i = 11; i >= 0; i--) {
             LocalDate start = LocalDate.now().minusMonths(i).withDayOfMonth(1);
             String actualMonthName = start.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
@@ -154,6 +156,11 @@ public class EstadisticasService {
             return "redirect:/login";
         }
         usuario = (Usuario) vr.getObjeto();
+
+        if (usuario.getSuscripciones() == null || usuario.getSuscripciones().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "No puedes ver las estadisticas si no dispones de suscripciones.");
+            return "redirect:/dashboard";
+        }
 
         periodoStr = switch (diasPeriodo) {
             case 30 -> "Últimos 30 dias";
@@ -219,7 +226,7 @@ public class EstadisticasService {
         model.addAttribute("variacionGastoTotal",variacionGastoTotal);
         model.addAttribute("gastoTotalAnterior", gastoTotalAnterior);
 
-        model.addAttribute("totalSuscripciones", fs.getSuscripcionesFiltradas().size());
+        model.addAttribute("totalSuscripciones", fs.getSuscripcionesFiltradas().size()); // 14?
         model.addAttribute("totalSuscripcionesAnterior", fs.getSuscripcionesFiltradasAnteriores().size());
         model.addAttribute("variacionSuscripciones", fs.getSuscripcionesFiltradas().size() - fs.getSuscripcionesFiltradasAnteriores().size());
 

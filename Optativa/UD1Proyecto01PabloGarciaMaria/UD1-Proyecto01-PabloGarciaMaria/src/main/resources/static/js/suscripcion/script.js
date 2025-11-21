@@ -1,17 +1,17 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Inicializar Select2 para todos los selects mejorados
     $('.select2-enhanced').select2({
         theme: 'bootstrap-5',
         width: '100%',
         language: {
-            noResults: function() {
+            noResults: function () {
                 return "No se encontraron resultados";
             },
-            searching: function() {
+            searching: function () {
                 return "Buscando...";
             }
         },
-        placeholder: function() {
+        placeholder: function () {
             return $(this).data('placeholder');
         },
         allowClear: $(this).data('allow-clear') || false
@@ -19,14 +19,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const plataformaSelect = $('#plataforma');
     const planSelect = $('#plan');
-    const loadingSpinner = document.getElementById('loadingSpinner');
     const submitButton = document.getElementById('submitButton');
     const planInfo = document.getElementById('planInfo');
 
     // Auto-enviar formulario cuando se selecciona plataforma (manteniendo funcionalidad original)
-    plataformaSelect.on('change', function() {
+    plataformaSelect.on('change', function () {
         if (this.value) {
-            loadingSpinner.style.display = 'block';
             submitButton.disabled = true;
             document.getElementById('formulario').submit();
         }
@@ -34,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Habilitar el botón de enviar cuando se carguen los planes
     if (planSelect.find('option').length > 1) {
-        loadingSpinner.style.display = 'none';
         submitButton.disabled = false;
     }
 
@@ -48,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Validación del formulario
     const form = document.getElementById('formulario');
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
         const plataforma = document.getElementById('plataforma').value;
         const plan = document.getElementById('plan').value;
         const fecha = document.getElementById('fechaInicio').value;
