@@ -67,7 +67,7 @@ public class EstadisticasService {
         Map<String,Double> plataformasMap = new HashMap<>();
         Map<String,Double> renovacionesMap = new HashMap<>();
         List<Suscripcion> suscripciones, suscripcionesFiltradas, suscripcionesFiltradasAnteriores;
-        List<Plataforma> totalPlataformas, totalPlataformasAnterior;
+        List<Plataforma> totalPlataformasAnterior;
         List<Double> suscripcionesUltimos12Meses= new ArrayList<>();
         List<Double> categoriasDataProc = new ArrayList<>();
         List<String> coloresCategorias = new ArrayList<>();
@@ -76,7 +76,7 @@ public class EstadisticasService {
         Usuario usuario;
         ObjectMapper mapper = new ObjectMapper();
         String insightAlertas, insightTendencia, periodoStr;
-        double gastoTotal, gastoTotalAnterior, gastoPromedio, gastoPromedioAnterior, variacionGastoTotal, suscripcionesConAutoRenovacion, totalSuscripciones;
+        double gastoTotal, gastoTotalAnterior, gastoPromedio, gastoPromedioAnterior, variacionGastoTotal, suscripcionesConAutoRenovacion, totalPlataformas;
         int suscripcionesProximas = 0;
         String categoriaMasCara;
         Double gastoCategoriaMasCara;
@@ -127,9 +127,6 @@ public class EstadisticasService {
             suscripcionesFiltradas = suscripcionesFiltradas.stream()
                     .filter(s -> s.getFechaInicio().isAfter(LocalDate.now().minusDays(diasPeriodo)))
                     .toList();
-
-            System.out.println(suscripcionesFiltradasAnteriores);
-            System.out.println(suscripcionesFiltradas);
         }
 
         record ListarPlataformasDTO(Long id, String nombre){}
@@ -139,7 +136,6 @@ public class EstadisticasService {
         variacionGastoTotal = calcularVariacion(gastoTotalAnterior, gastoTotal);
         gastoPromedio = gastoTotal / suscripcionesFiltradas.size();
         gastoPromedioAnterior = gastoTotalAnterior / suscripcionesFiltradasAnteriores.size();
-        totalPlataformas = suscripcionesFiltradas.stream().map(s -> s.getPlan().getPlataforma()).distinct().toList();
         totalPlataformasAnterior = suscripcionesFiltradasAnteriores.stream().map(s -> s.getPlan().getPlataforma()).distinct().toList();
 
 
@@ -159,12 +155,40 @@ public class EstadisticasService {
         }
 
         for (Plataforma p : usuario.getPlataformas()) {
+            /* Checkear tasa renovacion - Params */
+            int renovacion = 0, cont = 0;
+            List<Suscripcion> suscripcionesTrab = p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList();
+
+            /* Total por plataforma */
+            Double totalGasto = calcularTotalSuscripciones(p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList());
+            plataformasMap.put(p.getNombre(), totalGasto);
+
+            /* Plataformar por categoria*/
             if (categoriasDataMap.containsKey(p.getCategoria().name())) {
                 categoriasDataMap.put(p.getCategoria().name(), categoriasDataMap.get(p.getCategoria().name()) + 1);
             } else {
                 categoriasDataMap.put(p.getCategoria().name(), 1);
             }
+
+            /* Checkear tasa renovacion */
+            for (int i = 0; i < suscripcionesTrab.size(); i++) {
+                Suscripcion sActual = suscripcionesTrab.get(i);
+                Suscripcion sSiguiente = i+1 >= suscripcionesTrab.size() ? suscripcionesTrab.get(i) : suscripcionesTrab.get(i+1);
+
+
+                if (!sActual.equals(sSiguiente)) {
+                    if(sActual.getFechaFin().equals(sSiguiente.getFechaInicio())) {
+                        renovacion++;
+                    }
+                    cont++;
+                }
+            }
+            renovacionesMap.put(p.getNombre(),(double) (renovacion * 100) / cont);
+
         }
+
+
+
 
         for (Integer i : categoriasDataMap.values()) {
             int max = usuario.getPlataformas().size();
@@ -176,10 +200,18 @@ public class EstadisticasService {
         }
 
         for (Plataforma p : usuario.getPlataformas()) {
-            Double totalGasto = calcularTotalSuscripciones(p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList());
-            plataformasMap.put(p.getNombre(), totalGasto);
+
         }
 
+        for (Suscripcion sActual : suscripciones) {
+            /* Suscripciones Proximas */
+            if (sActual.isActiva()) {
+                if (sActual.getFechaFin().isBefore(LocalDate.now().plusDays(7))){
+                    suscripcionesProximas++;
+                }
+            }
+
+        }
         if (variacionGastoTotal > 10) {
             insightTendencia = "Tu gasto ha aumentado un " + Math.abs(variacionGastoTotal) + "% respecto al período anterior - considera revisar tus suscripciones";
         } else if (variacionGastoTotal < -5) {
@@ -188,19 +220,12 @@ public class EstadisticasService {
             insightTendencia = "Mantienes un gasto estable en tus suscripciones - buena gestión financiera";
         }
 
-        for (Suscripcion s : usuario.getSuscripciones()) {
-            if (s.isActiva()) {
-                if (s.getFechaFin().isBefore(LocalDate.now().plusDays(7))){
-                    suscripcionesProximas++;
-                }
-            }
-        }
-
         if (suscripcionesProximas <= 0) {
             insightAlertas = "Todas tus suscripciones están al día - sin vencimientos próximos";
         } else {
             insightAlertas = suscripcionesProximas + " suscripciones vencen en los próximos 7 días - planifica las renovaciones";
         }
+
 
         for (Plataforma p : usuario.getPlataformas()) {
             List<Suscripcion> allUserSubs = p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList();
@@ -226,7 +251,7 @@ public class EstadisticasService {
                 .count();
 
 
-        totalSuscripciones = usuario.getPlataformas().size();
+        totalPlataformas = usuario.getPlataformas().size();
 
         Map<String, Double> categoriaCara = new HashMap<>();
         for (Plataforma p : usuario.getPlataformas()) {
@@ -264,34 +289,46 @@ public class EstadisticasService {
                 .filter(Plataforma::isEstado)
                 .map(p -> new ListarPlataformasDTO(p.getId(), p.getNombre())).
                 toList());
+
         model.addAttribute("periodoActual", periodoStr);
+
         model.addAttribute("gastoTotal", gastoTotal);
         model.addAttribute("variacionGastoTotal",variacionGastoTotal);
         model.addAttribute("gastoTotalAnterior", gastoTotalAnterior);
+
         model.addAttribute("totalSuscripciones", suscripcionesFiltradas.size());
         model.addAttribute("totalSuscripcionesAnterior", suscripcionesFiltradasAnteriores.size());
         model.addAttribute("variacionSuscripciones", suscripcionesFiltradas.size() - suscripcionesFiltradasAnteriores.size());
+
         model.addAttribute("gastoPromedio", gastoPromedio);
         model.addAttribute("gastoPromedioAnterior", gastoPromedioAnterior);
         model.addAttribute("variacionGastoPromedio", calcularVariacion(gastoPromedioAnterior,gastoPromedio));
-        model.addAttribute("totalPlataformas", totalPlataformas.size());
+
+        model.addAttribute("totalPlataformas", totalPlataformas);
         model.addAttribute("totalPlataformasAnterior", totalPlataformasAnterior.size());
-        model.addAttribute("nuevasPlataformas", totalPlataformas.size() - totalPlataformasAnterior.size());
+        model.addAttribute("nuevasPlataformas", totalPlataformas - totalPlataformasAnterior.size());
+
         model.addAttribute("mesesLabels",mapper.writeValueAsString(ultimos12Meses));
         model.addAttribute("gastosMensualesData",mapper.writeValueAsString(suscripcionesUltimos12Meses));
+
         model.addAttribute("categoriasLabels",mapper.writeValueAsString(Categorias.values()));
         model.addAttribute("categoriasData",mapper.writeValueAsString(categoriasDataProc));
         model.addAttribute("categoriasColores", mapper.writeValueAsString(coloresCategorias));
+
         model.addAttribute("plataformasLabels",mapper.writeValueAsString(plataformasMap.keySet()));
         model.addAttribute("plataformasData",mapper.writeValueAsString(plataformasMap.values()));
+
         model.addAttribute("renovacionesLabels", mapper.writeValueAsString(renovacionesMap.keySet()));
         model.addAttribute("renovacionesData", mapper.writeValueAsString(renovacionesMap.values()));
+
         model.addAttribute("insightTendencia", insightTendencia);
         model.addAttribute("insightAlertas", insightAlertas);
+
         model.addAttribute("estadisticasPlataformas", estadisticasPlataformas);
         model.addAttribute("suscripcionesConAutoRenovacion",suscripcionesConAutoRenovacion);
-        model.addAttribute("totalSuscripciones",totalSuscripciones);
+
         model.addAttribute("categoriaMasCara", categoriaMasCara);
+
         model.addAttribute("gastoCategoriaMasCara", gastoCategoriaMasCara);
 
         return "estadisticas/estadisticas";

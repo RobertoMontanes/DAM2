@@ -375,7 +375,7 @@
                 </div>
             </div>
 
-             &lt;!&ndash; Primera Fila: Gráficos Principales &ndash;&gt; 
+             <!-- &lt;!&ndash; Primera Fila: Gráficos Principales &ndash;&gt;  -->
             <div class="row">
                 <div class="col-lg-8">
                     <div class="chart-container">
@@ -397,7 +397,7 @@
                 </div>
             </div>
 
-                    &lt;!&ndash; Segunda Fila: Más Gráficos y Estadísticas &ndash;&gt;
+            <!-- &lt;!&ndash; Segunda Fila: Más Gráficos y Estadísticas &ndash;&gt; -->
             <div class="row">
                 <div class="col-lg-6">
                     <div class="chart-container">
@@ -413,7 +413,7 @@
                 <div class="col-lg-6">
                     <div class="chart-container">
                         <h5 class="chart-title">
-                            <i class="fas fa-calendar-alt me-2"></i>Renovaciones por Mes
+                            <i class="fas fa-calendar-alt me-2"></i>Porcentaje de Renovacion
                         </h5>
                         <div style="width: 80%; max-width: 800px; margin: auto; height: 350px;">
                             <canvas id="renovacionesChart" height="350"></canvas>
@@ -508,7 +508,7 @@
                 </div>
             </div>
 
-            &lt;!&ndash; Cuarta Fila: Estadísticas Detalladas &ndash;&gt;
+            <!-- &lt;!&ndash; Cuarta Fila: Estadísticas Detalladas &ndash;&gt; -->
             <div class="row">
                 <div class="col-12">
                     <div class="chart-container">
@@ -555,10 +555,10 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="stat-card">
-                        <div class="stat-number" th:text="${suscripcionesConAutoRenovacion} + '/' + ${totalSuscripciones}">0/0</div>
+                        <div class="stat-number" th:text="${suscripcionesConAutoRenovacion} + '/' + ${totalPlataformas}">0/0</div>
                         <div class="stat-label">Auto-Renovación Activada</div>
                         <div class="text-muted small">
-                            <span th:text="${#numbers.formatDecimal((suscripcionesConAutoRenovacion / totalSuscripciones) * 100, 1, 0)}">0</span>% de tus suscripciones
+                            <span th:text="${#numbers.formatDecimal((suscripcionesConAutoRenovacion / totalPlataformas) * 100, 1, 0)}">0</span>% de tus suscripciones
                         </div>
                     </div>
                 </div>
