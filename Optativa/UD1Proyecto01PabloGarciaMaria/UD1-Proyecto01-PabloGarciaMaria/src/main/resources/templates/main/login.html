@@ -11,130 +11,8 @@
     <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        :root {
-            --primary-color: #6b7fd7;
-            --primary-dark: #5a6bc5;
-            --light-bg: #f8f9fa;
-            --text-color: #333;
-        }
-
-        body {
-            background-color: var(--light-bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 100%;
-            max-width: 420px;
-        }
-
-        .login-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
-        }
-
-        .login-header h1 {
-            font-size: 1.8rem;
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .login-body {
-            padding: 30px;
-        }
-
-        .form-control {
-            border-radius: 8px;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            transition: all 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
-        }
-
-        .input-group-text {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-right: none;
-            border-radius: 8px 0 0 8px;
-        }
-
-        .password-input {
-            border-left: none;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            border-radius: 8px;
-            padding: 12px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .btn-primary:hover, .btn-primary:focus {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline-primary {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-            border-radius: 8px;
-            padding: 10px;
-            transition: all 0.3s;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .alert {
-            border-radius: 8px;
-            padding: 12px 15px;
-        }
-
-        .password-toggle {
-            cursor: pointer;
-            color: var(--primary-color);
-            transition: all 0.2s;
-        }
-
-        .password-toggle:hover {
-            color: var(--primary-dark);
-        }
-
-        .login-footer {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            margin-top: 20px;
-            color: #666;
-        }
-
-        .brand-logo {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: white;
-        }
-    </style>
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="/css/main/login.css">
 </head>
 <body>
 <div class="login-container">
@@ -202,22 +80,7 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    // Función para mostrar/ocultar contraseña
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const passwordInput = document.getElementById('password');
-        const icon = this.querySelector('i');
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    });
-</script>
+<!-- JavaScript personalizado -->
+<script src="/js/main/login.js"></script>
 </body>
 </html>
