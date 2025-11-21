@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.management.openmbean.TabularDataSupport;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -113,22 +114,40 @@ public class EstadisticasService {
         }
         return estadisticasPlataformas;
     }
+    private Map<String, Double> prepararGraficoUltimosMeses(List<Suscripcion> suscripciones) {
+        Map<String, Double> grafico12Meses = new HashMap<>();
+        for (int i = 12; i >= 0; i--) {
+            LocalDate start = LocalDate.now().minusMonths(i).withDayOfMonth(1);
+            String actualMonthName = start.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
+            grafico12Meses.put(actualMonthName, (double) 0);
+
+            double totalMes = suscripciones.stream()
+                    .filter(s -> s.getFechaInicio().getMonth().equals(start.getMonth())
+                            && s.getFechaInicio().getYear() == start.getYear())
+                    .mapToDouble(s -> s.getPlan().getPrecio())
+                    .sum();
+
+            grafico12Meses.put(actualMonthName, totalMes);
+        }
+        return grafico12Meses;
+    }
+    
     public String cargarEstadisticas(Model model, RedirectAttributes redirectAttributes, HttpSession session, int diasPeriodo, String nombreCategoria, String idPlataforma) throws JsonProcessingException {
+        record ListarPlataformasDTO(Long id, String nombre){}
         ValidacionResultado vr = ExtraMethods.comprobarSesion(session, usuarioService);
         FiltradoSuscripciones fs;
-        Map<String,Integer> categoriasDataMap = new HashMap<>();
-        Map<String,Double> renovacionesMap = new HashMap<>(), categoriaCara = new HashMap<>(), plataformasMap;
-        List<Double> suscripcionesUltimos12Meses= new ArrayList<>(), categoriasDataProc = new ArrayList<>();
-        List<String> coloresCategorias = new ArrayList<>(), ultimos12Meses = new ArrayList<>();
+        ParCategoriaMasCara categoriaCara;
+        Map<String,Integer> categoriasDataMap ;
+        Map<String,Double> renovacionesMap , plataformasMap, ultimos12Meses;
+        List<Double> categoriasDataProc = new ArrayList<>();
+        List<String> coloresCategorias = new ArrayList<>();
         List<Plataforma> totalPlataformasAnterior;
         double gastoTotal, gastoTotalAnterior, gastoPromedio, gastoPromedioAnterior, variacionGastoTotal, totalPlataformas;
         Usuario usuario;
         ObjectMapper mapper = new ObjectMapper();
         String insightAlertas, insightTendencia, periodoStr;
-        int suscripcionesProximas = 0;
-        String categoriaMasCara;
-        Double gastoCategoriaMasCara;
+        int suscripcionesProximas;
 
         if (!vr.isExito()) {
             redirectAttributes.addFlashAttribute("error", vr.getError());
@@ -147,7 +166,6 @@ public class EstadisticasService {
 
         fs = this.filtrarSuscripciones(nombreCategoria,usuario.getSuscripciones(), idPlataforma, diasPeriodo);
 
-        record ListarPlataformasDTO(Long id, String nombre){}
 
         gastoTotal = calcularTotalSuscripciones(fs.getSuscripcionesFiltradas());
         gastoTotalAnterior = calcularTotalSuscripciones(fs.getSuscripcionesFiltradasAnteriores());
@@ -156,80 +174,10 @@ public class EstadisticasService {
         gastoPromedioAnterior = gastoTotalAnterior / fs.getSuscripcionesFiltradasAnteriores().size();
         totalPlataformasAnterior = fs.getSuscripcionesFiltradasAnteriores().stream().map(s -> s.getPlan().getPlataforma()).distinct().toList();
 
+        renovacionesMap = calcularTasaRenovacion(usuario.getPlataformas());
+        categoriasDataMap = contarPlataformasPorCategoria(usuario.getPlataformas());
 
-        // GRAFICO GASTOS MESES
-        for (int i = 12; i >= 0; i--) {
-            LocalDate start = LocalDate.now().minusMonths(i).withDayOfMonth(1);
-            LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
-
-            ultimos12Meses.add(start.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
-
-            double totalMes = usuario.getSuscripciones().stream()
-                    .filter(s -> s.getFechaInicio().getMonth().equals(start.getMonth())
-                            && s.getFechaInicio().getYear() == start.getYear())
-                    .mapToDouble(s -> s.getPlan().getPrecio())
-                    .sum();
-
-            suscripcionesUltimos12Meses.add(totalMes);
-        }
-
-        for (Plataforma p : usuario.getPlataformas()) {
-            /* Checkear tasa renovacion - Params */
-            int renovacion = 0, cont = 0;
-            List<Suscripcion> suscripcionesTrab = p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList();
-
-            /* Plataformar por categoria*/
-            if (categoriasDataMap.containsKey(p.getCategoria().name())) {
-                categoriasDataMap.put(p.getCategoria().name(), categoriasDataMap.get(p.getCategoria().name()) + 1);
-            } else {
-                categoriasDataMap.put(p.getCategoria().name(), 1);
-            }
-
-            /* Checkear tasa renovacion */
-            for (int i = 0; i < suscripcionesTrab.size(); i++) {
-                Suscripcion sActual = suscripcionesTrab.get(i);
-                Suscripcion sSiguiente = i+1 >= suscripcionesTrab.size() ? suscripcionesTrab.get(i) : suscripcionesTrab.get(i+1);
-
-
-                if (!sActual.equals(sSiguiente)) {
-                    if(sActual.getFechaFin().equals(sSiguiente.getFechaInicio())) {
-                        renovacion++;
-                    }
-                    cont++;
-                }
-            }
-            renovacionesMap.put(p.getNombre(),(double) (renovacion * 100) / cont);
-
-            /* Comprobar categoria mas cara */
-            Double precioMensual = p.getPlanes().stream()
-                    .map(Plan::getSuscripciones)
-                    .flatMap(List::stream)
-                    .filter(Suscripcion::isActiva)
-                    .map(Suscripcion::getPlan)
-                    .mapToDouble(Plan::calcularGastoMensual)
-                    .sum();
-
-            if (categoriaCara.containsKey(p.getCategoria().name())) {
-                categoriaCara.put(p.getCategoria().name(), categoriaCara.get(p.getCategoria().name()) + precioMensual);
-            } else {
-                categoriaCara.put(p.getCategoria().name(), precioMensual);
-            }
-
-        }
-
-        categoriaMasCara = "";
-        gastoCategoriaMasCara = (double) 0;
-        for (Map.Entry<String,Double> entry : categoriaCara.entrySet()) {
-            if (categoriaMasCara.isEmpty()) {
-                categoriaMasCara = entry.getKey();
-                gastoCategoriaMasCara = entry.getValue();
-            } else {
-                if (entry.getValue() > gastoCategoriaMasCara) {
-                    gastoCategoriaMasCara = entry.getValue();
-                    categoriaMasCara = entry.getKey();
-                }
-            }
-        }
+        categoriaCara = encontrarCategoriaMasCara(usuario.getPlataformas());
 
         for (Integer i : categoriasDataMap.values()) {
             int max = usuario.getPlataformas().size();
@@ -240,14 +188,7 @@ public class EstadisticasService {
             coloresCategorias.add(CategoriasColores.valueOf(cat.name()).getColorHex());
         }
 
-        for (Suscripcion sActual : usuario.getSuscripciones()) {
-            /* Suscripciones Proximas */
-            if (sActual.isActiva()) {
-                if (sActual.getFechaFin().isBefore(LocalDate.now().plusDays(7))){
-                    suscripcionesProximas++;
-                }
-            }
-        }
+        suscripcionesProximas = contarSuscripcionesCaducando(usuario.getSuscripciones());
 
         if (variacionGastoTotal > 10) {
             insightTendencia = "Tu gasto ha aumentado un " + Math.ceil(variacionGastoTotal) + "% respecto al período anterior - considera revisar tus suscripciones";
@@ -265,7 +206,7 @@ public class EstadisticasService {
 
         totalPlataformas = usuario.getPlataformas().size();
 
-
+        // 40 Lineas de models.
         model.addAttribute("categorias", Categorias.values());
         model.addAttribute("plataformas", usuario.getPlataformas().stream()
                 .filter(Plataforma::isEstado)
@@ -290,8 +231,9 @@ public class EstadisticasService {
         model.addAttribute("totalPlataformasAnterior", totalPlataformasAnterior.size());
         model.addAttribute("nuevasPlataformas", totalPlataformas - totalPlataformasAnterior.size());
 
-        model.addAttribute("mesesLabels",mapper.writeValueAsString(ultimos12Meses));
-        model.addAttribute("gastosMensualesData",mapper.writeValueAsString(suscripcionesUltimos12Meses));
+        ultimos12Meses = this.prepararGraficoUltimosMeses(usuario.getSuscripciones());
+        model.addAttribute("mesesLabels",mapper.writeValueAsString(ultimos12Meses.keySet()));
+        model.addAttribute("gastosMensualesData",mapper.writeValueAsString(ultimos12Meses.values()));
 
         model.addAttribute("categoriasLabels",mapper.writeValueAsString(Categorias.values()));
         model.addAttribute("categoriasData",mapper.writeValueAsString(categoriasDataProc));
@@ -310,10 +252,95 @@ public class EstadisticasService {
         model.addAttribute("estadisticasPlataformas", generarListaEstadisticas(usuario.getPlataformas()));
         model.addAttribute("suscripcionesConAutoRenovacion",filtrarSuscripcionesPorRenovacion(usuario.getPlataformas()));
 
-        model.addAttribute("categoriaMasCara", categoriaMasCara);
+        model.addAttribute("categoriaMasCara", categoriaCara.getNombre());
 
-        model.addAttribute("gastoCategoriaMasCara", gastoCategoriaMasCara);
+        model.addAttribute("gastoCategoriaMasCara", categoriaCara.getPrecio());
 
         return "estadisticas/estadisticas";
+    }
+
+    private ParCategoriaMasCara encontrarCategoriaMasCara(List<Plataforma> plataformas) {
+        Map<String,Double> categoriaCara = new HashMap<>();
+        ParCategoriaMasCara parReturn = new ParCategoriaMasCara("", (double) 0);
+
+        for (Plataforma p : plataformas) {
+            Double precioMensual = p.getPlanes().stream()
+                    .map(Plan::getSuscripciones)
+                    .flatMap(List::stream)
+                    .filter(Suscripcion::isActiva)
+                    .map(Suscripcion::getPlan)
+                    .mapToDouble(Plan::calcularGastoMensual)
+                    .sum();
+
+            if (categoriaCara.containsKey(p.getCategoria().name())) {
+                categoriaCara.put(p.getCategoria().name(), categoriaCara.get(p.getCategoria().name()) + precioMensual);
+            } else {
+                categoriaCara.put(p.getCategoria().name(), precioMensual);
+            }
+
+        }
+
+
+        for (Map.Entry<String,Double> entry : categoriaCara.entrySet()) {
+            if (parReturn.getNombre().isEmpty()) {
+                parReturn.setNombre(entry.getKey());;
+                parReturn.setPrecio(entry.getValue());
+            } else {
+                if (entry.getValue() > parReturn.getPrecio()) {
+                    parReturn.setPrecio(entry.getValue());
+                    parReturn.setNombre(entry.getKey());
+                }
+            }
+        }
+        return parReturn;
+
+    }
+
+    private Map<String, Integer> contarPlataformasPorCategoria(List<Plataforma> plataformas) {
+        HashMap<String, Integer> categoriasDataMap = new HashMap<>();
+        for (Plataforma p :  plataformas) {
+            if (categoriasDataMap.containsKey(p.getCategoria().name())) {
+                categoriasDataMap.put(p.getCategoria().name(), categoriasDataMap.get(p.getCategoria().name()) + 1);
+            } else {
+                categoriasDataMap.put(p.getCategoria().name(), 1);
+            }
+        }
+        return categoriasDataMap;
+    }
+
+    private Map<String, Double> calcularTasaRenovacion(List<Plataforma> listPlataforma) {
+        Map<String, Double> renovacionesMap = new HashMap<>();
+        for (Plataforma p : listPlataforma) {
+            int renovacion = 0, cont = 0;
+            List<Suscripcion> suscripcionesTrab = p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList();
+
+            for (int i = 0; i < suscripcionesTrab.size(); i++) {
+                Suscripcion sActual = suscripcionesTrab.get(i);
+                Suscripcion sSiguiente = i+1 >= suscripcionesTrab.size() ? suscripcionesTrab.get(i) : suscripcionesTrab.get(i+1);
+
+
+                if (!sActual.equals(sSiguiente)) {
+                    if(sActual.getFechaFin().equals(sSiguiente.getFechaInicio())) {
+                        renovacion++;
+                    }
+                    cont++;
+                }
+            }
+            renovacionesMap.put(p.getNombre(),(double) (renovacion * 100) / cont);
+        }
+
+        return renovacionesMap;
+    }
+
+    private int contarSuscripcionesCaducando(List<Suscripcion> listS) {
+        int suscripcionesProximas = 0;
+        for (Suscripcion s : listS) {
+            if (s.isActiva()) {
+                if (s.getFechaFin().isBefore(LocalDate.now().plusDays(7))){
+                    suscripcionesProximas++;
+                }
+            }
+        }
+        return suscripcionesProximas;
     }
 }
