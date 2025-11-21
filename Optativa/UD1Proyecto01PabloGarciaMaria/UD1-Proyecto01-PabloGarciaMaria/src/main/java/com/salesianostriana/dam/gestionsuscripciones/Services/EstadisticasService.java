@@ -132,7 +132,7 @@ public class EstadisticasService {
         }
         return grafico12Meses;
     }
-    
+
     public String cargarEstadisticas(Model model, RedirectAttributes redirectAttributes, HttpSession session, int diasPeriodo, String nombreCategoria, String idPlataforma) throws JsonProcessingException {
         record ListarPlataformasDTO(Long id, String nombre){}
         ValidacionResultado vr = ExtraMethods.comprobarSesion(session, usuarioService);
