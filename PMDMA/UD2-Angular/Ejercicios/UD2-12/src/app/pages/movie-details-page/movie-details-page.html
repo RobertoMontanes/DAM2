@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{movieDetails?.title}} - MovieDB</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .hero-section {
+            position: relative;
+            height: 70vh;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 2rem;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to right,
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(0, 0, 0, 0.7) 30%,
+                rgba(0, 0, 0, 0.4) 100%
+            );
+        }
+        .movie-poster {
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .genre-badge {
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .info-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .company-logo {
+            max-height: 50px;
+            max-width: 150px;
+            margin: 10px;
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+        }
+        .company-logo:hover {
+            filter: grayscale(0%);
+        }
+        .rating-badge {
+            font-size: 1.1rem;
+            padding: 8px 15px;
+        }
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        .backdrop-placeholder {
+            height: 70vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .action-buttons .btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            border-left: 4px solid #0d6efd;
+            padding-left: 15px;
+            margin: 2rem 0 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Component -->
+    <app-navbar-component></app-navbar-component>
+
+    <!-- Hero Section with Backdrop -->
+    @if (movieDetails?.backdrop_path) {
+        <div class="hero-section" 
+            [style.backgroundImage]="`url(https://image.tmdb.org/t/p/w1280/${movieDetails?.backdrop_path})`">
+            <div class="hero-overlay"></div>
+        </div>
+    } @else {
+        <div class="backdrop-placeholder">
+            <div class="text-center">
+                <i class="bi bi-film" style="font-size: 4rem;"></i>
+                <h3>{{movieDetails?.title}}</h3>
+            </div>
+        </div>
+    }
+
+    <!-- Movie Details Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Poster Column -->
+            <div class="col-md-4 mb-4">
+                <div class="sticky-top" style="top: 2rem;">
+                    @if (movieDetails?.poster_path) {
+                        <img [src]="'https://image.tmdb.org/t/p/w500' + movieDetails?.poster_path" 
+                             [alt]="movieDetails?.title"
+                             class="img-fluid movie-poster">
+                    } @else {
+                        <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                             style="height: 600px;">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                    }
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons mt-3">
+                        <button class="btn btn-primary btn-lg w-100 mb-2">
+                            <i class="bi bi-play-fill me-2"></i>Ver Trailer
+                        </button>
+                        <div class="d-grid gap-2 d-md-flex">
+                            <button class="btn btn-outline-primary flex-fill">
+                                <i class="bi bi-heart me-1"></i>Favorito
+                            </button>
+                            <button class="btn btn-outline-success flex-fill">
+                                <i class="bi bi-plus-circle me-1"></i>Lista
+                            </button>
+                            <button class="btn btn-outline-secondary flex-fill">
+                                <i class="bi bi-share me-1"></i>Compartir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Column -->
+            <div class="col-md-8">
+                <!-- Title and Basic Info -->
+                <div class="mb-4">
+                    <h1 class="display-5 fw-bold mb-2">{{movieDetails?.title}}</h1>
+                    @if (movieDetails?.original_title !== movieDetails?.title) {
+                        <h3 class="h5 text-muted mb-3">{{movieDetails?.original_title}}</h3>
+                    }
+                    
+                    @if (movieDetails?.tagline) {
+                        <p class="lead fst-italic text-muted">"{{movieDetails?.tagline}}"</p>
+                    }
+                    
+                    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                        <!-- Rating -->
+                        <div class="rating-badge badge bg-warning text-dark">
+                            <i class="bi bi-star-fill me-1"></i>
+                            {{movieDetails?.vote_average}}/10
+                        </div>
+                        
+                        <!-- Vote Count -->
+                        <span class="text-muted">
+                            <i class="bi bi-hand-thumbs-up me-1"></i>
+                            {{movieDetails?.vote_count}} votos
+                        </span>
+                        
+                        <!-- Release Year -->
+                        <span class="text-muted">
+                            <i class="bi bi-calendar me-1"></i>
+                            {{movieDetails?.release_date | date:'yyyy'}}
+                        </span>
+                        
+                        <!-- Runtime -->
+                        @if (movieDetails?.runtime) {
+                            <span class="text-muted">
+                                <i class="bi bi-clock me-1"></i>
+                                {{movieDetails?.runtime}} min
+                            </span>
+                        }
+                    </div>
+
+                    <!-- Genres -->
+                    <div class="mb-3">
+                        @for (genre of movieDetails?.genres; track genre.id) {
+                            <span class="genre-badge badge bg-primary">{{genre.name}}</span>
+                        }
+                    </div>
+                </div>
+
+                <!-- Overview -->
+                @if (movieDetails?.overview) {
+                    <div class="mb-4">
+                        <h3 class="section-title">Sinopsis</h3>
+                        <p class="fs-5">{{movieDetails?.overview}}</p>
+                    </div>
+                }
+
+                <!-- Movie Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h3 class="section-title">Información</h3>
+                        <div class="info-item">
+                            <strong>Estado:</strong>
+                            <span class="badge" 
+                                [ngClass]="{
+                                    'bg-success': movieDetails?.status === 'Released',
+                                    'bg-warning': movieDetails?.status !== 'Released'
+                                }">
+                                {{movieDetails?.status}}
+                            </span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <strong>Idioma Original:</strong>
+                            {{movieDetails?.original_language | uppercase}}
+                        </div>
+                        
+                        <div class="info-item">
+                            <strong>Presupuesto:</strong>
+                            @if (movieDetails && movieDetails.budget > 0) {
+                                {{movieDetails.budget | currency:'USD':'symbol':'1.0-0'}}
+                            } @else {
+                                No disponible
+                            }
+                        </div>
+                        
+                        <div class="info-item">
+                            <strong>Ingresos:</strong>
+                            @if (movieDetails && movieDetails.revenue > 0) {
+                                {{movieDetails.revenue | currency:'USD':'symbol':'1.0-0'}}
+                            } @else {
+                                No disponible
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h3 class="section-title">Detalles Técnicos</h3>
+                        
+                        <!-- Production Countries -->
+                        @if (movieDetails && movieDetails.production_countries && movieDetails.production_countries.length > 0) {
+                            <div class="info-item">
+                                <strong>Países de Producción:</strong><br>
+                                @for (country of movieDetails.production_countries; track country.iso_3166_1; let last = $last) {
+                                    {{country.name}}{{last ? '' : ', '}}
+                                }
+                            </div>
+                        }
+                        
+                        <!-- Spoken Languages -->
+                        @if (movieDetails && movieDetails.spoken_languages && movieDetails.spoken_languages.length > 0) {
+                            <div class="info-item">
+                                <strong>Idiomas:</strong><br>
+                                @for (language of movieDetails.spoken_languages; track language.iso_639_1; let last = $last) {
+                                    {{language.english_name}}{{last ? '' : ', '}}
+                                }
+                            </div>
+                        }
+                        
+                        <!-- Adult Content -->
+                        <div class="info-item">
+                            <strong>Contenido Adulto:</strong>
+                            <span class="badge" [ngClass]="movieDetails?.adult ? 'bg-danger' : 'bg-success'">
+                                {{movieDetails?.adult ? 'Sí' : 'No'}}
+                            </span>
+                        </div>
+                        
+                        <!-- Popularity -->
+                        <div class="info-item">
+                            <strong>Popularidad:</strong>
+                            <div class="progress mt-1" style="height: 8px;">
+                                @if (movieDetails && movieDetails.popularity) {
+                                    <div class="progress-bar" 
+                                        [style.width]="(movieDetails.popularity / 1000) + '%'"
+                                        [attr.aria-valuenow]="movieDetails.popularity"
+                                        aria-valuemin="0" 
+                                        aria-valuemax="1000">
+                                    </div>
+                                }
+                            </div>
+                            <small class="text-muted">{{movieDetails?.popularity}} puntos</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Production Companies -->
+                @if (movieDetails && movieDetails.production_companies && movieDetails.production_companies.length > 0) {
+                    <div class="mb-4">
+                        <h3 class="section-title">Compañías de Producción</h3>
+                        <div class="row">
+                            @for (company of movieDetails.production_companies; track company.id) {
+                                <div class="col-6 col-md-4 col-lg-3 text-center mb-3">
+                                    @if (company.logo_path) {
+                                        <img [src]="'https://image.tmdb.org/t/p/w200' + company.logo_path" 
+                                            [alt]="company.name"
+                                            class="company-logo img-fluid">
+                                    } @else {
+                                        <div class="company-logo-placeholder bg-light rounded p-3">
+                                            <small class="text-muted">{{company.name}}</small>
+                                        </div>
+                                    }
+                                    <div class="mt-1">
+                                        <small class="text-muted">{{company.origin_country}}</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- External Links -->
+                <div class="mb-4">
+                    <h3 class="section-title">Enlaces Externos</h3>
+                    <div class="d-flex flex-wrap gap-2">
+                        @if (movieDetails?.homepage) {
+                            <a [href]="movieDetails?.homepage" 
+                                target="_blank" 
+                                class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-globe me-1"></i>Sitio Web
+                            </a>
+                        }
+                        
+                        @if (movieDetails?.imdb_id) {
+                            <a [href]="'https://www.imdb.com/title/' + movieDetails?.imdb_id" 
+                                target="_blank" 
+                                class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-film me-1"></i>IMDb
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>MovieDB</h5>
+                    <p>Tu fuente de información sobre películas y series.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2023 MovieDB. Todos los derechos reservados.</p>
+                    <p>Datos proporcionados por TMDb</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+El contenido del fichero cliente.txt es:
+Nombre:				Roberto
+Apellido1:			Montanes
+Apellido2:			Ramos
+Edad:				21

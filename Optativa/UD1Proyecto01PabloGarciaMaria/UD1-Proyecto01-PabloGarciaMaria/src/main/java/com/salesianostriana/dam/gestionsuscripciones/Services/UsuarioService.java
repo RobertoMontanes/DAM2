@@ -153,7 +153,15 @@ public class UsuarioService extends BaseServiceImpl<Usuario, Long, UsuarioReposi
                 return p.getNombre().toLowerCase().contains(query.toLowerCase());
             }
         }).filter(Plataforma::isEstado).map(ListarPlataformas_UsuarioDTO::toDTO).toList();
-        suscripciones =  u.getSuscripciones().stream().filter(Suscripcion::isActiva).map(ListarSuscripcion_UsuarioDTO::toDTO).toList();
+        suscripciones =  u.getSuscripciones().stream().filter(Suscripcion::isActiva)
+                .filter(s -> {
+                    if (query == null || query.isEmpty()) {
+                        return true;
+                    } else {
+                        return s.getPlan().getPlataforma().getNombre().toLowerCase().contains(query.toLowerCase());
+                    }
+                })
+                .map(ListarSuscripcion_UsuarioDTO::toDTO).toList();
         plataformasLimited = plataformas.stream().skip(actualPage*perPage).limit(perPage).toList();
         suscripcionesLimited = suscripciones.stream().skip(actualPage*perPage).limit(perPage).toList();
         model.addAttribute("plataformas", plataformasLimited);
