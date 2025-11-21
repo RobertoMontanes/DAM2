@@ -66,6 +66,7 @@ public class EstadisticasService {
         Map<String,Integer> categoriasDataMap = new HashMap<>();
         Map<String,Double> plataformasMap = new HashMap<>();
         Map<String,Double> renovacionesMap = new HashMap<>();
+        Map<String, Double> categoriaCara = new HashMap<>();
         List<Suscripcion> suscripciones, suscripcionesFiltradas, suscripcionesFiltradasAnteriores;
         List<Plataforma> totalPlataformasAnterior;
         List<Double> suscripcionesUltimos12Meses= new ArrayList<>();
@@ -155,6 +156,9 @@ public class EstadisticasService {
         }
 
         for (Plataforma p : usuario.getPlataformas()) {
+            /* Generar estadisticas de plataforma - Params*/
+            List<Suscripcion> allUserSubs = p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList();
+
             /* Checkear tasa renovacion - Params */
             int renovacion = 0, cont = 0;
             List<Suscripcion> suscripcionesTrab = p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList();
@@ -185,51 +189,7 @@ public class EstadisticasService {
             }
             renovacionesMap.put(p.getNombre(),(double) (renovacion * 100) / cont);
 
-        }
-
-
-
-
-        for (Integer i : categoriasDataMap.values()) {
-            int max = usuario.getPlataformas().size();
-            categoriasDataProc.add((double) ((i * 100) /max));
-        }
-
-        for (Categorias cat : Categorias.values()){
-            coloresCategorias.add(CategoriasColores.valueOf(cat.name()).getColorHex());
-        }
-
-        for (Plataforma p : usuario.getPlataformas()) {
-
-        }
-
-        for (Suscripcion sActual : suscripciones) {
-            /* Suscripciones Proximas */
-            if (sActual.isActiva()) {
-                if (sActual.getFechaFin().isBefore(LocalDate.now().plusDays(7))){
-                    suscripcionesProximas++;
-                }
-            }
-
-        }
-        if (variacionGastoTotal > 10) {
-            insightTendencia = "Tu gasto ha aumentado un " + Math.abs(variacionGastoTotal) + "% respecto al período anterior - considera revisar tus suscripciones";
-        } else if (variacionGastoTotal < -5) {
-            insightTendencia = "¡Excelente! Has reducido tus gastos en " + Math.abs(variacionGastoTotal) + "% este período";
-        } else {
-            insightTendencia = "Mantienes un gasto estable en tus suscripciones - buena gestión financiera";
-        }
-
-        if (suscripcionesProximas <= 0) {
-            insightAlertas = "Todas tus suscripciones están al día - sin vencimientos próximos";
-        } else {
-            insightAlertas = suscripcionesProximas + " suscripciones vencen en los próximos 7 días - planifica las renovaciones";
-        }
-
-
-        for (Plataforma p : usuario.getPlataformas()) {
-            List<Suscripcion> allUserSubs = p.getPlanes().stream().map(Plan::getSuscripciones).flatMap(List::stream).toList();
-
+            /* Generar estadisticas de plataforma */
             EstadisticasPlataformaDTO ep = new EstadisticasPlataformaDTO();
             ep.setNombre(p.getNombre());
             ep.setGastoTotal(calcularTotalSuscripciones(allUserSubs));
@@ -238,23 +198,8 @@ public class EstadisticasService {
             ep.setPorcentajeTotal(calcularPorcentajeTotal(ep.getTotalSuscripciones(), usuario.getPlataformas()));
             ep.setColor(generateRandomColor());
             estadisticasPlataformas.add(ep);
-        }
 
-        suscripcionesConAutoRenovacion = usuario.getPlataformas()
-                .stream()
-                .map(Plataforma::getPlanes)
-                .flatMap(List::stream)
-                .map(Plan::getSuscripciones)
-                .flatMap(List::stream)
-                .filter(Suscripcion::isActiva)
-                .filter(Suscripcion::isRenovacionAutomatica)
-                .count();
-
-
-        totalPlataformas = usuario.getPlataformas().size();
-
-        Map<String, Double> categoriaCara = new HashMap<>();
-        for (Plataforma p : usuario.getPlataformas()) {
+            /* Comprobar categoria mas cara */
             Double precioMensual = p.getPlanes().stream()
                     .map(Plan::getSuscripciones)
                     .flatMap(List::stream)
@@ -268,6 +213,7 @@ public class EstadisticasService {
             } else {
                 categoriaCara.put(p.getCategoria().name(), precioMensual);
             }
+
         }
 
         categoriaMasCara = "";
@@ -283,6 +229,53 @@ public class EstadisticasService {
                 }
             }
         }
+
+        for (Integer i : categoriasDataMap.values()) {
+            int max = usuario.getPlataformas().size();
+            categoriasDataProc.add((double) ((i * 100) /max));
+        }
+
+        for (Categorias cat : Categorias.values()){
+            coloresCategorias.add(CategoriasColores.valueOf(cat.name()).getColorHex());
+        }
+
+        for (Suscripcion sActual : suscripciones) {
+            /* Suscripciones Proximas */
+            if (sActual.isActiva()) {
+                if (sActual.getFechaFin().isBefore(LocalDate.now().plusDays(7))){
+                    suscripcionesProximas++;
+                }
+            }
+
+        }
+
+        if (variacionGastoTotal > 10) {
+            insightTendencia = "Tu gasto ha aumentado un " + Math.abs(variacionGastoTotal) + "% respecto al período anterior - considera revisar tus suscripciones";
+        } else if (variacionGastoTotal < -5) {
+            insightTendencia = "¡Excelente! Has reducido tus gastos en " + Math.abs(variacionGastoTotal) + "% este período";
+        } else {
+            insightTendencia = "Mantienes un gasto estable en tus suscripciones - buena gestión financiera";
+        }
+
+        if (suscripcionesProximas <= 0) {
+            insightAlertas = "Todas tus suscripciones están al día - sin vencimientos próximos";
+        } else {
+            insightAlertas = suscripcionesProximas + " suscripciones vencen en los próximos 7 días - planifica las renovaciones";
+        }
+
+        suscripcionesConAutoRenovacion = usuario.getPlataformas()
+                .stream()
+                .map(Plataforma::getPlanes)
+                .flatMap(List::stream)
+                .map(Plan::getSuscripciones)
+                .flatMap(List::stream)
+                .filter(Suscripcion::isActiva)
+                .filter(Suscripcion::isRenovacionAutomatica)
+                .count();
+
+
+        totalPlataformas = usuario.getPlataformas().size();
+
 
         model.addAttribute("categorias", Categorias.values());
         model.addAttribute("plataformas", usuario.getPlataformas().stream()
