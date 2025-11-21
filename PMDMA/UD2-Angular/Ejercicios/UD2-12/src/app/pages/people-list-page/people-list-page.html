@@ -1,3 +1,97 @@
-@for (person of people; track $index) {
-    <p>{{person.id}} - {{person.name}}</p>
-}
+<!-- Barra de navegación -->
+    <app-navbar-component></app-navbar-component>
+
+    <!-- Contenido principal - Página de Actores -->
+    <div class="container my-4" id="people">
+        <h2 class="page-title">Actores y Directores</h2>
+
+        <!-- Lista de personas -->
+        <div class="content-section">
+            <div class="row">
+                @for (person of people; track person.id) {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        @if (person.profile_path) {
+                            <img src="https://image.tmdb.org/t/p/w500{{person.profile_path}}" 
+                                class="card-img-top person-img" 
+                                alt="{{person.name}}">
+                        } @else {
+                            <div class="person-placeholder">
+                                <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
+                            </div>
+                        }
+                        <div class="popularity">
+                            <i class="bi bi-star-fill text-warning me-1"></i>{{person.popularity.toFixed(0)}}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{person.name}}</h5>
+                            <p class="card-text text-muted">
+                                <small>
+                                    <i class="bi bi-briefcase me-1"></i>{{person.known_for_department}}
+                                    @if (person.gender === 1) {
+                                        <i class="bi bi-gender-female ms-2 me-1 text-pink"></i>Mujer
+                                    } @else if (person.gender === 2) {
+                                        <i class="bi bi-gender-male ms-2 me-1 text-primary"></i>Hombre
+                                    }
+                                </small>
+                            </p>
+                            
+                            @if (person.known_for && person.known_for.length > 0) {
+                                <p class="card-text">
+                                    <strong class="small">Conocido por:</strong>
+                                    <div class="known-for-list mt-2">
+                                        @for (work of person.known_for; track work.id) {
+                                            <div class="known-for-item">
+                                                @if (work.media_type === 'movie') {
+                                                    <i class="bi bi-film text-info me-1"></i>
+                                                    <strong>{{work.title}}</strong> ({{work.release_date | date:'yyyy'}})
+                                                } @else {
+                                                    <i class="bi bi-tv text-success me-1"></i>
+                                                    <strong>{{work.name}}</strong> ({{work.first_air_date | date:'yyyy'}})
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                            }
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-secondary">
+                                    <i class="bi bi-collection-play me-1"></i>{{person.known_for.length || 0}}
+                                </span>
+                                <div>
+                                    <a [routerLink]="['/people', person.id]" class="btn btn-outline-primary btn-sm me-1">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <button class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <!-- Botón para cargar más personas -->
+            <button class="btn btn-primary load-more-btn" (click)="aumentarPagina()">
+                <i class="bi bi-arrow-down-circle me-2"></i>Cargar más personas
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>MovieDB</h5>
+                    <p>Tu fuente de información sobre películas, series y personas del mundo del entretenimiento.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2025 MovieDB. Todos los derechos reservados.</p>
+                    <p>Datos proporcionados por TMDb</p>
+                </div>
+            </div>
+        </div>
+    </footer>

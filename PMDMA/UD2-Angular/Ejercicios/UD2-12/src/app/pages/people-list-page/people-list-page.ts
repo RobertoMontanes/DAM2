@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { PeopleService } from '../../services/people-service';
 import { PeopleListResponse, Person } from '../../interfaces/people-list-response';
+import { NavbarComponent } from "../../components/navbar-component/navbar-component";
+import { RouterLink } from "@angular/router";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-people-list-page',
-  imports: [],
+  imports: [NavbarComponent, RouterLink,DatePipe],
   templateUrl: './people-list-page.html',
   styleUrl: './people-list-page.css',
 })
 export class PeopleListPage implements OnInit{
 
   people: Person[] = []
+  actualPage = 1;
 
   constructor(private peopleService:PeopleService) {}
 
@@ -18,16 +22,20 @@ export class PeopleListPage implements OnInit{
     this.obtenerPeople()
   }
 
-  obtenerPeople(page = 1) {
-        this.peopleService.getPeople(page).subscribe(r => {
-          console.log(r.results);
+  obtenerPeople() {
+        this.peopleService.getPeople(this.actualPage).subscribe(r => {
           
-            if (page == 1) {
+            if (this.actualPage == 1) {
               this.people = r.results
             } else {
               this.people = this.people.concat(r.results)
             }
     })
+  }
+
+  aumentarPagina() {
+    this.actualPage += 1;
+    this.obtenerPeople()
   }
 
 }
