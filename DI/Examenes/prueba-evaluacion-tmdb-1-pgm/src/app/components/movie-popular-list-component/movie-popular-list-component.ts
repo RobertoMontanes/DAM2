@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MovieService } from '../../services/movie-service';
 import { Movie } from '../../interfaces/movie-response-interface';
 
@@ -8,46 +8,40 @@ import { Movie } from '../../interfaces/movie-response-interface';
   templateUrl: './movie-popular-list-component.html',
   styleUrl: './movie-popular-list-component.css',
 })
-export class MoviePopularListComponent {
+export class MoviePopularListComponent implements OnInit, OnChanges {
 
     movieList: Movie[] = [];
     shownMovies: Movie[] = [];
     internalPage = 0;
-    // internalLimit = input(4);
-    internalLimit = 4;
-  
+  internalLimit = input(4)  
     constructor(private service: MovieService) {}
-
-    changeLimit(value: any) {  
-      if (value == "all") {
-          this.shownMovies = []
-          this.shownMovies = this.shownMovies.concat(this.movieList)
-      } else {
-          this.internalLimit = Number(value);
-          this.limitList()
-        }
-    }
   
     getPopularMovies(){
       this.service.getPopularMovies().subscribe(r => {
-        this.movieList = this.movieList.concat(r.results);
-        console.log(this.movieList);
-        
+        this.movieList = this.movieList.concat(r.results);        
         this.limitList();
       });
     }
   
     limitList() {
       this.shownMovies = []
-      for (let index = 0; index < this.internalLimit; index++) {      
-        let operator = this.internalPage == 0 ? index : this.internalPage * this.internalLimit + index;
-        console.log(operator);
-        this.shownMovies.push(this.movieList[operator]!);
-      }    
+      if(this.internalLimit() == 999) {
+        this.shownMovies = this.movieList
+      } else {
+        for (let index = 0; index < this.internalLimit(); index++) {      
+          let operator = this.internalPage == 0 ? index : this.internalPage * this.internalLimit() + index;
+          this.shownMovies.push(this.movieList[operator]!);
+        }   
+      }   
+      
     }
   
     ngOnInit(): void {
       this.getPopularMovies()
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+      this.limitList()
     }
   
     next() {
