@@ -1,10 +1,11 @@
 import { Component, input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MovieService } from '../../services/movie-service';
-import { Movie } from '../../interfaces/movie-response-interface';
+import { Movie } from '../../interfaces/movie-list-response-interface';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-movie-popular-list-component',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './movie-popular-list-component.html',
   styleUrl: './movie-popular-list-component.css',
 })

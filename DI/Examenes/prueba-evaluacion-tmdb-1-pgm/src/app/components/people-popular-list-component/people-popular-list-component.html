@@ -1,7 +1,7 @@
 <button (click)="prev()">previousFour</button>
 
 <div style="display: flex; flex-direction: row;">
-    @for (people of shownPeople; track people) {
+    @for (people of shownPeople; track people.id) {
 
         <div class="card m-2" style="width: 18rem;">
             
