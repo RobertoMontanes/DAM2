@@ -1,9 +1,19 @@
+<button (click)="prev()">previousFour</button>
+
 <div style="display: flex; flex-direction: row;">
     @for (movie of shownMovies; track movie) {
-        <p>{{movie.title}}</p>
-        <span style="margin-right: 10px;"></span>
+
+    <div class="card m-2" style="width: 18rem;">
+        
+        <div style="background-color: red; height: 10px;"></div>
+
+        <div class="card-body">
+            <h5 class="card-title">{{movie.title}}</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
     }
 </div>
 
-<button (click)="prev()">previousFour</button>
 <button (click)="next()">nextFour</button>
