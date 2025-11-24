@@ -1,0 +1,174 @@
+:root {
+    --primary-color: #6b7fd7;
+    --primary-dark: #5a6bc5;
+    --primary-light: #e8ebf9;
+    --border-color: #e0e0e0;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-bg: #f5f7fb;
+    --text-color: #333;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+}
+
+/* Navbar común */
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+}
+
+.navbar-brand {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: #666;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+/* Botones comunes */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 8px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-outline-danger {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-outline-danger:hover {
+    transform: translateY(-2px);
+}
+
+/* Formularios comunes */
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* Alertas comunes */
+.alert {
+    border-radius: 8px;
+    border: none;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+}
+
+/* Utilidades comunes */
+.text-muted {
+    color: #666 !important;
+}
+
+/* Select2 personalizado */
+.select2-container--bootstrap-5 .select2-selection {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 12px 15px;
+    min-height: 48px;
+    transition: all 0.3s;
+}
+
+.select2-container--bootstrap-5 .select2-selection:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+}
+
+.select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+    padding: 0;
+    line-height: 24px;
+}
+
+.select2-container--bootstrap-5 .select2-dropdown {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.select2-container--bootstrap-5 .select2-results__option--selected {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+.select2-container--bootstrap-5 .select2-results__option--highlighted {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.select2-search--dropdown .select2-search__field {
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+}
+
+.select2-search--dropdown .select2-search__field:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(107, 127, 215, 0.25);
+}
+
+/* Responsive común */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 0;
+    }
+
+    .btn-primary, .btn-outline-primary {
+        padding: 10px 16px;
+    }
+}

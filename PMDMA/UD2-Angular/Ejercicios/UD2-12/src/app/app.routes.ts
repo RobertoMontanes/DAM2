@@ -3,6 +3,7 @@ import { MovieDiscoverPage } from './pages/movie-discover-page/movie-discover-pa
 import { MovieListPage } from './pages/movie-list-page/movie-list-page';
 import { MovieDetailsPage } from './pages/movie-details-page/movie-details-page';
 import { PeopleListPage } from './pages/people-list-page/people-list-page';
+import { PeopleDetailsPage } from './pages/people-details-page/people-details-page';
 
 export const routes: Routes = [
     {
@@ -20,6 +21,10 @@ export const routes: Routes = [
     {
         path: "people",
         component: PeopleListPage
+    },
+    {
+        path: "people/:id",
+        component: PeopleDetailsPage
     },
     {
         path: '**',

@@ -32,6 +32,7 @@ public class Plataforma {
 
     public void modify(Plataforma plataforma) {
         this.nombre = plataforma.getNombre();
+        this.categoria = plataforma.getCategoria();
     }
 
     public void addPlan(Plan plan) {

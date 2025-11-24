@@ -121,7 +121,7 @@ public class SuscripcionService extends BaseServiceImpl<Suscripcion, Long, Suscr
 
 
         if (listaDTO.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "No tienes plataformas para crear suscripciones.");
+            redirectAttributes.addFlashAttribute("error", "No tienes plataformas disponibles (todas tienen suscripcion activa) para crear suscripciones.");
             return "redirect:/dashboard";
         }
 
