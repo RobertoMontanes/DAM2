@@ -1,6 +1,17 @@
-@for (movie of shownMovies; track movie) {
-    <p>{{movie.title}}</p>
-}
+<select id="limitator" name="limitator" #limitator (change)="changeLimit(limitator.value)">
+    <option value="2">2</option>
+    <option value="4" selected>4</option>
+    <option value="all">All</option>
+</select>
+
+
+
+<div style="display: flex; flex-direction: row;">
+    @for (movie of shownMovies; track movie) {
+        <p>{{movie.title}}</p>
+        <span style="margin-right: 10px;"></span>
+    }
+</div>
 
 <button (click)="prev()">previousFour</button>
 <button (click)="next()">nextFour</button>

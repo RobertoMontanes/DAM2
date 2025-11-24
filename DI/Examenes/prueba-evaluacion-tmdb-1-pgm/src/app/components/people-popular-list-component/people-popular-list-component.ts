@@ -13,21 +13,22 @@ export class PeoplePopularListComponent implements OnInit {
   peopleList: People[] = [];
   shownPeople: People[] = [];
   internalPage = 0;
-  internalLimit = input(4);
+  //internalLimit = input(4);
+  internalLimit = 4;
 
 
 
   constructor(private service: PeopleService) {}
 
-    // changeLimit(value: any) {  
-    //   if (value == "all") {
-    //       this.shownPeople = []
-    //       this.shownPeople = this.shownPeople.concat(this.peopleList)
-    //   } else {
-    //       this.internalLimit = Number(value);
-    //       this.limitList()
-    //     }
-    // }
+    changeLimit(value: any) {  
+      if (value == "all") {
+          this.shownPeople = []
+          this.shownPeople = this.shownPeople.concat(this.peopleList)
+      } else {
+          this.internalLimit = Number(value);
+          this.limitList()
+        }
+    }
   
   getPopularPeople(){
     this.service.getPopularPeople().subscribe(r => {
@@ -40,8 +41,8 @@ export class PeoplePopularListComponent implements OnInit {
 
   limitList() {
     this.shownPeople = []
-    for (let index = 0; index < this.internalLimit(); index++) {      
-      let operator = this.internalPage == 0 ? index : this.internalPage * this.internalLimit() + index;
+    for (let index = 0; index < this.internalLimit; index++) {      
+      let operator = this.internalPage == 0 ? index : this.internalPage * this.internalLimit + index;
       console.log(operator);
       this.shownPeople.push(this.peopleList[operator]!);
     }    

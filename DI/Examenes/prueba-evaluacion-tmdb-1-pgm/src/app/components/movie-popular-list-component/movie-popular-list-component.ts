@@ -13,9 +13,20 @@ export class MoviePopularListComponent {
     movieList: Movie[] = [];
     shownMovies: Movie[] = [];
     internalPage = 0;
-    internalLimit = input(4);
+    // internalLimit = input(4);
+    internalLimit = 4;
   
     constructor(private service: MovieService) {}
+
+    changeLimit(value: any) {  
+      if (value == "all") {
+          this.shownMovies = []
+          this.shownMovies = this.shownMovies.concat(this.movieList)
+      } else {
+          this.internalLimit = Number(value);
+          this.limitList()
+        }
+    }
   
     getPopularMovies(){
       this.service.getPopularMovies().subscribe(r => {
@@ -28,8 +39,8 @@ export class MoviePopularListComponent {
   
     limitList() {
       this.shownMovies = []
-      for (let index = 0; index < this.internalLimit(); index++) {      
-        let operator = this.internalPage == 0 ? index : this.internalPage * this.internalLimit() + index;
+      for (let index = 0; index < this.internalLimit; index++) {      
+        let operator = this.internalPage == 0 ? index : this.internalPage * this.internalLimit + index;
         console.log(operator);
         this.shownMovies.push(this.movieList[operator]!);
       }    
