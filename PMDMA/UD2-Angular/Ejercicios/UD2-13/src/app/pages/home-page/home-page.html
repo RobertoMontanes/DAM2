@@ -1,0 +1,13 @@
+<app-custom-progress-bar-component [value]="value" [isStriped]="isStriped" [showProgress]="showProgress" [color]="color"></app-custom-progress-bar-component>
+
+<label for="changeColor"></label>
+<input type="checkbox" id="changeColor" (change)="modificarColor()"/>
+
+<label for="value"></label>
+<input type="number" id="value" (change)="modificarValue()"/>
+
+<label for="stripped"></label>
+<input type="checkbox" id="stripped" [checked]="isStriped" (change)="isStriped = $event.target.checked"/>
+
+<label for="showProgress"></label>
+<input type="checkbox" id="showProgress" [checked]="showProgress" (change)="showProgress = $event.target.checked"/>
