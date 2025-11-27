@@ -1,13 +1,34 @@
-<app-custom-progress-bar-component [value]="value" [isStriped]="isStriped" [showProgress]="showProgress" [color]="color"></app-custom-progress-bar-component>
+<div class="container">
+    <app-custom-progress-bar-component 
+        [value]="value" 
+        [isStriped]="isStriped" 
+        [showProgress]="showProgress" 
+        [color]="color">
+    </app-custom-progress-bar-component>
 
-<label for="changeColor"></label>
-<input type="checkbox" id="changeColor" (change)="modificarColor()"/>
+    <div class="controls">
+        <div class="control-group">
+            <label for="changeColor">Color:</label>
+            <input type="text" id="changeColor" (change)="modificarColor()" placeholder="Ingresa un color"/>
+        </div>
 
-<label for="value"></label>
-<input type="number" id="value" (change)="modificarValue()"/>
+        <div class="control-group">
+            <label for="value">Valor:</label>
+            <input type="number" id="value" (change)="modificarValue()" placeholder="0-100"/>
+        </div>
 
-<label for="stripped"></label>
-<input type="checkbox" id="stripped" [checked]="isStriped" (change)="isStriped = $event.target.checked"/>
+        <div class="control-group">
+            <label for="stripped">
+                <input type="checkbox" id="stripped" [checked]="isStriped" (change)="isStriped = $event.target.checked"/>
+                Rayado
+            </label>
+        </div>
 
-<label for="showProgress"></label>
-<input type="checkbox" id="showProgress" [checked]="showProgress" (change)="showProgress = $event.target.checked"/>
+        <div class="control-group">
+            <label for="showProgress">
+                <input type="checkbox" id="showProgress" [checked]="showProgress" (change)="showProgress = $event.target.checked"/>
+                Mostrar progreso
+            </label>
+        </div>
+    </div>
+</div>

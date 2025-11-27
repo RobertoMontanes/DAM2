@@ -3,9 +3,7 @@
 
 f = open("files/entrada.txt")
 
-fullEmpty = False;
 cont = 0
-lastCharacter = ""
 
 for linea in f:
     if linea != "\n":

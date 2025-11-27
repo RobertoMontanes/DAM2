@@ -4,6 +4,6 @@ import datetime
 
 f = open("files/fechas.txt", "a")
 
-f.write(str(datetime.datetime.now()) +  "\n")
+f.write(datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") +  "\n")
 
 f.close()

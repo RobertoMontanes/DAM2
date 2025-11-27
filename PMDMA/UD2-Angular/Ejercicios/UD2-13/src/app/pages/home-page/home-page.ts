@@ -15,7 +15,7 @@ export class HomePage {
   showProgress = true;
 
   modificarColor() {
-    this.color = this.color === 'blue' ? 'green' : 'blue';
+    this.color = (<HTMLInputElement>document.getElementById("changeColor")).value;
   }
 
   modificarValue() {
