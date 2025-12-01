@@ -2,7 +2,6 @@
 # esos números, y escriba cuántos de esos números era mayor que el anterior.
 
 def checkHighers(numObj = 0, numToInsert = 0):
-    print(f"NumObj={numObj}, numToInser={numToInsert}")
     arrayNum = []
     cont = 0
 
@@ -20,3 +19,22 @@ num0 = int(input("Introduce un numero: "))
 num1= int(input("Introduce cuantos numeros vas a meter: "))
 checkHighers(num0, num1)
 
+## V2
+
+def checkHighers(numObj = 0, numToInsert = 0):
+    arrayNum = []
+    arrayHigh = []
+
+    for i in range(0,numToInsert):
+        arrayNum.append(int(input("Inserta un nuevo numero: ")))
+        
+    for i in arrayNum:
+        if i > numObj:
+            arrayHigh.append(i)
+            
+
+    print(f"Los numeros mayores que {numObj} son: {arrayHigh}")
+    
+num0 = int(input("Introduce un numero: "))
+num1= int(input("Introduce cuantos numeros vas a meter: "))
+checkHighers(num0, num1)
