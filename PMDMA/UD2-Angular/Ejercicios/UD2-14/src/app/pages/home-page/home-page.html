@@ -1,2 +1,71 @@
 
-<button (click)="logIn()"> Log In </button>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Encabezado -->
+            <div class="login-header">
+                <div class="app-logo">
+                    <i class="bi bi-list-check"></i>
+                </div>
+                <h1 class="app-name">ListMaster</h1>
+                <p class="app-tagline">Organiza, comparte y disfruta de tus listas</p>
+            </div>
+            
+            <!-- Cuerpo -->
+            <div class="login-body">
+                <h2 class="welcome-text">Bienvenido de nuevo</h2>
+                <p class="description">
+                    Accede a tu cuenta para gestionar todas tus listas, 
+                    descubrir nuevas recomendaciones y compartir tus creaciones 
+                    con la comunidad.
+                </p>
+                
+                <!-- Botón de Login (elemento principal) -->
+                <button class="login-btn" (click)="logIn()">
+                    <i class="bi bi-box-arrow-in-right btn-icon"></i>
+                    <span>Iniciar Sesión</span>
+                </button>
+                
+                <!-- Características de la app -->
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-collection"></i>
+                        </div>
+                        <h4 class="feature-title">Listas Ilimitadas</h4>
+                        <p class="feature-desc">Crea y organiza todas las listas que necesites</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-share"></i>
+                        </div>
+                        <h4 class="feature-title">Comparte Fácil</h4>
+                        <p class="feature-desc">Comparte tus listas con amigos y comunidad</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-star"></i>
+                        </div>
+                        <h4 class="feature-title">Favoritos</h4>
+                        <p class="feature-desc">Guarda y sigue tus listas favoritas</p>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="login-footer">
+                    <p>© 2023 ListMaster. Todos los derechos reservados.</p>
+                    <p class="mt-1">
+                        <small>
+                            Al iniciar sesión, aceptas nuestros 
+                            <a href="#" class="text-decoration-none">Términos de servicio</a> y 
+                            <a href="#" class="text-decoration-none">Política de privacidad</a>
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>

@@ -3,6 +3,7 @@ import { timeout } from 'rxjs';
 import { AccountService } from '../../services/account-service';
 import { AccountList } from '../../interfaces/account-lists-interface';
 import { ListaObjectComponent } from "../../components/lista-object-component/lista-object-component";
+import { Route, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-personal-lists-page',
@@ -11,14 +12,13 @@ import { ListaObjectComponent } from "../../components/lista-object-component/li
   styleUrl: './personal-lists-page.css',
 })
 export class PersonalListsPage implements OnInit {
-
   loading = true;
   error = false;
   session_id = localStorage.getItem('session_id');
 
   listData: AccountList[] = []; // Adjust type as needed
 
-  constructor(private service: AccountService) {}
+  constructor(private service: AccountService, private router: Router) {}
 
   ngOnInit(): void {
     this.checkSession();
@@ -62,5 +62,10 @@ export class PersonalListsPage implements OnInit {
       }, 5000);
     }
   }
+
+  cerrarSesion() {
+    this.router.navigate(['/home']);
+  }
+
 
 }
