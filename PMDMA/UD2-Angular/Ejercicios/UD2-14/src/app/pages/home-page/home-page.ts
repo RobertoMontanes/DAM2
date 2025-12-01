@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
       console.log("Request obtenida: " + r.request_token);
       localStorage.setItem('request_token', r.request_token);
       window.open(`https://www.themoviedb.org/authenticate/${r.request_token}?redirect_to=http://localhost:4200/moviedb/auth`, '_blank', 'width=500, height=300');
-      window.location.href = 'http://localhost:4200/personalLists';
+      window.location.href = 'http://localhost:4200/lists';
     });
   }
 
