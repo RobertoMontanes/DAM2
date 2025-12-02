@@ -44,8 +44,8 @@ def ejerClase():
     for i in range(0,numEjer):
         listaEjer.append(int(input("Inserte un numero: ")))
         
-    print(sort(listaEjer))
-    #print(highLow(listaEjer))
+    #print(sort(listaEjer))
+    print(highLow(listaEjer))
 
 def sortAuto():
     comienzoEjec = datetime.datetime.now()
@@ -60,23 +60,16 @@ def sortAuto():
 
 def highLow(listaNum=[]):
     newArray = []
-    high = listaNum[0]
-    low = listaNum[0]
+    high = max(listaNum)
+    low = min(listaNum)
     
     contHigh = 0
     contLow = 0
     
-    for i in listaNum:
-        if i > high:
-            high = i
-        if i < low:
-            low = i
-    
     contLow = listaNum.count(low)
     contHigh = listaNum.count(high)
     
-    newArray.append(low)
-    for i in range(1,contLow):
+    for i in range(0,contLow):
         newArray.append(low)
 
     for i in range(0,len(listaNum)):
