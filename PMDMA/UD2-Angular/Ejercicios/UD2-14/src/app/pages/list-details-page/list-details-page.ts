@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ListDetails } from '../../interfaces/lists-details-interface';
 import { ListsService } from '../../services/lists-service';
+import { DatePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-details-page',
-  imports: [],
+  imports: [DatePipe, UpperCasePipe],
   templateUrl: './list-details-page.html',
   styleUrl: './list-details-page.css',
 })

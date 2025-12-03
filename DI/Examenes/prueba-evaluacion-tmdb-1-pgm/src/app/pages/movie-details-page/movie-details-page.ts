@@ -4,6 +4,7 @@ import { MovieService } from '../../services/movie-service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MovieDetails } from '../../interfaces/movie-details-response-interface';
 import { Video } from '../../interfaces/video-list-response';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-movie-details-page',
@@ -17,7 +18,7 @@ export class MovieDetailsPage implements OnInit {
   movie: MovieDetails | null = null
   videos: Video[] = []
 
-  constructor(private service:MovieService, private route: ActivatedRoute) {
+  constructor(private service:MovieService, private route: ActivatedRoute, private sanitazer:  DomSanitizer) {
 
   }
 
@@ -40,12 +41,12 @@ export class MovieDetailsPage implements OnInit {
     this.obtenerVideos()
   }
 
-  urlMethod(key:string, site:string) {
+  urlMethod(key:string, site:string) {nvnvnvvnvvbncvgcgcgchgchgcgcgcgcgchgcgcgcgccgcfgfgccc
     if (site == "YouTube" ) {
       console.log(key);
-      return `https://www.youtube.com/embed/${key}`
+      return this.sanitazer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${key}`)
     } else {
-      return `https://player.vimeo.com/video/${key}`
+      return this.sanitazer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${key}`)
     }
   }
 
