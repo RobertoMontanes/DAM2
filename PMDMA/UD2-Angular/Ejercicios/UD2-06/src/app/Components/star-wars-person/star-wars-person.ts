@@ -25,12 +25,8 @@ interface Person {
   templateUrl: './star-wars-person.html',
   styleUrl: './star-wars-person.css',
 })
-<<<<<<< HEAD
-export class StarWarsPersersona = input('');
-=======
 export class StarWarsPerson {
 
     persona = input<Person>();
->>>>>>> 08ab674b7437f6ab8d84c15ed1054b4f381f2851
 
 }

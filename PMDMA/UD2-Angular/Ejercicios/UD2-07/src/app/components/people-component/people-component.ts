@@ -11,4 +11,8 @@ export class PeopleComponent {
 
   person = input<StarWarsPerson>();
 
+  fun() {
+    console.log(this.person.name); 
+  }
+
 }
