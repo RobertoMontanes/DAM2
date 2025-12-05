@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ProvinciasService } from '../../services/provincias-service';
-import { ComunidadAutonoma, ProvinciaSorted } from '../../interfaces-deprecated/provincias-list-response';
 import { RouterLink } from "@angular/router";
 import { FormsModule } from '@angular/forms';
-import { NgbAccordionBody, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarComponent } from "../../components/shared/navbar-component/navbar-component";
+import { ComunidadAutonoma, ProvinciaSorted } from '../../interfaces/provincias-list-response';
 
 @Component({
   selector: 'app-provincias-list-page',
-  imports: [RouterLink, FormsModule, NgbModule],
+  imports: [RouterLink, FormsModule, NavbarComponent],
   templateUrl: './provincias-list-page.html',
   styleUrl: './provincias-list-page.css',
 })

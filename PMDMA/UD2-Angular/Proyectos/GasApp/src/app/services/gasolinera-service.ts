@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Gasolinera, ListadoGasolinerasResponse } from '../interfaces-deprecated/listado-gasolineras-response';
+import { Gasolinera, ListadoGasolinerasResponse } from '../interfaces/gasolinera-list-response';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +14,16 @@ export class GasolineraService {
     return this.http.get<ListadoGasolinerasResponse>(`https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroProvincia/${idProvincia}`)
   }
 
+  getListadoGasolinerasMunicipio(idMunicipio: String): Observable<ListadoGasolinerasResponse> {
+    return this.http.get<ListadoGasolinerasResponse>(`https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroMunicipio/${idMunicipio}`)
+  }
+
   procesarDatos(datosDefault: ListadoGasolinerasResponse) {
     let gasolineras: Gasolinera[] = [];
-
-    datosDefault.ListaEESSPrecio.forEach(gasolineraUP => {
+      datosDefault.ListaEESSPrecio.forEach(gasolineraUP => {
       let gasolineraP: Gasolinera = new Gasolinera();
 
+      gasolineraP.provinciaID = gasolineraUP.IDProvincia;
       gasolineraP.id = gasolineraUP.IDEESS;
       gasolineraP.rotulo = gasolineraUP["Rótulo"];
       gasolineraP.direccion = gasolineraUP.Dirección;

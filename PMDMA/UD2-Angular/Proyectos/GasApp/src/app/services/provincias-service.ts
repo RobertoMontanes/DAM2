@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProvinciasListResponse, ProvinciaSorted } from '../interfaces-deprecated/provincias-list-response';
+import { ProvinciasListResponse, ProvinciaSorted } from '../interfaces/provincias-list-response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProvinciasService {
-  sortProvincias(provinciasRAw: ProvinciasListResponse): ProvinciaSorted[] {
+  sortProvincias(provinciasRaw: ProvinciasListResponse): ProvinciaSorted[] {
     let provinciasSort: ProvinciaSorted[] = []
 
-    provinciasRAw.forEach(provincia => {
+    provinciasRaw.forEach(provincia => {
       let comunidad = provinciasSort.find(c => c.ComunidadAutonoma === provincia.CCAA);
       if (comunidad) {
         comunidad.Provincias.push(provincia);

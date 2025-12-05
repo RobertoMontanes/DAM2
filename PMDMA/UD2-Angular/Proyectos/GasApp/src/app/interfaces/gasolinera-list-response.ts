@@ -12,6 +12,7 @@ export class Gasolinera {
     localidad!: string;
     municipio!: string;
     provincia!: string;
+    provinciaID!: string;
     cp!: string;
     horario!: string;
     coordenadas!: {
