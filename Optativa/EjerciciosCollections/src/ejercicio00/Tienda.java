@@ -2,10 +2,12 @@
 package ejercicio00;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -59,7 +61,7 @@ public class Tienda {
 	}
 	
 	public Venta addVenta(Map<Producto, Integer> lineasVenta) {
-		Venta nueva = new Venta(lineasVenta, LocalDateTime.now(), generarIdVenta());
+		Venta nueva = new Venta(lineasVenta,LocalDateTime.now(), generarIdVenta());
 		this.ventas.add(nueva);
 		return nueva;
 	}
@@ -90,6 +92,10 @@ public class Tienda {
 		return Optional.empty();
 	}
 
+	public double getUniqueKey(double total, int id) {
+        return total + ((double) id / 1000000000.0);
+    }
+	
 	public Venta getVentaById(int id) {
 		for (Venta v : ventas) {
 			if (v.getId() == id) {
@@ -104,12 +110,27 @@ public class Tienda {
 		}
 	}
 
-	public void generarVentas() {
+	public void generarVentas(int ventasACrear,int  maxVentas , int ProductosPorVenta) {
 		Set<Integer> idProductos = new LinkedHashSet<Integer>();
-		
+		Map<Producto, Integer> lineasVenta;
+		Random rnd = new Random(System.nanoTime());
+				
 		for (Producto p : productos) {
 			idProductos.add(p.getId());
 		}
+		
+		for (int i = 0; i < ventasACrear; i++) {
+			lineasVenta = new HashMap<Producto, Integer>();
+			for (int j = 0; j < ProductosPorVenta; j++) {
+				Optional<Producto> p = this.findProductoById(rnd.nextInt(idProductos.size()));
+				if (p.isPresent()) {
+					lineasVenta.put(p.get(), rnd.nextInt(1,maxVentas));				
+				}
+			}
+			this.addVenta(lineasVenta);
+		}
+		
+		
 		
 		
 		

@@ -1,5 +1,6 @@
-package com.salesianos.triana.PSP_EjemploPokemon;
+package com.salesianos.triana.PSP_EjemploPokemon.models;
 
+import com.salesianos.triana.PSP_EjemploPokemon.Tipo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,9 +32,12 @@ public class Pokemon {
     private double peso;
     private double altura;
 
-    
+
     private LocalDateTime fechaCaptura;
 
-    private List<Tipo> tipo;
+    private Set<Tipo> tipo;
+
+    @ManyToOne
+    private Entrenador duenio;
 
 }
