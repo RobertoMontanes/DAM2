@@ -1,6 +1,10 @@
 # Escriba un programa que pida un número. Después pregunte cuántos números se van a introducir, pida
 # esos números, y escriba cuántos de esos números era mayor que el anterior.
 
+
+# Los primeros 3 ejercios tienen prints e inputs dentro por que aun no sabia que no era aconsejable usaros dentro de las funciones
+# a partir del ejercicio 4 ya no hay nada
+
 def checkHighers(numObj = 0, numToInsert = 0):
     arrayNum = []
     cont = 0
