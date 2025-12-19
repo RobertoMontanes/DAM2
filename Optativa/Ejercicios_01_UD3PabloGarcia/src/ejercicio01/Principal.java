@@ -8,9 +8,6 @@ import java.util.Optional;
 public class Principal {
 
     public static void main(String[] args) {
-        // ---------------------------------------------------------
-        // 1. DECLARACIÓN DE TODAS LAS VARIABLES AL PRINCIPIO
-        // ---------------------------------------------------------
         
         Scanner scanner = new Scanner(System.in);
         Secretaria secretaria = new Secretaria(new ArrayList<Alumno>());
@@ -142,7 +139,7 @@ public class Principal {
 
             } catch (NumberFormatException e) {
                 System.out.println("Error: Debes introducir un número válido.");
-                opcion = -1; // Para evitar salir del bucle accidentalmente
+                opcion = -1;
             } catch (Exception e) {
                 System.out.println("Error inesperado: " + e.getMessage());
             }
