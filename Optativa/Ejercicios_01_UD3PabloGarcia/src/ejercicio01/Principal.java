@@ -16,16 +16,16 @@ public class Principal {
         
         int opcion = -1;
         String[] menuOpciones = {
-            "Salir",                                                // 0
-            "Mostrar todos los alumnos (forEach)",                  // 1
-            "Buscar alumnos por letra inicial",                     // 2
-            "Contar total de alumnos",                              // 3
-            "Buscar por nota media mayor a...",                     // 4
-            "Mostrar los 3 primeros alumnos",                       // 5
-            "Obtener el alumno de menor edad",                      // 6
-            "Obtener el primer alumno de la lista",                 // 7
-            "Buscar por longitud de nombre (Mayor a...)",           // 8
-            "Buscar: Empieza por 'A' y longitud menor o igual a..." // 9
+            "Salir",
+            "Mostrar todos los alumnos (forEach)",
+            "Buscar alumnos por letra inicial",
+            "Contar total de alumnos",
+            "Buscar por nota media mayor a...",
+            "Mostrar los 3 primeros alumnos",
+            "Obtener el alumno de menor edad",
+            "Obtener el primer alumno de la lista",
+            "Buscar por longitud de nombre (Mayor a...)",
+            "Buscar: Empieza por 'A' y longitud menor o igual a..."
         };
 
         char letraAux = ' ';
