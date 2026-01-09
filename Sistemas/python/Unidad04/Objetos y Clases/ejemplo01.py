@@ -1,8 +1,11 @@
-class droide:
+class droid:
     pass
 
-r2d2 = droide()
-c3po = droide()
-bb8 = droide()
+class droid_methods:
+    def greet(self):
+        print("Beep Boop")
 
+r2d2 = droid()
+c3po = droid()
+bb8 = droid()
 print(type(r2d2))
