@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+
+/// Chat de CHATGPT usado pa esta cosa: 
+/// https://chatgpt.com/share/6966dad8-37b0-8001-8f6e-16e820aa1e1d
+/// 
+/// Solo hay algunas preguntas de componentes y tal, pero por si.
+
+
 class ActorCage extends StatelessWidget {
   const ActorCage(
     {
