@@ -17,5 +17,5 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/images/path_logo.png
+    - assets/images
   uses-material-design: true
