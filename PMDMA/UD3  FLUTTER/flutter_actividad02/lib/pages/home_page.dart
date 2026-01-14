@@ -27,6 +27,96 @@ class HomePage extends StatelessWidget {
           actorName: "Ana",
           actorLastName: "de Armas",
         ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "Polla de armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
+        SizedBox(width: 20),
+        ActorCage(
+          imgUrl: "https://media.themoviedb.org/t/p/w300_and_h450_face/5Qne374OM0ewMM7uSN9eq9jNrWq.jpg",
+          actorName: "Ana",
+          actorLastName: "de Armas",
+        ),
       ]
     );
   }

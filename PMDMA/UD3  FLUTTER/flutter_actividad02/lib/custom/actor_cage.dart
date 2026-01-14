@@ -49,8 +49,8 @@ class ActorCage extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                    Text(actorName, style: TextStyle(fontSize: 35, color: Colors.black)),
-                    Text(actorLastName, style: TextStyle(fontSize: 15, color: Colors.grey[600]))
+                    Text(actorName, style: TextStyle(fontSize: 35, color: Colors.black, fontFamily: 'Poppins')),
+                    Text(actorLastName, style: TextStyle(fontSize: 15, color: Colors.grey[600], fontFamily: 'Poppins')),
                   ],
                 )
                 ),
