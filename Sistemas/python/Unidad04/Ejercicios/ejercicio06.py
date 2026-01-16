@@ -30,13 +30,14 @@ numeros = {
 def girar_ruleta():
     return random.randint(0,36)
 
-tiradas = []
 
-while (opcion != opcionAbandonar):
+while opcion != opcionAbandonar:
     saldo = int(input("Indique su saldo inicial: "))
     cantidadApostarInicial = int(input("Indique la apuesta inicial: "))
     cantidadAbandonar = int(input("Indique con cuanto dinero quiere irse: "))
     cantidadApostar = cantidadApostarInicial
+    tiradas = []
+    continuar = True
     
     print("A continuacion, apostaremos hasta que el saldo llegue a 0")
     inicio = datetime.datetime.now()
@@ -56,7 +57,8 @@ while (opcion != opcionAbandonar):
             if continuarInp == "0":
                 continuar = False
             
-            saldo += cantidadApostar
+            saldo += cantidadApostar*2
+            print(f"Has ganado {cantidadApostar*2}, saldo actual {saldo}")
             cont = 1
             
             cantidadApostar = cantidadApostarInicial
@@ -67,6 +69,9 @@ while (opcion != opcionAbandonar):
             if saldo >= cantidadApostar:
                 print("- Seguimos jugando.")
                 saldo -= cantidadApostar;
+                print(f"Has perdido {cantidadApostar}, saldo actual {saldo}")
+                
+                
             else:
                 tiradas.append(cont)
                 continuar = False
@@ -75,6 +80,7 @@ while (opcion != opcionAbandonar):
         
         if (saldo >= cantidadAbandonar):
             print("Has llegado al objetivo, abandonado.")
+            continuar = False
     
     fin = datetime.datetime.now()
     tiempoTotal = fin - inicio
