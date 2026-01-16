@@ -24,7 +24,7 @@ public class Principal {
 			"Raiz cuadrada"
 		};
 		
-		double num1, num2;
+		int num1, num2;
 		int opcion, opcionAbandonar = 0;
 		
 			do {
@@ -37,42 +37,42 @@ public class Principal {
 					case 0 -> System.out.println("Saliendo...");
 						case 1 -> {
 							System.out.println("Introduzca el primer numero de la suma: ");
-							num1 = Double.parseDouble(sc.nextLine());
+							num1 = Integer.parseInt(sc.nextLine());
 							
 							System.out.println("Introduzca el segundo numero de la suma: ");
-							num2 = Double.parseDouble(sc.nextLine());
+							num2 = Integer.parseInt(sc.nextLine());
 							
 							System.out.println("El resultado de la suma: " + (num1+num2));
 						}
 						case 2 -> {
 							System.out.println("Introduzca el primer numero de la resta: ");
-							num1 = Double.parseDouble(sc.nextLine());
+							num1 =Integer.parseInt(sc.nextLine());
 							
 							System.out.println("Introduzca el segundo numero de la resta: ");
-							num2 = Double.parseDouble(sc.nextLine());
+							num2 =Integer.parseInt(sc.nextLine());
 							
 							System.out.println("El resultado de la resta: " + (num1-num2));						}
 						case 3 -> {
 							System.out.println("Introduzca el primer numero de la multiplicacion: ");
-							num1 = Double.parseDouble(sc.nextLine());
+							num1 =Integer.parseInt(sc.nextLine());
 							
 							System.out.println("Introduzca el segundo numero de la multiplicacion: ");
-							num2 = Double.parseDouble(sc.nextLine());
+							num2 =Integer.parseInt(sc.nextLine());
 							
 							System.out.println("El resultado de la multiplicacion: " + (num1*num2));		
 						}
 						case 4 -> {
 							System.out.println("Introduzca el primer numero de la division: ");
-							num1 = Double.parseDouble(sc.nextLine());
+							num1 =Integer.parseInt(sc.nextLine());
 							
 							System.out.println("Introduzca el segundo numero de la division: ");
-							num2 = Double.parseDouble(sc.nextLine());
+							num2 =Integer.parseInt(sc.nextLine());
 							
 							System.out.println("El resultado de la multiplicacion: " + (num1/num2));	
 						}
 						case 5 -> {
 							System.out.println("Introduzca el numero de la raiz cuadrada: ");
-							num1 = Double.parseDouble(sc.nextLine());
+							num1 =Integer.parseInt(sc.nextLine());
 							
 							System.out.println("El resultado de la raiz cuadrada: " + (Math.sqrt(num1)));		
 							
@@ -91,7 +91,11 @@ public class Principal {
 				} catch (IllegalArgumentException e) {
 	                System.err.println(e.getMessage());
 					opcion = -1;
-	            }
+	            } catch (Exception e) {
+	            	System.err.println("Se ha producido un error inesperado: " + e.getMessage());
+	            	opcion = -1;
+				}
+				
 			} while (opcion != opcionAbandonar);
 			
 			sc.close();

@@ -50,6 +50,7 @@ public class Principal {
 				opcion = -1;			
 			} catch (NumberFormatException e) {
 				System.err.println("Has introducido un dato erroneo.");
+				opcion = -1;
 			} catch (Exception e) {
 				System.err.println("Se ha encontrado un error inesperado: \n" + e);
 				opcion = -1;			
