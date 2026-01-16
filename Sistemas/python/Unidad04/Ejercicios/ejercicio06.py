@@ -44,12 +44,23 @@ while opcion != opcionAbandonar:
     
     cont = 1
     while continuar or saldo < 0:
+        
+        print(f"Saldo actual: {saldo}")
+        if saldo >= cantidadApostar:
+            print("Vamos a apostar: ")
+            print(f"{cantidadApostar} al Negro.")
+            saldo -= cantidadApostar
+        else:
+            tiradas.append(cont)
+            print(f"No tienes saldo suficiente como para apostar. Saldo: {saldo}, Cantidad esperada: {cantidadApostar}")
+            continuar = False
+            continue
+        
         numGanador = girar_ruleta()
         print(f"Tirada {cont} => Ha salido el numero: {numGanador}")
-        print(f"Saldo actual: {saldo}")
         if (numeros[numGanador] == "Negro"):
             #continuarInp = input(f"Has ganado => {cantidadApostar}, para salir pulse 0, para continuar otra cosa: ")
-            print(f"Has ganado => {cantidadApostar}")
+            print(f"Has ganado => {cantidadApostar*2}")
             continuarInp = 1
             
             tiradas.append(cont)
@@ -66,16 +77,6 @@ while opcion != opcionAbandonar:
         else:
             print(f"Has perdido, duplicando apuesta.")
             cantidadApostar = cantidadApostar * 2
-            if saldo >= cantidadApostar:
-                print("- Seguimos jugando.")
-                saldo -= cantidadApostar;
-                print(f"Has perdido {cantidadApostar}, saldo actual {saldo}")
-                
-                
-            else:
-                tiradas.append(cont)
-                continuar = False
-                print("Te has quedado sin saldo.")
             cont += 1
         
         if (saldo >= cantidadAbandonar):
