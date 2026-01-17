@@ -27,6 +27,7 @@ numeros = {
     31: "Negro",  32: "Rojo",   33: "Negro",  34: "Rojo",   35: "Negro",
     36: "Rojo"
 }
+
 def girar_ruleta():
     return random.randint(0,36)
 
