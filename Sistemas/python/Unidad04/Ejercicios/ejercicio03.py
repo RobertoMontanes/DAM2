@@ -14,8 +14,8 @@
 
 import datetime
 
-opcion = -1
 opcionAbandonar = 0
+precioLimite = -1
 
 inmuebles = [
     {'año': 2000, 'metros': 100, 'habitaciones': 3, 'garaje': True, 'zona': 'A'},
@@ -27,39 +27,48 @@ inmuebles = [
 
 inmueblesRetorno = []
 
-def buscarInmueble(inmuebles, precioMax):
-    inmueblesAptos = []
+def calcular_precio(inmueble):
     año_actual = datetime.datetime.now().year
+    antiguedad = año_actual - inmueble["año"]
     
+    garaje = 0
+    if inmueble["garaje"]:
+        garaje = 1
+    
+    if inmueble["zona"] == "A":
+        precio = (inmueble["metros"] * 1000 + inmueble["habitaciones"] * 5000 + garaje * 15000) * (1-antiguedad/100)
+    else:
+        precio = (inmueble["metros"] * 1000 + inmueble["habitaciones"] * 5000 + garaje * 15000) * (1-antiguedad/100) * 1.5
+    
+    return precio
+
+def buscar_inmueble(inmuebles, precioMax):
+    inmueblesAptos = []
     
     for inmueble in inmuebles:
-        
-        antiguedad = año_actual - inmueble["año"]
-        
-        if inmueble["zona"] == "A":
-            precio = (inmueble["metros"] * 1000 + inmueble["habitaciones"] * 5000 + inmueble["garaje"] * 15000) * (1-antiguedad/100)
-        else:
-            precio = (inmueble["metros"] * 1000 + inmueble["habitaciones"] * 5000 + inmueble["garaje"] * 15000) * (1-antiguedad/100) * 1.5
+        precio = calcular_precio(inmueble)
         
         if precio <= precioMax:
             inmueble["precio"] = precio
             inmueblesAptos.append(inmueble);
-    
+        
+            
     return inmueblesAptos
 
 print("Bienvenido al programa de busqueda de inmuebles. ")
 
-while opcion != opcionAbandonar:
-    precioLimite = float(input("Indique el precio maximo de busqueda: "));
-    inmueblesRetorno = buscarInmueble(inmuebles, precioLimite)
-    
-    if len(inmueblesRetorno) == 0:
-        print(f"No se han encontrada casas con precio menor a {precioLimite}.")
-    else:
-        print(f"Los siguientes inmuebles se encuentran por debajo de {precioLimite}: ")
-        for i in range(0, len(inmueblesRetorno)):
-            print(i+1, ". ", inmueblesRetorno[i])
+while precioLimite != opcionAbandonar:
+    precioLimite = float(input("Indique el precio de busqueda (para abandonar pulse 0): "))    
+
+    if precioLimite != 0:
+        inmueblesRetorno = buscar_inmueble (inmuebles, precioLimite)
         
-    opcion = int(input("Si quiere repetir el programa indique algun numero, si no, pulse 0: "))
+        if len(inmueblesRetorno) == 0:
+            print(f"No se han encontrada casas con precio menor a {precioLimite}.")
+        else:
+            print(f"Los siguientes inmuebles se encuentran por debajo de {precioLimite}: ")
+            for i in range(0, len(inmueblesRetorno)):
+                print(i+1, ". ", inmueblesRetorno[i])
+        
 
 print("Muchas gracias por usar el programa, tenga un buen dia.")
