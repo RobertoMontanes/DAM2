@@ -62,8 +62,8 @@ public class Principal {
 	}
 	
 	public static double calcularSuma(double a, double b) throws ErrorSuma {
-		double resul = a+b;
-		
+		double resul;
+		resul = a+b;
 		if (resul > ErrorSuma.ERROR)
 			throw new ErrorSuma();
 		
