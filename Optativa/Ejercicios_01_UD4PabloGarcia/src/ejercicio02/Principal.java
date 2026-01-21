@@ -17,7 +17,10 @@ public class Principal {
 				"Abandonar",
 				"Convertir temperatura"
 		};
+		Double doubleSc;
+		
 		Scanner sc = new Scanner(System.in);
+		
 		
 		System.out.println("Bienvenido al programa de conversion de temperaturas.");
 		
@@ -37,7 +40,8 @@ public class Principal {
 					}
 					case 1-> {
 						System.out.println("Introduzca la temperatura que desea convertir: ");
-						convertirTemperatura(Double.parseDouble(sc.nextLine()));
+						doubleSc = Double.parseDouble(sc.nextLine());
+						System.out.printf("%.2f Grados Celsius son %.2f Farenheit \n", doubleSc, convertirTemperatura(doubleSc));
 
 					}
 					default ->
@@ -61,13 +65,13 @@ public class Principal {
 		
 	}
 	
-	public static double convertirTemperatura(double celsius) {
+	public static double convertirTemperatura(double celsius)  throws TemperaturaErronea {
 		double temperaturaError = -273;
 		
 		if (celsius <= temperaturaError)
 			throw new TemperaturaErronea();
 		
-		return (celsius * 2) + 30;
+		return (celsius * 9.0 / 5.0) + 32;
 	}
 
 }

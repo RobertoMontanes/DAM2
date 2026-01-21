@@ -116,8 +116,25 @@ def calcular_estadisticas(resultados: list[Estadisticas]):
     print(f"Has ganado un {procentaje_victorias}%, perdido {procentaje_derrotas}% y fallos: {procentaje_something}%")
     
     print(f"Has girado la ruleta un total de {total_giros} veces, a una media de {total_giros / len(resultados)} por partida.")
-    
 
+def martingala_a_tiradas(veces: int, persona: Persona, cantidad_apostar: float, color_apostar: str):
+
+    estadisticas = []    
+    
+    for i in range(0,veces-1):
+        estadisiticas_partida = Estadisticas(1,persona.saldo, persona.saldo - cantidad_apostar)
+
+        resul = jugar_ruleta(persona, cantidad_apostar, color_apostar)
+        
+        if resul == -1:
+            return 0
+        
+        if resul == 0:
+            cantidad_apostar *= 2
+        
+        estadisticas.append(estadisiticas_partida)
+    
+    print(f"Tras jugar {veces}, el saldo final es: {persona.saldo}")
 
 def simulacion_simple(saldo, cantidad_apostar):
     resultados = []
@@ -154,6 +171,8 @@ def simulacion_compleja(saldo, cantidad_apostar, saldo_final):
 
     calcular_estadisticas(resultados)
 
+
+martingala_a_tiradas(10, Persona(saldo=1000, nombre="Pablo"), 10, colores[2])
 
 # Simulacion:
 print("Vamos a realizar 100 juegos usando martin gala.")
