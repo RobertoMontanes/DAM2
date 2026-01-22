@@ -9,7 +9,7 @@ public class Principal {
     
     private static List<Integer> historialAleatorios = new ArrayList<>();
     private static List<Integer> idsExistentes = new ArrayList<>();
-    private static double saldoBizum = 100.0; // Saldo inicial de prueba
+  	private static double saldoBizum = 100.0;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -75,10 +75,8 @@ public class Principal {
         System.out.print("Seleccione: ");
     }
 
-    // --- MÉTODOS SOLICITADOS ---
-
     public static int generarAleatorio() throws AleatorioRepetidoException {
-        int n = new Random().nextInt(10) + 1; // Rango 1-10 para facilitar el test de error
+        int n = new Random().nextInt(10) + 1;
         if (historialAleatorios.contains(n)) throw new AleatorioRepetidoException("El número " + n + " ya salió.");
         historialAleatorios.add(n);
         return n;
