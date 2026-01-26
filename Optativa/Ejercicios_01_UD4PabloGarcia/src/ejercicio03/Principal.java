@@ -6,9 +6,13 @@ public class Principal {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        double a,b,c;
+        double[] resultados;
         int opcion, opcionAbandonar = 0;
         String[] opciones = {"Abandonar", "Resolver Ecuación"};
 
+        
+        System.out.println("Bienvenido al programa de resolver ecuaciones: ");
         do {
             try {
                 for (int i = 0; i < opciones.length; i++) {
@@ -18,18 +22,18 @@ public class Principal {
                 opcion = Integer.parseInt(sc.nextLine());
 
                 switch (opcion) {
-                    case 0 -> System.out.println("Saliendo del programa...");
+                    case 0 -> System.out.println("Muchas gracias por usar el programa, Saliendo del programa...");
                     case 1 -> {
                         System.out.print("Coeficiente a: ");
-                        double a = Double.parseDouble(sc.nextLine());
+                        a = Double.parseDouble(sc.nextLine());
                         System.out.print("Coeficiente b: ");
-                        double b = Double.parseDouble(sc.nextLine());
+                        b = Double.parseDouble(sc.nextLine());
                         System.out.print("Coeficiente c: ");
-                        double c = Double.parseDouble(sc.nextLine());
+                        c = Double.parseDouble(sc.nextLine());
 
-                        double[] resultados = CEcuacion2Grado.resolver(a, b, c);
+                        resultados = CEcuacion2Grado.resolver(a, b, c);
 
-                        if (resultados.length == 1) {
+                        if (resultados[1] == Double.NEGATIVE_INFINITY) {
                             System.out.printf("Ecuación de 1er grado. Raíz única: %.2f\n", resultados[0]);
                         } else {
                             System.out.printf("Raíz 1: %.2f | Raíz 2: %.2f\n", resultados[0], resultados[1]);

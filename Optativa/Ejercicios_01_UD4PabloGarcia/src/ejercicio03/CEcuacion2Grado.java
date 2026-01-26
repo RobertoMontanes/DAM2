@@ -2,26 +2,30 @@ package ejercicio03;
 
 public class CEcuacion2Grado {
 
-    public static double[] resolver(double a, double b, double c) 
-            throws EcuacionDegeneradaException, RaicesComplejasException {
-        
-        if (a == 0 && b == 0) {
-            throw new EcuacionDegeneradaException();
-        }
+	public static double[] resolver(double a, double b, double c)
+			throws EcuacionDegeneradaException, RaicesComplejasException {
 
-        if (a == 0) {
-            return new double[] { -c / b };
-        }
+		double discriminante;
+		double[] solucion = new double[2];
 
-        double discriminante = Math.pow(b, 2) - (4 * a * c);
+		if (a == 0 && b == 0)
+			throw new EcuacionDegeneradaException();
 
-        if (discriminante < 0) {
-            throw new RaicesComplejasException();
-        }
+		discriminante = Math.pow(b, 2) - (4 * a * c);
+		System.out.println(discriminante);
 
-        double x1 = (-b + Math.sqrt(discriminante)) / (2 * a);
-        double x2 = (-b - Math.sqrt(discriminante)) / (2 * a);
+		if (discriminante < 0)
+			throw new RaicesComplejasException();
 
-        return new double[] { x1, x2 };
-    }
+		if (a == 0) {
+			solucion[0] = -c / b;
+			solucion[1] = Double.NEGATIVE_INFINITY;
+		} else {
+			solucion[0] = (-b + Math.sqrt(discriminante)) / (2 * a);
+			solucion[1] = (-b - Math.sqrt(discriminante)) / (2 * a);
+		}
+
+		return solucion;
+
+	}
 }

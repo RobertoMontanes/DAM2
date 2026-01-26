@@ -11,15 +11,29 @@
 # calcule solo las calorías aportadas por uno de los tipos.
 # Prueba todo en una clase principal donde se lean los datos de los parámetros por teclado.
 
+# - Agrega un decorador para validar el tamaño de un yogur, para que estos no pesen menos que un Petit, de 50
+# gramos.
+# - Puedes crear otro decorador para comprobar que realmente es un yogur y no un “postre lácteo” como los
+# Activia, que no son yogures (para ser un yogur la leche debe pasar por un proceso de fermentación).
+# - Crea el código necesario usando algún método mágico para comparar yogures y hacerlos del “mismo grupo
+# calórico” si tienen las mismas calorías.
+
 class yogur_normal():
-    
-    
     def __init__(self, sabor: str, marca: str, trocitos: bool, calorias_cien:float = 120.5):
         self.calorias_cien = calorias_cien
         self.sabor = sabor
         self.marca = marca
         self.trocitos = trocitos
     
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            resul = func(*args, **kwargs)
+            if resul <= 50:
+                return "petite"
+            else:
+                return "normal"
+        return wrapper
+
     def calcular_calorias(self,tamanio: float):
         base_calorias = 100
         return (tamanio * self.calorias_cien) / base_calorias
